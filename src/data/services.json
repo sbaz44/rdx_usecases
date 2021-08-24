@@ -1,0 +1,102 @@
+{
+  "data": [
+    {
+      "memory": 100,
+      "name": "LOITV1",
+      "type": "Usecase",
+      "service_name": "Loitering",
+      "Parent_container_id": ["person"],
+      "scheduleChecked": false,
+      "unScheduleChecked": false,
+      "disableScheduleCheckbox": false,
+      "disableUnscheduleCheckbox": false
+    },
+    {
+      "memory": 200,
+      "name": "TRESSPASSV1",
+      "type": "Usecase",
+      "service_name": "Tresspassing",
+      "Parent_container_id": ["person"],
+      "scheduleChecked": false,
+      "unScheduleChecked": false,
+      "disableScheduleCheckbox": false,
+      "disableUnscheduleCheckbox": false
+    },
+    {
+      "memory": 100,
+      "name": "PPLCNT1",
+      "type": "Usecase",
+      "service_name": "People Count",
+      "Parent_container_id": ["person"],
+      "scheduleChecked": false,
+      "unScheduleChecked": false,
+      "disableScheduleCheckbox": false,
+      "disableUnscheduleCheckbox": false
+    },
+    {
+      "memory": 100,
+      "name": "VHLCNT1",
+      "type": "Usecase",
+      "service_name": "Vehicle Count",
+      "Parent_container_id": ["vehicle"],
+      "scheduleChecked": false,
+      "unScheduleChecked": false,
+      "disableScheduleCheckbox": false,
+      "disableUnscheduleCheckbox": false
+    },
+    {
+      "memory": 100,
+      "name": "FGMHV1",
+      "type": "Usecase",
+      "service_name": "Gun Detection",
+      "Parent_container_id": ["fmgh"],
+      "scheduleChecked": false,
+      "unScheduleChecked": false,
+      "disableScheduleCheckbox": false,
+      "disableUnscheduleCheckbox": false
+    },
+    {
+      "memory": 100,
+      "name": "AVGWAITV1",
+      "type": "Usecase",
+      "service_name": "Average Waiting",
+      "Parent_container_id": ["person"],
+      "scheduleChecked": false,
+      "unScheduleChecked": false,
+      "disableScheduleCheckbox": false,
+      "disableUnscheduleCheckbox": false
+    },
+    {
+      "memory": 100,
+      "name": "SOCIALDISTV1",
+      "type": "Usecase",
+      "service_name": "Social Distancing",
+      "Parent_container_id": ["person"],
+      "scheduleChecked": false,
+      "unScheduleChecked": false,
+      "disableScheduleCheckbox": false,
+      "disableUnscheduleCheckbox": false
+    },
+    {
+      "memory": 1000,
+      "name": "person",
+      "type": "AI",
+      "service_name": "Deepstream_person_service",
+      "Parent_container_id": []
+    },
+    {
+      "memory": 1000,
+      "name": "fmgh",
+      "type": "AI",
+      "service_name": "Deepstream_fmgh_service",
+      "Parent_container_id": []
+    },
+    {
+      "memory": 1000,
+      "name": "vehicle",
+      "type": "AI",
+      "service_name": "Deepstream_vehicle_service",
+      "Parent_container_id": []
+    }
+  ]
+}

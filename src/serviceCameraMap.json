@@ -1,0 +1,8 @@
+{
+    "details": {
+        "LOITV1": {
+            "scheduleHours": ["LOIV1", "TRESSPASSV1"],
+            "unscheduleHours": []
+        }
+    }
+}

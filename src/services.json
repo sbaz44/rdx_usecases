@@ -1,0 +1,92 @@
+{
+  "details": {
+    "LOITV1": {
+      "memory": 100,
+      "type": "Usecase",
+      "service_name": "Loitering",
+      "Parent_container_id": ["person"],
+      "scheduleChecked": false,
+      "unScheduleChecked": false,
+      "disableScheduleCheckbox": false,
+      "disableUnscheduleCheckbox": false
+    },
+    "TRESSPASSV1": {
+      "memory": 200,
+      "type": "Usecase",
+      "service_name": "Tresspassing",
+      "Parent_container_id": ["person"],
+      "scheduleChecked": false,
+      "unScheduleChecked": false,
+      "disableScheduleCheckbox": false,
+      "disableUnscheduleCheckbox": false
+    },
+    "PPLCNT1": {
+      "memory": 100,
+      "type": "Usecase",
+      "service_name": "People Count",
+      "Parent_container_id": ["person"],
+      "scheduleChecked": false,
+      "unScheduleChecked": false,
+      "disableScheduleCheckbox": false,
+      "disableUnscheduleCheckbox": false
+    },
+    "VHLCNT1": {
+      "memory": 100,
+      "type": "Usecase",
+      "service_name": "Vehicle Count",
+      "Parent_container_id": ["vehicle"],
+      "scheduleChecked": false,
+      "unScheduleChecked": false,
+      "disableScheduleCheckbox": false,
+      "disableUnscheduleCheckbox": false
+    },
+    "FGMHV1": {
+      "memory": 100,
+      "type": "Usecase",
+      "service_name": "Gun Detection",
+      "Parent_container_id": ["fmgh"],
+      "scheduleChecked": false,
+      "unScheduleChecked": false,
+      "disableScheduleCheckbox": false,
+      "disableUnscheduleCheckbox": false
+    },
+    "AVGWAITV1": {
+      "memory": 100,
+      "type": "Usecase",
+      "service_name": "Average Waiting",
+      "Parent_container_id": ["person"],
+      "scheduleChecked": false,
+      "unScheduleChecked": false,
+      "disableScheduleCheckbox": false,
+      "disableUnscheduleCheckbox": false
+    },
+    "SOCIALDISTV1": {
+      "memory": 100,
+      "type": "Usecase",
+      "service_name": "Social Distancing",
+      "Parent_container_id": ["person"],
+      "scheduleChecked": false,
+      "unScheduleChecked": false,
+      "disableScheduleCheckbox": false,
+      "disableUnscheduleCheckbox": false
+    },
+    "person": {
+      "memory": 1000,
+      "type": "AI",
+      "service_name": "Deepstream_person_service",
+      "Parent_container_id": []
+    },
+    "fmgh": {
+      "memory": 1000,
+      "type": "AI",
+      "service_name": "Deepstream_fmgh_service",
+      "Parent_container_id": []
+    },
+    "vehicle": {
+      "memory": 1000,
+      "type": "AI",
+      "service_name": "Deepstream_vehicle_service",
+      "Parent_container_id": []
+    }
+  }
+}

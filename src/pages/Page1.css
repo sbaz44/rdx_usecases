@@ -1,0 +1,12 @@
+.page1 {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.submit {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
