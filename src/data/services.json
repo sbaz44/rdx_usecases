@@ -60,7 +60,7 @@
       "name": "AVGWAITV1",
       "type": "Usecase",
       "service_name": "Average Waiting",
-      "Parent_container_id": ["person"],
+      "Parent_container_id": ["person","vehicle"],
       "scheduleChecked": false,
       "unScheduleChecked": false,
       "disableScheduleCheckbox": false,
