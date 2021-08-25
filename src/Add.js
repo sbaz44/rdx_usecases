@@ -19,16 +19,90 @@ class Add extends Component {
   state = {
     data: useCasesAndDS,
     scheduleChecked: [],
+    unscheduleChecked: [],
     Deepstream: 0,
     selectedDS: [],
   };
 
+  handleGlobalScheduleDisable = () => {
+    //to disable all schedule checkbox after it meets its limit eg: "Usecase": 3 so scheduleChecked.length should not be greater than 3
+
+    console.log("Checking use case limit")
+    let scheduleChecked = [...this.state.scheduleChecked];
+    let data = [...this.state.data];
+
+    if (scheduleChecked.length === usecaseLimit) {
+      console.log("Usecase limit reached");
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].type === "Usecase") {
+          if (
+            !scheduleChecked.some(
+              (item) => item === data[i].service_name
+            )
+          ) {
+            // data[i].disableUnscheduleCheckbox = true;
+            data[i].disableScheduleCheckbox = true;
+          }
+          // for (let j = 0; j < data[i].Parent_container_id.length; j++) {
+          //   if (
+          //     !this.state.selectedDS.some(
+          //       (item) => item === data[i].Parent_container_id[j]
+          //     )
+          //   ) {
+          //     data[i].disableUnscheduleCheckbox = true;
+          //     data[i].disableScheduleCheckbox = true;
+          //   }
+          // }
+        }
+      }
+      this.setState({ data });
+    }
+
+  }
+
   handleScheduleCheck = (index) => {
+    // reusable function to check Schedule
+
     let data = [...this.state.data];
     data[index].scheduleChecked = true;
-    this.setState({ data });
+    let selected = data[index].service_name;
+    let arr = [...this.state.scheduleChecked];
+    arr.push(selected)
+    this.setState({ data, scheduleChecked: arr }, () => this.handleGlobalScheduleDisable());
   };
-  disableUsecase = () => {
+
+  handleScheduleUncheck = (index) => {
+    // reusable function to uncheck Schedule
+
+    let data = [...this.state.data];
+    data[index].scheduleChecked = false;
+    let selected = data[index].service_name;
+    let arr = [...this.state.scheduleChecked];
+    let result = arr.filter(item => item !== selected);
+
+    this.setState({ data, scheduleChecked: result }, () => this.toggleSchduleUsecase());
+  };
+
+  toggleSchduleUsecase = () => {
+    //to toggle usecase if user checks and uncheck schedule
+
+    if (this.state.scheduleChecked.length <= usecaseLimit) {
+      let data = [...this.state.data];
+      console.log("Usecase limit not reached");
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].type === "Usecase" && data[i].Parent_container_id.length <= deepStreamLimit) {
+          console.log(data[i])
+        }
+      }
+    }
+    // this.setState({ data });
+  }
+
+
+
+
+  disableUsecaseDSLimitReached = () => {
+    // disable use case if deepstream limit reached
     console.log(this.state.selectedDS.length + "===" + deepStreamLimit);
     if (this.state.selectedDS.length === deepStreamLimit) {
       let data = [...this.state.data];
@@ -48,32 +122,44 @@ class Add extends Component {
       }
       this.setState({ data });
     }
+    else {
+      console.log("disableUsecaseDSLimitReached")
+    }
   };
 
   onScheduleClickHandle = (e, item, index) => {
     let parentContainerArr = item.Parent_container_id;
     let selectedDS = [...this.state.selectedDS];
+    const isChecked = this.state.scheduleChecked.some(
+      (itemm) =>
+        itemm === item.service_name
 
-    if (!this.state.selectedDS.length) {
-      console.log("IF");
-      this.setState({ selectedDS: parentContainerArr }, () => {
-        this.disableUsecase();
-        this.handleScheduleCheck(index);
-      });
-    } else {
-      console.log("ELSE");
-
-      for (let i = 0; i < parentContainerArr.length; i++) {
-        if (!selectedDS.some((item) => item === parentContainerArr[i])) {
-          console.log("not found");
-          selectedDS.push(parentContainerArr[i]);
+    )
+    //if else condition to check and uncheck scheduled usecase
+    if (isChecked) {
+      //if checked
+      this.handleScheduleUncheck(index)
+    }
+    else {
+      // if unchecked
+      if (!this.state.selectedDS.length) {
+        console.log("IF");
+        this.setState({ selectedDS: parentContainerArr }, () => {
+          this.disableUsecaseDSLimitReached();
+          this.handleScheduleCheck(index);
+        });
+      } else {
+        console.log("ELSE");
+        for (let i = 0; i < parentContainerArr.length; i++) {
+          if (!selectedDS.some((item) => item === parentContainerArr[i])) {
+            selectedDS.push(parentContainerArr[i]);
+          }
         }
+        this.setState({ selectedDS }, () => {
+          this.disableUsecaseDSLimitReached();
+          this.handleScheduleCheck(index);
+        });
       }
-      console.log(selectedDS);
-      this.setState({ selectedDS }, () => {
-        this.handleScheduleCheck(index);
-        this.disableUsecase();
-      });
     }
 
     // if (deepStreamLimit >= this.state.Deepstream) {
@@ -139,9 +225,9 @@ class Add extends Component {
                       value="unscheduled"
                       checked={item.unScheduleChecked}
                       disabled={item.disableUnscheduleCheckbox}
-                      // onChange={onUnscheduledClicked}
-                      // checked={unScheduleChecked}
-                      // disabled={unScheduleDisable}
+                    // onChange={onUnscheduledClicked}
+                    // checked={unScheduleChecked}
+                    // disabled={unScheduleDisable}
                     />
                     UnScheduled
                   </label>
