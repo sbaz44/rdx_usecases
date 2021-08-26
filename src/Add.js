@@ -119,16 +119,19 @@ class Add extends Component {
     let selected = data[index].service_name;
     let arr = [...this.state.scheduleChecked];
     let result = arr.filter((item) => item !== selected);
-    let filteredRes = [];
-    for (let ele of item.Parent_container_id) {
-      filteredRes = this.state.selectedDS.filter((item) => item !== ele);
-      // for (let ele2 of this.state.selectedDS) {
+    console.log(this.state.selectedDS);
+    let filteredRes = item.Parent_container_id.filter(
+      (val) => !this.state.selectedDS.includes(val)
+    );
+    // for (let ele of item.Parent_container_id) {
+    //   filteredRes = this.state.selectedDS.filter((item) => item !== ele);
+    //   // for (let ele2 of this.state.selectedDS) {
 
-      //   filteredRes = ele.filter((item) => item);
-      // }
-      // console.log(item.Parent_container_id);
-      // let res
-    }
+    //   //   filteredRes = ele.filter((item) => item);
+    //   // }
+    //   // console.log(item.Parent_container_id);
+    //   // let res
+    // }
     console.log("filteredRes");
     console.log(filteredRes);
 
