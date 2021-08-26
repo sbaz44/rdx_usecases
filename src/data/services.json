@@ -77,6 +77,17 @@
       "disableScheduleCheckbox": false,
       "disableUnscheduleCheckbox": false
     },
+     {
+      "memory": 100,
+      "name": "NUMBEARPLTV1",
+      "type": "Usecase",
+      "service_name": "Number Plate",
+      "Parent_container_id": ["ocr"],
+      "scheduleChecked": false,
+      "unScheduleChecked": false,
+      "disableScheduleCheckbox": false,
+      "disableUnscheduleCheckbox": false
+    },
     {
       "memory": 1000,
       "name": "person",
