@@ -68,12 +68,15 @@ class Add extends Component {
                 // let intersection = this.state.selectedDS.filter((x) =>
                 //   data[i].Parent_container_id.includes(x)
                 // );
+
                 let result = [];
                 for (let ele of this.state.selectedDS) {
+                  console.log(ele + "===" + data[i].Parent_container_id[j])
                   if (ele === data[i].Parent_container_id[j]) {
                     result.push(true);
                   } else result.push(false);
                 }
+
                 if (result.includes(true)) {
                   if (
                     !this.state.selectedDS.includes(
@@ -84,8 +87,10 @@ class Add extends Component {
                     data[i].disableUnscheduleCheckbox = true;
                   }
                 }
-              } else {
-                // console.log("else................");
+                else {
+                  data[i].disableScheduleCheckbox = true;
+                  data[i].disableUnscheduleCheckbox = true;
+                }
               }
             }
           } else {
@@ -263,7 +268,6 @@ class Add extends Component {
     } else {
       this.handleScheduleCheck(indexx);
       console.log("disableUsecaseDSLimitReached ELSE");
-      return;
     }
   };
 
@@ -362,9 +366,9 @@ class Add extends Component {
                       value="unscheduled"
                       checked={item.unScheduleChecked}
                       disabled={item.disableUnscheduleCheckbox}
-                      // onChange={onUnscheduledClicked}
-                      // checked={unScheduleChecked}
-                      // disabled={unScheduleDisable}
+                    // onChange={onUnscheduledClicked}
+                    // checked={unScheduleChecked}
+                    // disabled={unScheduleDisable}
                     />
                     UnScheduled
                   </label>

@@ -60,7 +60,7 @@
       "name": "AVGWAITV1",
       "type": "Usecase",
       "service_name": "Average Waiting",
-      "Parent_container_id": ["person","vehicle"],
+      "Parent_container_id": ["person", "vehicle"],
       "scheduleChecked": false,
       "unScheduleChecked": false,
       "disableScheduleCheckbox": false,
@@ -77,12 +77,12 @@
       "disableScheduleCheckbox": false,
       "disableUnscheduleCheckbox": false
     },
-     {
+    {
       "memory": 100,
       "name": "NUMBEARPLTV1",
       "type": "Usecase",
       "service_name": "Number Plate",
-      "Parent_container_id": ["ocr"],
+      "Parent_container_id": ["ocr", "fmgh"],
       "scheduleChecked": false,
       "unScheduleChecked": false,
       "disableScheduleCheckbox": false,
