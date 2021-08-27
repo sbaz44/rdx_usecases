@@ -60,8 +60,13 @@ class Add extends Component {
                 }
               }
               if (!result.includes(true)) {
-                element.disableScheduleCheckbox = true;
+
+                console.log("element.service_name: " + element.service_name)
+                if (element.Parent_container_id >= deepStreamLimit) {
+                  element.disableScheduleCheckbox = true;
+                }
               }
+
             }
           }
         }
@@ -108,6 +113,7 @@ class Add extends Component {
           ele.type === "Usecase" &&
           ele.Parent_container_id.length <= deepStreamLimit
         ) {
+
           ele.disableScheduleCheckbox = false;
         }
       }
@@ -141,10 +147,9 @@ class Add extends Component {
                   if (ele2 === ele3) {
                     result.push(true);
                   } else result.push(false);
-                  console.log("service_name: " + ele.service_name);
                   console.log("result: " + result);
                   if (result.includes(true)) {
-                    console.log("object");
+                    console.log("service_name: " + ele.service_name);
                     ele.disableScheduleCheckbox = false;
                   }
                 } else {
@@ -178,8 +183,9 @@ class Add extends Component {
                     result.push(true);
                   } else result.push(false);
                 }
-                // console.log("ele");
-                // console.log(ele);
+                console.log("ele");
+                console.log("service_name: " + ele.service_name);
+                console.log("result: " + result);
               }
             }
           }
