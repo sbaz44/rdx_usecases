@@ -108,6 +108,13 @@
       "type": "AI",
       "service_name": "Deepstream_vehicle_service",
       "Parent_container_id": []
+    },
+    {
+      "memory": 1000,
+      "name": "fmgh",
+      "type": "AI",
+      "service_name": "Deepstream_fmgh_service",
+      "Parent_container_id": []
     }
   ]
 }
