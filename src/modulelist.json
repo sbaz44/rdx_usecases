@@ -1,14 +1,14 @@
 {
     "details": {
         "globallyActive": {
-            "ScheduledUC": {"LOITV1": 100, "TRESSPASSV1": 200},
-            "ScheduledDP": {"person": 1000},
+            "ScheduledUC": {},
+            "ScheduledDP": {},
             "UnScheduledUC": {},
             "UnScheduledDP": {}
         },
         "locallyActive": {
-            "ScheduledUC": {"LOITV1": 100},
-            "ScheduledDP": {"person": 1000},
+            "ScheduledUC": {},
+            "ScheduledDP": {},
             "UnScheduledUC": {},
             "UnScheduledDP": {}
         }

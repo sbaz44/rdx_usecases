@@ -46,27 +46,85 @@ class Add extends Component {
       this.setState({ data });
     } else {
       console.log("handleGlobalScheduleDisable ELSE");
-      //disable schedule if any DS is not found in Parent_container_id
       for (let element of data) {
         if (element.type === "Usecase") {
-          if (element.Parent_container_id.length <= deepStreamLimit) {
-            if (element.Parent_container_id.length > 1) {
+          // console.log(this.state.selectedDS.length + ">" + 1);
+          if (this.state.selectedDS.length > 1) {
+            //if selectedDS length is greater than 1
+            console.log("selectedDS length is greater than 1");
+            if (
+              element.Parent_container_id.length >= this.state.selectedDS.length
+            ) {
+              //parent is greater/equal to selectedDS
+
               let result = [];
               for (let ele of this.state.selectedDS) {
                 for (let ele2 of element.Parent_container_id) {
+                  console.log(ele + "===" + ele2);
                   if (ele === ele2) {
                     result.push(true);
                   } else result.push(false);
                 }
               }
+              console.log("result: " + result);
               if (!result.includes(true)) {
+                let sub =
+                  Number(deepStreamLimit) - this.state.selectedDS.length;
 
-                console.log("element.service_name: " + element.service_name)
-                if (element.Parent_container_id >= deepStreamLimit) {
+                let intersection = element.Parent_container_id.filter(
+                  (x) => !this.state.selectedDS.includes(x)
+                );
+                if (intersection.length) element.disableScheduleCheckbox = true;
+              } else {
+                let intersection = element.Parent_container_id.filter(
+                  (x) => !this.state.selectedDS.includes(x)
+                );
+                let add = this.state.selectedDS.length + intersection.length;
+
+                if (deepStreamLimit < add) {
                   element.disableScheduleCheckbox = true;
                 }
               }
-
+            } else {
+              //parent length is less than selectedDS
+            }
+          } else {
+            // selectedDS length is 1
+            if (element.Parent_container_id.length > 1) {
+              console.log("selectedDS length is 1: " + element.service_name);
+              let result = [];
+              for (let ele of this.state.selectedDS) {
+                for (let ele2 of element.Parent_container_id) {
+                  console.log(ele + "===" + ele2);
+                  if (ele === ele2) {
+                    result.push(true);
+                  } else result.push(false);
+                }
+              }
+              console.log("result: " + result);
+              if (!result.includes(true)) {
+                // let sub =
+                //   Number(deepStreamLimit) - this.state.selectedDS.length;
+                if (element.Parent_container_id.length < deepStreamLimit) {
+                } else {
+                  let intersection = element.Parent_container_id.filter(
+                    (x) => !this.state.selectedDS.includes(x)
+                  );
+                  if (intersection.length)
+                    element.disableScheduleCheckbox = true;
+                }
+              } else {
+                console.log(element.service_name);
+                let intersection = element.Parent_container_id.filter(
+                  (x) => !this.state.selectedDS.includes(x)
+                );
+                console.log(intersection);
+                let add = this.state.selectedDS.length + intersection.length;
+                console.log(add);
+                if (deepStreamLimit < add) {
+                  element.disableScheduleCheckbox = true;
+                }
+              }
             }
           }
         }
@@ -113,7 +171,6 @@ class Add extends Component {
           ele.type === "Usecase" &&
           ele.Parent_container_id.length <= deepStreamLimit
         ) {
-
           ele.disableScheduleCheckbox = false;
         }
       }
@@ -129,7 +186,7 @@ class Add extends Component {
           }
         }
       }
-
+      console.log();
       if (arr.length > 1) {
         console.log("ARR > 1");
         for (let ele of data) {
@@ -167,7 +224,6 @@ class Add extends Component {
         }
       } else {
         console.log("ARR === 1");
-
         for (let ele of data) {
           if (
             ele.type === "Usecase" &&
@@ -183,7 +239,6 @@ class Add extends Component {
                     result.push(true);
                   } else result.push(false);
                 }
-                console.log("ele");
                 console.log("service_name: " + ele.service_name);
                 console.log("result: " + result);
               }

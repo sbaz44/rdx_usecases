@@ -82,7 +82,7 @@
       "name": "NUMBEARPLTV1",
       "type": "Usecase",
       "service_name": "Number Plate",
-      "Parent_container_id": ["ocr", "fmgh"],
+      "Parent_container_id": ["ocr", "fmgh","vehicle"],
       "scheduleChecked": false,
       "unScheduleChecked": false,
       "disableScheduleCheckbox": false,
