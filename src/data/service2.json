@@ -1,0 +1,85 @@
+{
+  "Services": [
+    {
+      "Service_id": "LOITV1",
+      "Service_name": "Loitering",
+      "Description": "desc",
+      "Status": "Inactive",
+      "Parent_container_id": [
+        "person"
+      ]
+    },
+    {
+      "Service_id": "TRESSPASSV1",
+      "Service_name": "tresspassing",
+      "Description": "desc",
+      "Status": "Inactive",
+      "Parent_container_id": [
+        "person"
+      ]
+    },
+    {
+      "Service_id": "OCCUPANCYANALYSISV1",
+      "Service_name": "people occupancy",
+      "Description": "desc",
+      "Status": "Downloaded",
+      "Parent_container_id": [
+        "person"
+      ]
+    },
+     {
+      "Service_id": "QUEUEV1",
+      "Service_name": "queue waiting",
+      "Description": "desc",
+      "Status": "Downloaded",
+      "Parent_container_id": [
+        "person"
+      ]
+    },
+    {
+      "Service_id": "MASKHELMETV1",
+      "Service_name": "gmfh detection",
+      "Description": "desc",
+      "Status": "Inactive",
+      "Parent_container_id": [
+        "maskhelmet"
+      ]
+    },
+     {
+      "Service_id": "VEHCNTV1",
+      "Service_name": "Vehicle Count",
+      "Description": "desc",
+      "Status": "Inactive",
+      "Parent_container_id": [
+        "vehicle"
+      ]
+    },
+    {
+      "Service_id": "DUMMY1V1",
+      "Service_name": "Dummy Service1",
+      "Description": "desc",
+      "Status": "Inactive",
+      "Parent_container_id": [
+        "fmgh","person"
+      ]
+    },
+    {
+      "Service_id": "DUMMY2V1",
+      "Service_name": "Dummy Service2",
+      "Description": "desc",
+      "Status": "Inactive",
+      "Parent_container_id": [
+        "dp1","dp2"
+      ]
+    },
+    {
+      "Service_id": "DUMMY3V1",
+      "Service_name": "Dummy Service3",
+      "Description": "desc",
+      "Status": "Inactive",
+      "Parent_container_id": [
+        "dp1","dp2","vehicle"
+      ]
+    }
+  ]
+}

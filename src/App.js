@@ -1,9 +1,10 @@
 // import logo from './logo.svg';
 
-import Page1 from './pages/Page1';
+import Page1 from "./pages/Page1";
 
-import './App.css';
-import Add from './Add';
+import "./App.css";
+import Add from "./Add";
+import Add2 from "./Add2";
 
 function App() {
   return (
@@ -22,8 +23,9 @@ function App() {
           Learn React
         </a>
       </header> */}
-      <Add />
-      <Page1 />
+      {/* <Add /> */}
+      <Add2 />
+      {/* <Page1 /> */}
     </div>
   );
 }
