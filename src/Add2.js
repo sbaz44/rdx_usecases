@@ -14,9 +14,11 @@ export default class Add2 extends Component {
             "LOITV1",
             "TRESSPASSV1",
             "OCCUPANCYANALYSISV1",
-            // "QUEUEV1",
+            "QUEUEV1",
             "MASKHELMETV1",
           ],
+          // ScheduledDP: ["person"],
+          // ScheduledDP: ["dp1","dp2"],
           ScheduledDP: ["person", "maskhelmet"],
           UnScheduledUC: ["LOITV1", "TRESSPASSV1"],
           UnScheduledDP: ["person"],
@@ -114,10 +116,23 @@ export default class Add2 extends Component {
             console.log("result");
             console.log(result);
             if (!result.includes(true)) {
-              //if none of DP matched selected DP
-              if (result.length !== 1) {
+              let intersection = item.Parent_container_id.filter(
+                (x) => !_ScheduledDP.includes(x)
+              );
+              let add = _ScheduledDP.length + intersection.length;
+
+              if (deepStreamLimit < add) {
                 item.disableScheduleCheckbox = true;
-                item.disableUnscheduleCheckbox = true;
+              }
+            } else {
+              console.log("True item");
+              let intersection = item.Parent_container_id.filter(
+                (x) => !_ScheduledDP.includes(x)
+              );
+              let add = _ScheduledDP.length + intersection.length;
+
+              if (deepStreamLimit < add) {
+                item.disableScheduleCheckbox = true;
               }
             }
             // console.log(item);
@@ -178,7 +193,7 @@ export default class Add2 extends Component {
   }
   render() {
     return (
-      <div>
+      <div style={{ margin: "1vw" }}>
         {console.log(this.state)}
         <div style={{ display: "flex", justifyContent: "space-around" }}>
           {this.state.data.map((item, index) => (
@@ -217,6 +232,10 @@ export default class Add2 extends Component {
         <p>ScheduledDP</p>
 
         <pre>{JSON.stringify(this.state.ScheduledDP, null, 4)}</pre>
+        <p>Deepstream limit</p>
+        <pre>{JSON.stringify(deepStreamLimit, null, 4)}</pre>
+        <p>Usecase limit</p>
+        <pre>{JSON.stringify(usecaseLimit, null, 4)}</pre>
       </div>
     );
   }
