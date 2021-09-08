@@ -23,8 +23,8 @@ function App() {
           Learn React
         </a>
       </header> */}
-      {/* <Add /> */}
-      <Add2 />
+      <Add />
+      {/* <Add2 /> */}
       {/* <Page1 /> */}
     </div>
   );

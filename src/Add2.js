@@ -14,12 +14,14 @@ export default class Add2 extends Component {
             "LOITV1",
             "TRESSPASSV1",
             "OCCUPANCYANALYSISV1",
-            "QUEUEV1",
-            "MASKHELMETV1",
+            // "QUEUEV1",
+            // "MASKHELMETV1",
+            "DUMMY2V1",
+            "DUMMY1V1",
           ],
-          // ScheduledDP: ["person"],
+          ScheduledDP: ["person", "dp1", "dp2", "fmgh"],
           // ScheduledDP: ["dp1","dp2"],
-          ScheduledDP: ["person", "maskhelmet"],
+          // ScheduledDP: ["person", "maskhelmet"],
           UnScheduledUC: ["LOITV1", "TRESSPASSV1"],
           UnScheduledDP: ["person"],
         },
@@ -148,7 +150,6 @@ export default class Add2 extends Component {
   };
 
   onLoad = () => {
-    let apiKey = Object.keys(this.state.apiData);
     let _ScheduledUC = [
         ...this.state.apiData.detail.DeviceScheduleDetail.ScheduledUC,
       ],
