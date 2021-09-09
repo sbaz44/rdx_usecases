@@ -11,29 +11,28 @@ class Add extends Component {
     data: usecases.Services,
     scheduleChecked: [],
     unscheduleChecked: [],
-    Deepstream: 0,
     selectedDS: [],
     selectedUsDS: [],
     apiData: {
       detail: {
         DeviceScheduleDetail: {
           ScheduledUC: [
-            "LOITV1",
-            "TRESSPASSV1",
+            // "LOITV1",
+            // "TRESSPASSV1",
             // "OCCUPANCYANALYSISV1",
             // "QUEUEV1",
             // "MASKHELMETV1",
             // "DUMMY2V1",
-            // "DUMMY1V1",
+            "DUMMY1V1",
           ],
           // ScheduledDP: [],
           // ScheduledDP: ["person", "dp1", "dp2", "fmgh"],
-          // ScheduledDP: ["dp1","dp2"],
-          ScheduledDP: ["person"],
-          // ScheduledDP: ["person", "maskhelmet"],
+          // ScheduledDP: ["dp1", "dp2"],
+          // ScheduledDP: ["person"],
+          ScheduledDP: ["person", "fmgh"],
           UnScheduledUC: ["LOITV1", "TRESSPASSV1"],
-          // UnScheduledDP: [],
-          UnScheduledDP: ["person"],
+          UnScheduledDP: [],
+          // UnScheduledDP: ["person"],
         },
       },
       module_data: [
@@ -47,6 +46,7 @@ class Add extends Component {
     ScheduledDP: [],
     UnScheduledUC: [],
     UnScheduledDP: [],
+    disabledSchedule: [],
   };
 
   //reusable functions
@@ -102,7 +102,7 @@ class Add extends Component {
       console.log("Usecase limit reached");
 
       this.parentLoop(data, (items) => {
-        if (!scheduleChecked.some((item) => item === items.Service_name)) {
+        if (!scheduleChecked.some((item) => item === items.Service_id)) {
           items.disableScheduleCheckbox = true;
         }
       });
@@ -133,7 +133,6 @@ class Add extends Component {
             items.Parent_container_id.length <= this.state.selectedDS.length
           ) {
             //parent is greater/equal to selectedDS
-            console.log(items.Service_name);
             let result = [];
             for (let ele of this.state.selectedDS) {
               this.parentLoop(items.Parent_container_id, (item2) => {
@@ -203,7 +202,7 @@ class Add extends Component {
 
     let data = [...this.state.data];
     data[index].scheduleChecked = true;
-    let selected = data[index].Service_name;
+    let selected = data[index].Service_id;
     let arr = [...this.state.scheduleChecked];
     arr.push(selected);
     this.setState({ data, scheduleChecked: arr }, () =>
@@ -215,7 +214,7 @@ class Add extends Component {
     // reusable function to uncheck Schedule
     let data = [...this.state.data];
     data[index].scheduleChecked = false;
-    let selected = data[index].Service_name;
+    let selected = data[index].Service_id;
     let arr = [...this.state.scheduleChecked];
     let result = arr.filter((item) => item !== selected);
 
@@ -243,7 +242,7 @@ class Add extends Component {
 
       this.parentLoop(scheduleChecked, (ele) => {
         this.parentLoop(data, (ele2) => {
-          if (ele2.Service_name === ele) {
+          if (ele2.Service_id === ele) {
             Array.prototype.push.apply(arr, ele2.Parent_container_id);
             arr = [...new Set(arr)];
           }
@@ -330,7 +329,7 @@ class Add extends Component {
     let parentContainerArr = item.Parent_container_id;
     let selectedDS = [...this.state.selectedDS];
     const isChecked = this.state.scheduleChecked.some(
-      (itemm) => itemm === item.Service_name
+      (itemm) => itemm === item.Service_id
     );
     //if else condition to check and uncheck scheduled usecase
     if (isChecked) {
@@ -371,7 +370,7 @@ class Add extends Component {
       console.log("Usecase limit reached");
 
       this.parentLoop(data, (items) => {
-        if (!scheduleChecked.some((item) => item === items.Service_name)) {
+        if (!scheduleChecked.some((item) => item === items.Service_id)) {
           items.disableUnscheduleCheckbox = true;
         }
       });
@@ -471,7 +470,7 @@ class Add extends Component {
 
     let data = [...this.state.data];
     data[index].unScheduleChecked = true;
-    let selected = data[index].Service_name;
+    let selected = data[index].Service_id;
     let arr = [...this.state.unscheduleChecked];
     arr.push(selected);
     this.setState({ data, unscheduleChecked: arr }, () =>
@@ -483,7 +482,7 @@ class Add extends Component {
     // reusable function to uncheck Schedule
     let data = [...this.state.data];
     data[index].unScheduleChecked = false;
-    let selected = data[index].Service_name;
+    let selected = data[index].Service_id;
     let arr = [...this.state.unscheduleChecked];
     let result = arr.filter((item) => item !== selected);
 
@@ -511,7 +510,7 @@ class Add extends Component {
       let arr = [];
       this.parentLoop(scheduleChecked, (ele) => {
         this.parentLoop(data, (ele2) => {
-          if (ele2.Service_name === ele) {
+          if (ele2.Service_id === ele) {
             Array.prototype.push.apply(arr, ele2.Parent_container_id);
             arr = [...new Set(arr)];
           }
@@ -598,7 +597,7 @@ class Add extends Component {
     let parentContainerArr = item.Parent_container_id;
     let selectedDS = [...this.state.selectedUsDS];
     const isChecked = this.state.unscheduleChecked.some(
-      (itemm) => itemm === item.Service_name
+      (itemm) => itemm === item.Service_id
     );
     //if else condition to check and uncheck scheduled usecase
     if (isChecked) {
@@ -658,15 +657,17 @@ class Add extends Component {
       },
       () => {
         if (_ScheduledDP.length !== 0 || _UnScheduledDP.length !== 0) {
+          console.log("CAMERA IS PRESENT");
           this.setState({ selectedDS: [..._ScheduledDP] });
-          if (_ScheduledDP.length < deepStreamLimit) {
-            console.log("DS LIMIT NOT REACHED");
-            this.dsScheduleAvailable();
-          } else {
-            console.log("DS LIMIT REACHED");
-            this.dsScheduleAvailable();
-          }
+          // if (_ScheduledDP.length < deepStreamLimit) {
+          //   console.log("DS LIMIT NOT REACHED");
+          //   this.dsScheduleAvailable();
+          // } else {
+          //   console.log("DS LIMIT REACHED");
+          this.dsScheduleAvailable();
+          // }
         } else {
+          console.log("CAMERA IS NOT PRESENT");
           this.parentLoop(data, (item) => {
             if (item.Parent_container_id.length > deepStreamLimit) {
               item.disableScheduleCheckbox = true;
@@ -685,11 +686,14 @@ class Add extends Component {
     let _data = [...this.state.data];
     let _ScheduledUC = [...this.state.ScheduledUC];
     let _ScheduledDP = [...this.state.ScheduledDP];
+    let _disabledSchedule = [...this.state.disabledSchedule];
     if (this.state.ScheduledUC.length >= usecaseLimit) {
       console.log("USE CASE LIMIT REACHED");
       this.parentLoop(_data, (item) => {
         //disable other usecase and DS
         if (!_ScheduledUC.includes(item.Service_id)) {
+          console.log("service name: " + item.Service_name);
+          _disabledSchedule.push(item.Service_id);
           item.disableScheduleCheckbox = true;
         }
       });
@@ -717,12 +721,15 @@ class Add extends Component {
               let add = _ScheduledDP.length + intersection.length;
               if (deepStreamLimit < add) {
                 item.disableScheduleCheckbox = true;
+                _disabledSchedule.push(item.Service_id);
               }
             } else {
               item.disableScheduleCheckbox = true;
+              _disabledSchedule.push(item.Service_id);
             }
           } else {
             item.disableScheduleCheckbox = true;
+            _disabledSchedule.push(item.Service_id);
           }
         });
       } else {
@@ -744,6 +751,7 @@ class Add extends Component {
 
               if (deepStreamLimit < add) {
                 item.disableScheduleCheckbox = true;
+                _disabledSchedule.push(item.Service_id);
               }
             } else {
               let intersection = item.Parent_container_id.filter(
@@ -753,17 +761,126 @@ class Add extends Component {
 
               if (deepStreamLimit < add) {
                 item.disableScheduleCheckbox = true;
+                _disabledSchedule.push(item.Service_id);
               }
             }
           } else {
             console.log("GREATER THAN DS");
+            _disabledSchedule.push(item.Service_id);
             item.disableScheduleCheckbox = true;
             item.disableUnscheduleCheckbox = true;
           }
         });
       }
     }
+    this.setState({ data: _data, disabledSchedule: _disabledSchedule });
+  };
+  alwaysDisabled = () => {
+    let _data = [...this.state.data];
+    let _disabledSchedule = [...this.state.disabledSchedule];
+    this.parentLoop(_data, (ele) => {
+      if (_disabledSchedule.includes(ele.Service_id)) {
+        console.log(ele.Service_name);
+        ele.disableScheduleCheckbox = true;
+      }
+    });
     this.setState({ data: _data });
+  };
+  handleScheduleUncheck2 = (index, item) => {
+    // reusable function to uncheck Schedule
+    let data = [...this.state.data];
+    data[index].scheduleChecked = false;
+    let selected = data[index].Service_id;
+    let arr = [...this.state.scheduleChecked];
+    let result = arr.filter((item) => item !== selected);
+
+    this.setState(
+      { data, scheduleChecked: result },
+      () => this.toggleSchduleUsecase2()
+      // console.log("object")
+    );
+  };
+
+  toggleSchduleUsecase2 = () => {
+    console.log("toggleSchduleUsecase2");
+    let data = [...this.state.data];
+    let scheduleChecked = [...this.state.scheduleChecked];
+
+    //to toggle usecase if user uncheck schedule
+    if (this.state.scheduleChecked.length === 0) {
+      console.log("DEFAULT STATE");
+      this.parentLoop(data, (ele) => {
+        if (ele.Parent_container_id.length <= deepStreamLimit) {
+          ele.disableScheduleCheckbox = false;
+        }
+      });
+      this.setState({ selectedDS: [...this.state.ScheduledDP] }, () =>
+        this.alwaysDisabled()
+      );
+    } else {
+      console.log("toggleSchduleUsecase ELSE");
+      let arr = [...this.state.ScheduledDP];
+
+      this.parentLoop(scheduleChecked, (ele) => {
+        this.parentLoop(data, (ele2) => {
+          if (ele2.Service_id === ele) {
+            Array.prototype.push.apply(arr, ele2.Parent_container_id);
+            arr = [...new Set(arr)];
+          }
+        });
+      });
+      // arr = [...this.state.ScheduledDP];
+      console.log(arr);
+      if (arr.length > 1) {
+        console.log("ARR > 1");
+        let filterData = data.filter(
+          (item) => item.Parent_container_id.length <= deepStreamLimit
+        );
+        this.parentLoop(filterData, (element) => {
+          let result = [];
+          this.parentLoop(arr, (ele) => {
+            this.parentLoop(element.Parent_container_id, (ele2) => {
+              if (ele === ele2) result.push(true);
+              else result.push(false);
+            });
+          });
+
+          if (result.includes(true)) {
+            this.resultIntersection(element, "schedule", arr, (obj) => {
+              element = { ...obj };
+            });
+          } else {
+            this.resultIntersection(element, "schedule", arr, (obj) => {
+              element = { ...obj };
+            });
+          }
+        });
+      } else {
+        console.log("ARR === 1");
+        this.parentLoop(data, (element) => {
+          if (element.Parent_container_id.length <= deepStreamLimit) {
+            if (element.Parent_container_id.length === 1) {
+              element.disableScheduleCheckbox = false;
+            } else {
+              let result = [];
+              this.parentLoop(arr, (ele) => {
+                this.parentLoop(element.Parent_container_id, (ele2) => {
+                  if (ele === ele2) result.push(true);
+                  else result.push(false);
+                });
+              });
+
+              if (result.includes(true)) {
+                this.resultIntersection(element, "schedule", arr, (obj) => {
+                  element = { ...obj };
+                });
+              }
+            }
+          }
+        });
+      }
+      this.setState({ selectedDS: arr, data }, () => this.alwaysDisabled());
+    }
   };
 
   onScheduleClickHandle2 = (item, index) => {
@@ -775,7 +892,7 @@ class Add extends Component {
     //if else condition to check and uncheck scheduled usecase
     if (isChecked) {
       //if unchecked
-      this.handleScheduleUncheck(index, item);
+      this.handleScheduleUncheck2(index, item);
     } else {
       // if checked
       if (!selectedDS.length) {
@@ -835,7 +952,7 @@ class Add extends Component {
     );
   };
 
-  handleGlobalScheduleDisable = () => {
+  handleGlobalScheduleDisable2 = () => {
     console.log("Checking use case limit");
     let scheduleChecked = [...this.state.scheduleChecked];
     let data = [...this.state.data];
@@ -864,7 +981,7 @@ class Add extends Component {
       console.log("handleGlobalScheduleDisable ELSE");
       this.parentLoop(data, (items) => {
         if (this.state.selectedDS.length > 1) {
-          // console.log("selectedDS length is greater than 1");
+          console.log("selectedDS length is greater than 1");
           if (
             items.Parent_container_id.length <= this.state.selectedDS.length
           ) {
@@ -875,13 +992,13 @@ class Add extends Component {
                 else result.push(false);
               });
             }
-            console.log(result);
+
             if (!result.includes(true)) {
               let intersection = items.Parent_container_id.filter(
                 (x) => !this.state.selectedDS.includes(x)
               );
               let add = this.state.selectedDS.length + intersection.length;
-              console.log("items.ser if" + items.Service_name);
+
               if (deepStreamLimit < add) {
                 items.disableScheduleCheckbox = true;
               }
@@ -890,7 +1007,7 @@ class Add extends Component {
               let intersection = items.Parent_container_id.filter(
                 (x) => !this.state.selectedDS.includes(x)
               );
-              console.log("items.ser else" + items.Service_name);
+              // console.log("items.ser else" + items.Service_name);
               let add = this.state.selectedDS.length + intersection.length;
 
               if (deepStreamLimit < add) {
@@ -899,11 +1016,39 @@ class Add extends Component {
             }
           }
         } else {
+          // selectedDS length is 1
           if (items.Parent_container_id.length > 1) {
-            console.log("Service_name: " + items.Service_name);
+            console.log("selectedDS length is 1: " + items.Service_name);
+            let result = [];
+
+            this.parentLoop(this.state.selectedDS, (ele) => {
+              this.parentLoop(items.Parent_container_id, (item2) => {
+                if (ele === item2) result.push(true);
+                else result.push(false);
+              });
+            });
+
+            if (!result.includes(true)) {
+              if (items.Parent_container_id.length < deepStreamLimit) {
+              } else {
+                let intersection = items.Parent_container_id.filter(
+                  (x) => !this.state.selectedDS.includes(x)
+                );
+                if (intersection.length) items.disableScheduleCheckbox = true;
+              }
+            } else {
+              let intersection = items.Parent_container_id.filter(
+                (x) => !this.state.selectedDS.includes(x)
+              );
+              let add = this.state.selectedDS.length + intersection.length;
+              if (deepStreamLimit < add) {
+                items.disableScheduleCheckbox = true;
+              }
+            }
           }
         }
       });
+      this.setState({ data });
     }
   };
 
@@ -916,7 +1061,7 @@ class Add extends Component {
         {console.log(this.state)}
         Add
         <div style={{ display: "flex", justifyContent: "space-around" }}>
-          {this.state.ScheduledDP.length === 0 ||
+          {this.state.ScheduledDP.length === 0 &&
           this.state.UnScheduledDP.length === 0
             ? this.state.data.map((item, index) => {
                 return (
