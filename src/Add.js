@@ -23,13 +23,13 @@ class Add extends Component {
             // "QUEUEV1",
             // "MASKHELMETV1",
             // "DUMMY2V1",
-            "DUMMY1V1",
+            // "DUMMY1V1",
           ],
-          // ScheduledDP: [],
+          ScheduledDP: [],
           // ScheduledDP: ["person", "dp1", "dp2", "fmgh"],
           // ScheduledDP: ["dp1", "dp2"],
           // ScheduledDP: ["person"],
-          ScheduledDP: ["person", "fmgh"],
+          // ScheduledDP: ["person", "fmgh"],
           UnScheduledUC: ["LOITV1", "TRESSPASSV1"],
           UnScheduledDP: [],
           // UnScheduledDP: ["person"],
@@ -68,7 +68,6 @@ class Add extends Component {
 
   resultIntersection = (element, type, arr, callback) => {
     let selectedDS = [...arr];
-
     // let selectedDS =
     //   type === "unschedule"
     //     ? [...this.state.selectedUsDS]
@@ -141,26 +140,92 @@ class Add extends Component {
               });
             }
             if (!result.includes(true)) {
-              let intersection = items.Parent_container_id.filter(
-                (x) => !this.state.selectedDS.includes(x)
+              this.resultIntersection(
+                items,
+                "schedule",
+                this.state.selectedDS,
+                (obj) => {
+                  items = { ...obj };
+                }
               );
-              let add = this.state.selectedDS.length + intersection.length;
-              if (deepStreamLimit < add) {
-                items.disableScheduleCheckbox = true;
-              }
-              // if (intersection.length) items.disableScheduleCheckbox = true;
             } else {
-              let intersection = items.Parent_container_id.filter(
-                (x) => !this.state.selectedDS.includes(x)
+              this.resultIntersection(
+                items,
+                "schedule",
+                this.state.selectedDS,
+                (obj) => {
+                  items = { ...obj };
+                }
               );
-              let add = this.state.selectedDS.length + intersection.length;
-
-              if (deepStreamLimit < add) {
-                items.disableScheduleCheckbox = true;
-              }
             }
+
+            // if (!result.includes(true)) {
+            //   let intersection = items.Parent_container_id.filter(
+            //     (x) => !this.state.selectedDS.includes(x)
+            //   );
+            //   let add = this.state.selectedDS.length + intersection.length;
+            //   if (deepStreamLimit < add) {
+            //     items.disableScheduleCheckbox = true;
+            //   }
+            // } else {
+            //   let intersection = items.Parent_container_id.filter(
+            //     (x) => !this.state.selectedDS.includes(x)
+            //   );
+            //   let add = this.state.selectedDS.length + intersection.length;
+
+            //   if (deepStreamLimit < add) {
+            //     items.disableScheduleCheckbox = true;
+            //   }
+            // }
           } else {
-            //parent length is less than selectedDS
+            //parent length is greater than selectedDS
+            console.log("parent length is greater than selectedDS");
+            let result = [];
+            for (let ele of this.state.selectedDS) {
+              this.parentLoop(items.Parent_container_id, (item2) => {
+                if (ele === item2) result.push(true);
+                else result.push(false);
+              });
+            }
+
+            if (!result.includes(true)) {
+              this.resultIntersection(
+                items,
+                "schedule",
+                this.state.selectedDS,
+                (obj) => {
+                  items = { ...obj };
+                }
+              );
+            } else {
+              this.resultIntersection(
+                items,
+                "schedule",
+                this.state.selectedDS,
+                (obj) => {
+                  items = { ...obj };
+                }
+              );
+            }
+
+            // if (!result.includes(true)) {
+            //   let intersection = items.Parent_container_id.filter(
+            //     (x) => !this.state.selectedDS.includes(x)
+            //   );
+            //   let add = this.state.selectedDS.length + intersection.length;
+            //   if (deepStreamLimit < add) {
+            //     items.disableScheduleCheckbox = true;
+            //   }
+            // } else {
+            //   let intersection = items.Parent_container_id.filter(
+            //     (x) => !this.state.selectedDS.includes(x)
+            //   );
+            //   let add = this.state.selectedDS.length + intersection.length;
+
+            //   if (deepStreamLimit < add) {
+            //     items.disableScheduleCheckbox = true;
+            //   }
+            // }
           }
         } else {
           // selectedDS length is 1
@@ -182,13 +247,22 @@ class Add extends Component {
                 if (intersection.length) items.disableScheduleCheckbox = true;
               }
             } else {
-              let intersection = items.Parent_container_id.filter(
-                (x) => !this.state.selectedDS.includes(x)
+              this.resultIntersection(
+                items,
+                "schedule",
+                this.state.selectedDS,
+                (obj) => {
+                  items = { ...obj };
+                }
               );
-              let add = this.state.selectedDS.length + intersection.length;
-              if (deepStreamLimit < add) {
-                items.disableScheduleCheckbox = true;
-              }
+
+              // let intersection = items.Parent_container_id.filter(
+              //   (x) => !this.state.selectedDS.includes(x)
+              // );
+              // let add = this.state.selectedDS.length + intersection.length;
+              // if (deepStreamLimit < add) {
+              //   items.disableScheduleCheckbox = true;
+              // }
             }
           }
         }
@@ -292,6 +366,10 @@ class Add extends Component {
                 this.resultIntersection(element, "schedule", arr, (obj) => {
                   element = { ...obj };
                 });
+              } else {
+                this.resultIntersection(element, "schedule", arr, (obj) => {
+                  element = { ...obj };
+                });
               }
             }
           }
@@ -389,7 +467,7 @@ class Add extends Component {
 
       this.setState({ data });
     } else {
-      console.log("handleGlobalScheduleDisable ELSE");
+      console.log("handleGlobalunScheduleDisable ELSE");
 
       this.parentLoop(data, (items) => {
         if (this.state.selectedUsDS.length > 1) {
@@ -409,26 +487,71 @@ class Add extends Component {
               });
             }
             if (!result.includes(true)) {
-              let intersection = items.Parent_container_id.filter(
-                (x) => !this.state.selectedUsDS.includes(x)
+              this.resultIntersection(
+                items,
+                "unschedule",
+                this.state.selectedUsDS,
+                (obj) => {
+                  items = { ...obj };
+                }
               );
-              let add = this.state.selectedUsDS.length + intersection.length;
-              if (deepStreamLimit < add) {
-                items.disableUnscheduleCheckbox = true;
-              }
-              // if (intersection.length) items.disableUnscheduleCheckbox = true;
             } else {
-              let intersection = items.Parent_container_id.filter(
-                (x) => !this.state.selectedUsDS.includes(x)
+              this.resultIntersection(
+                items,
+                "unschedule",
+                this.state.selectedUsDS,
+                (obj) => {
+                  items = { ...obj };
+                }
               );
-              let add = this.state.selectedUsDS.length + intersection.length;
-
-              if (deepStreamLimit < add) {
-                items.disableUnscheduleCheckbox = true;
-              }
             }
+            // if (!result.includes(true)) {
+            //   let intersection = items.Parent_container_id.filter(
+            //     (x) => !this.state.selectedUsDS.includes(x)
+            //   );
+            //   let add = this.state.selectedUsDS.length + intersection.length;
+            //   if (deepStreamLimit < add) {
+            //     items.disableUnscheduleCheckbox = true;
+            //   }
+            // } else {
+            //   let intersection = items.Parent_container_id.filter(
+            //     (x) => !this.state.selectedUsDS.includes(x)
+            //   );
+            //   let add = this.state.selectedUsDS.length + intersection.length;
+
+            //   if (deepStreamLimit < add) {
+            //     items.disableUnscheduleCheckbox = true;
+            //   }
+            // }
           } else {
-            //parent length is less than selectedUsDS
+            console.log("parent length is greater than selectedDS");
+            let result = [];
+            for (let ele of this.state.selectedDS) {
+              this.parentLoop(items.Parent_container_id, (item2) => {
+                if (ele === item2) result.push(true);
+                else result.push(false);
+              });
+            }
+
+            if (!result.includes(true)) {
+              this.resultIntersection(
+                items,
+                "unschedule",
+                this.state.selectedUsDS,
+                (obj) => {
+                  items = { ...obj };
+                }
+              );
+            } else {
+              this.resultIntersection(
+                items,
+                "unschedule",
+                this.state.selectedUsDS,
+                (obj) => {
+                  items = { ...obj };
+                }
+              );
+            }
           }
         } else {
           // selectedUsDS length is 1
@@ -450,13 +573,21 @@ class Add extends Component {
                 if (intersection.length) items.disableUnscheduleCheckbox = true;
               }
             } else {
-              let intersection = items.Parent_container_id.filter(
-                (x) => !this.state.selectedUsDS.includes(x)
+              this.resultIntersection(
+                items,
+                "unschedule",
+                this.state.selectedUsDS,
+                (obj) => {
+                  items = { ...obj };
+                }
               );
-              let add = this.state.selectedUsDS.length + intersection.length;
-              if (deepStreamLimit < add) {
-                items.disableUnscheduleCheckbox = true;
-              }
+              // let intersection = items.Parent_container_id.filter(
+              //   (x) => !this.state.selectedUsDS.includes(x)
+              // );
+              // let add = this.state.selectedUsDS.length + intersection.length;
+              // if (deepStreamLimit < add) {
+              //   items.disableUnscheduleCheckbox = true;
+              // }
             }
           }
         }
@@ -557,6 +688,10 @@ class Add extends Component {
                 });
               });
               if (result.includes(true)) {
+                this.resultIntersection(element, "unschedule", arr, (obj) => {
+                  element = { ...obj };
+                });
+              } else {
                 this.resultIntersection(element, "unschedule", arr, (obj) => {
                   element = { ...obj };
                 });
@@ -938,18 +1073,6 @@ class Add extends Component {
       this.handleScheduleCheck(indexx);
       console.log("disableUsecaseDSLimitReached ELSE");
     }
-  };
-
-  handleScheduleCheck = (index) => {
-    // reusable function to check Schedule
-    let data = [...this.state.data];
-    data[index].scheduleChecked = true;
-    let selected = data[index].Service_id;
-    let arr = [...this.state.scheduleChecked];
-    arr.push(selected);
-    this.setState({ data, scheduleChecked: arr }, () =>
-      this.handleGlobalScheduleDisable()
-    );
   };
 
   handleGlobalScheduleDisable2 = () => {
