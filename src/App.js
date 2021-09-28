@@ -5,6 +5,7 @@ import Page1 from "./pages/Page1";
 import "./App.css";
 import Add from "./Add";
 import Add2 from "./Add2";
+import AddCamera from "./AddCamera";
 
 function App() {
   return (
@@ -23,9 +24,10 @@ function App() {
           Learn React
         </a>
       </header> */}
-      <Add />
+      {/* <Add /> */}
       {/* <Add2 /> */}
       {/* <Page1 /> */}
+      <AddCamera />
     </div>
   );
 }

@@ -1,92 +1,64 @@
 {
-  "details": {
-    "LOITV1": {
-      "memory": 100,
-      "type": "Usecase",
-      "service_name": "Loitering",
-      "Parent_container_id": ["person"],
-      "scheduleChecked": false,
-      "unScheduleChecked": false,
-      "disableScheduleCheckbox": false,
-      "disableUnscheduleCheckbox": false
+  "Services": [
+    {
+      "Service_id": "LOITV1ANA",
+      "Service_name": "Loitering Analytics",
+      "Description": "desc",
+      "Status": "Inactive",
+      "Category": "Analytics",
+      "Parent_container_id": {
+        "AI": ["person"],
+        "Usecase": ["LOITV1"],
+        "Analytics": [],
+        "Base": [],
+        "Firmware": [],
+        "Database": []
+      }
     },
-    "TRESSPASSV1": {
-      "memory": 200,
-      "type": "Usecase",
-      "service_name": "Tresspassing",
-      "Parent_container_id": ["person"],
-      "scheduleChecked": false,
-      "unScheduleChecked": false,
-      "disableScheduleCheckbox": false,
-      "disableUnscheduleCheckbox": false
+    {
+      "Service_id": "LOITV1",
+      "Service_name": "Loitering",
+      "Description": "desc",
+      "Status": "Inactive",
+      "Category": "Usecase",
+      "Parent_container_id": {
+        "AI": ["person"],
+        "Usecase": [],
+        "Analytics": [],
+        "Base": [],
+        "Firmware": [],
+        "Database": []
+      }
     },
-    "PPLCNT1": {
-      "memory": 100,
-      "type": "Usecase",
-      "service_name": "People Count",
-      "Parent_container_id": ["person"],
-      "scheduleChecked": false,
-      "unScheduleChecked": false,
-      "disableScheduleCheckbox": false,
-      "disableUnscheduleCheckbox": false
+    {
+      "Service_id": "VEHIV1ANA",
+      "Service_name": "Vehicle Analytics",
+      "Description": "desc",
+      "Status": "Inactive",
+      "Category": "Analytics",
+      "Parent_container_id": {
+        "AI": ["vehicle"],
+        "Usecase": ["VEHIV1"],
+        "Analytics": [],
+        "Base": [],
+        "Firmware": [],
+        "Database": []
+      }
     },
-    "VHLCNT1": {
-      "memory": 100,
-      "type": "Usecase",
-      "service_name": "Vehicle Count",
-      "Parent_container_id": ["vehicle"],
-      "scheduleChecked": false,
-      "unScheduleChecked": false,
-      "disableScheduleCheckbox": false,
-      "disableUnscheduleCheckbox": false
-    },
-    "FGMHV1": {
-      "memory": 100,
-      "type": "Usecase",
-      "service_name": "Gun Detection",
-      "Parent_container_id": ["fmgh"],
-      "scheduleChecked": false,
-      "unScheduleChecked": false,
-      "disableScheduleCheckbox": false,
-      "disableUnscheduleCheckbox": false
-    },
-    "AVGWAITV1": {
-      "memory": 100,
-      "type": "Usecase",
-      "service_name": "Average Waiting",
-      "Parent_container_id": ["person","vehicle"],
-      "scheduleChecked": false,
-      "unScheduleChecked": false,
-      "disableScheduleCheckbox": false,
-      "disableUnscheduleCheckbox": false
-    },
-    "SOCIALDISTV1": {
-      "memory": 100,
-      "type": "Usecase",
-      "service_name": "Social Distancing",
-      "Parent_container_id": ["person"],
-      "scheduleChecked": false,
-      "unScheduleChecked": false,
-      "disableScheduleCheckbox": false,
-      "disableUnscheduleCheckbox": false
-    },
-    "person": {
-      "memory": 1000,
-      "type": "AI",
-      "service_name": "Deepstream_person_service",
-      "Parent_container_id": []
-    },
-    "fmgh": {
-      "memory": 1000,
-      "type": "AI",
-      "service_name": "Deepstream_fmgh_service",
-      "Parent_container_id": []
-    },
-    "vehicle": {
-      "memory": 1000,
-      "type": "AI",
-      "service_name": "Deepstream_vehicle_service",
-      "Parent_container_id": []
+    {
+      "Service_id": "VEHIV1",
+      "Service_name": "Vehicle Count",
+      "Description": "desc",
+      "Status": "Inactive",
+      "Category": "Usecase",
+      "Parent_container_id": {
+        "AI": ["vehicle"],
+        "Usecase": [],
+        "Analytics": [],
+        "Base": [],
+        "Firmware": [],
+        "Database": []
+      }
     }
-  }
+  ]
 }
