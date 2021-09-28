@@ -21,28 +21,158 @@ export default class AddCamera extends Component {
     mouseState: false,
     arr: [],
     Service: Services,
+    selectedTimeSlot: [],
+    data: [
+      {
+        slot: "0-2",
+        Usecases: [],
+        AI: [],
+        isDisabled: false,
+        disabledSlot: [],
+      },
+      {
+        slot: "2-4",
+        Usecases: [],
+        AI: [],
+        isDisabled: false,
+        disabledSlot: [],
+      },
+      {
+        slot: "4-6",
+        Usecases: [],
+        AI: [],
+        isDisabled: false,
+        disabledSlot: [],
+      },
+      {
+        slot: "6-8",
+        Usecases: [],
+        AI: [],
+        isDisabled: false,
+        disabledSlot: [],
+      },
+      {
+        slot: "8-10",
+        Usecases: [],
+        AI: [],
+        isDisabled: false,
+        disabledSlot: [],
+      },
+      {
+        slot: "10-12",
+        Usecases: [],
+        AI: [],
+        isDisabled: false,
+        disabledSlot: [],
+      },
+      {
+        slot: "12-14",
+        Usecases: [],
+        AI: [],
+        isDisabled: false,
+        disabledSlot: [],
+      },
+      {
+        slot: "14-16",
+        Usecases: [],
+        AI: [],
+        isDisabled: false,
+        disabledSlot: [],
+      },
+      {
+        slot: "16-18",
+        Usecases: [],
+        AI: [],
+        isDisabled: false,
+        disabledSlot: [],
+      },
+      {
+        slot: "18-20",
+        Usecases: [],
+        AI: [],
+        isDisabled: false,
+        disabledSlot: [],
+      },
+      {
+        slot: "20-22",
+        Usecases: [],
+        AI: [],
+        isDisabled: false,
+        disabledSlot: [],
+      },
+      {
+        slot: "22-0",
+        Usecases: [],
+        AI: [],
+        isDisabled: false,
+        disabledSlot: [],
+      },
+    ],
+    activeUsecases: [],
+  };
+
+  parentLoop = (arr, callback) => {
+    for (let element of arr) {
+      callback(element);
+    }
   };
 
   mouseDown = (i) => {
     console.log("mouseDown");
-    let _arr = [...this.state.arr];
-    if (_arr.includes(i)) {
-      var index = _arr.indexOf(i);
-      _arr.splice(index, 1);
+    let _selectedTimeSlot = [...this.state.selectedTimeSlot];
+    if (_selectedTimeSlot.includes(i)) {
+      var index = _selectedTimeSlot.indexOf(i);
+      _selectedTimeSlot.splice(index, 1);
     } else {
-      _arr.push(i);
+      _selectedTimeSlot.push(i);
     }
 
-    this.setState({ arr: _arr });
+    this.setState({ selectedTimeSlot: _selectedTimeSlot });
     this.setState({ mouseState: true });
   };
-  componentDidMount() {
-    console.log(this.state.Service);
-  }
+  submitTime = () => {
+    let _selectedTimeSlot = [...this.state.selectedTimeSlot];
+    let _data = [...this.state.data];
+    const intersection = _data.filter((element) => {
+      if (_selectedTimeSlot.includes(element.slot)) {
+        element.isDisabled = false;
+      } else element.isDisabled = true;
+      return element;
+    });
+    this.setState({ data: intersection });
+  };
+  handleCase = (item, service_item) => {
+    console.log(item, service_item);
+    let _data = [...this.state.data];
+    this.parentLoop(_data, (ele) => {
+      if (ele.slot === item.slot) {
+        if (ele.Usecases.includes(service_item.Service_id)) {
+          var index = ele.Usecases.indexOf(service_item.Service_id);
+          ele.Usecases.splice(index, 1);
+        } else ele.Usecases.push(service_item.Service_id);
+      }
+    });
+    this.setState({ data: _data });
+  };
+  usecaseMouseDown = (item, index, service_item) => {
+    let _activeUsecases = [...this.state.activeUsecases];
+    let _data = [...this.state.data];
+    //adding selected usecase in state
+    if (_activeUsecases.includes(service_item.Service_id)) {
+      var index = _activeUsecases.indexOf(service_item.Service_id);
+      _activeUsecases.splice(index, 1);
+    } else {
+      _activeUsecases.push(service_item.Service_id);
+    }
+    this.setState({ mouseState: true, activeUsecases: _activeUsecases }, () =>
+      this.handleCase(item, service_item)
+    );
+  };
+  componentDidMount() {}
   render() {
     return (
       <div className="addCamera">
-        {console.log(this.state.arr)}
+        {console.log(this.state)}
         <div className="header">
           <img src={logo} className="logo" />
         </div>
@@ -70,25 +200,30 @@ export default class AddCamera extends Component {
             <p className="h">Camera</p>
             <div
               className="timeline"
-              onMouseLeave={() => this.setState({ mouseState: false })}
+              // onMouseLeave={() => this.setState({ mouseState: false })}
             >
-              {this.state.time.map((item) => (
+              {this.state.data.map((item) => (
                 <div
                   key={item}
                   className={
-                    this.state.arr.includes(item) ? "child active" : "child"
+                    this.state.selectedTimeSlot.includes(item.slot)
+                      ? "child active"
+                      : "child"
                   }
                   onMouseDown={() => {
-                    this.mouseDown(item);
+                    this.mouseDown(item.slot);
                   }}
                   onMouseEnter={() => {
                     if (this.state.mouseState) {
-                      this.mouseDown(item);
+                      this.mouseDown(item.slot);
                     }
                   }}
                   onMouseUp={() => this.setState({ mouseState: false })}
                 ></div>
               ))}
+              <button onClick={this.submitTime} className="submit">
+                Submit
+              </button>
             </div>
           </div>
           <div className="data-container">
@@ -96,25 +231,28 @@ export default class AddCamera extends Component {
               <h1>Usecases</h1>
               <div className="dummy" />
             </div>
-            {this.state.Service.map((item) => (
+            {this.state.Service.map((service_item) => (
               <div className="flex">
-                <h4 className="name">{item.Service_name}</h4>
+                <h4 className="name">{service_item.Service_name}</h4>
                 <div
                   className="dummy"
-                  onMouseLeave={() => this.setState({ mouseState: false })}
+                  // onMouseLeave={() => this.setState({ mouseState: false })}
                 >
-                  {this.state.time.map((item) => (
+                  {this.state.data.map((item, index) => (
                     <div
-                      key={item}
+                      key={item.slot}
+                      className="child"
                       className={
-                        this.state.arr.includes(item) ? "child active" : "child"
+                        item.Usecases.includes(service_item.Service_id)
+                          ? "child active"
+                          : "child"
                       }
                       onMouseDown={() => {
-                        this.mouseDown(item);
+                        this.usecaseMouseDown(item, index, service_item);
                       }}
                       onMouseEnter={() => {
                         if (this.state.mouseState) {
-                          this.mouseDown(item);
+                          this.usecaseMouseDown(item, index, service_item);
                         }
                       }}
                       onMouseUp={() => this.setState({ mouseState: false })}

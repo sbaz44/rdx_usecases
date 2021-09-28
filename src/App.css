@@ -63,6 +63,7 @@ body {
 }
 
 .timeline-header {
+  position: relative;
   display: flex;
   background: #f5f5f5;
   align-items: center;
@@ -80,6 +81,11 @@ body {
   font-weight: bold;
 }
 .timeline {
+  display: flex;
+  width: 100%;
+}
+
+.slider {
   display: flex;
   width: 100%;
 }
@@ -138,6 +144,11 @@ body {
   text-align: center;
   padding: 10px 0;
   font-weight: normal;
+}
+.submit {
+  position: absolute;
+  bottom: 0;
+  right: 0;
 }
 /* .usecase-name {
   width: 22%;
