@@ -32,7 +32,7 @@ export default class AddCamera extends Component {
         Usecases: [],
         AI: [],
         isDisabled: true,
-        disabledSlot: [],
+        disabledService: [],
         Dependent: [],
       },
       {
@@ -40,7 +40,7 @@ export default class AddCamera extends Component {
         Usecases: [],
         AI: [],
         isDisabled: true,
-        disabledSlot: [],
+        disabledService: [],
         Dependent: [],
       },
       {
@@ -48,7 +48,7 @@ export default class AddCamera extends Component {
         Usecases: [],
         AI: [],
         isDisabled: true,
-        disabledSlot: [],
+        disabledService: [],
         Dependent: [],
       },
       {
@@ -56,7 +56,7 @@ export default class AddCamera extends Component {
         Usecases: [],
         AI: [],
         isDisabled: true,
-        disabledSlot: [],
+        disabledService: [],
         Dependent: [],
       },
       {
@@ -64,7 +64,7 @@ export default class AddCamera extends Component {
         Usecases: [],
         AI: [],
         isDisabled: true,
-        disabledSlot: [],
+        disabledService: [],
         Dependent: [],
       },
       {
@@ -72,7 +72,7 @@ export default class AddCamera extends Component {
         Usecases: [],
         AI: [],
         isDisabled: true,
-        disabledSlot: [],
+        disabledService: [],
         Dependent: [],
       },
       {
@@ -80,7 +80,7 @@ export default class AddCamera extends Component {
         Usecases: [],
         AI: [],
         isDisabled: true,
-        disabledSlot: [],
+        disabledService: [],
         Dependent: [],
       },
       {
@@ -88,7 +88,7 @@ export default class AddCamera extends Component {
         Usecases: [],
         AI: [],
         isDisabled: true,
-        disabledSlot: [],
+        disabledService: [],
         Dependent: [],
       },
       {
@@ -96,7 +96,7 @@ export default class AddCamera extends Component {
         Usecases: [],
         AI: [],
         isDisabled: true,
-        disabledSlot: [],
+        disabledService: [],
         Dependent: [],
       },
       {
@@ -104,7 +104,7 @@ export default class AddCamera extends Component {
         Usecases: [],
         AI: [],
         isDisabled: true,
-        disabledSlot: [],
+        disabledService: [],
         Dependent: [],
       },
       {
@@ -112,7 +112,7 @@ export default class AddCamera extends Component {
         Usecases: [],
         AI: [],
         isDisabled: true,
-        disabledSlot: [],
+        disabledService: [],
         Dependent: [],
       },
       {
@@ -120,7 +120,7 @@ export default class AddCamera extends Component {
         Usecases: [],
         AI: [],
         isDisabled: true,
-        disabledSlot: [],
+        disabledService: [],
         Dependent: [],
       },
     ],
@@ -182,7 +182,8 @@ export default class AddCamera extends Component {
     }
     this.setState({ data: _data });
   };
-  handleCase = (item, service_item) => {
+  handleDSRemoval = (item, service_item) => {
+    console.log(this.state);
     // console.log(item, service_item);
     // let _data = [...this.state.data];
     // this.parentLoop(_data, (ele) => {
@@ -201,6 +202,7 @@ export default class AddCamera extends Component {
     let _activeUsecases = [...this.state.activeUsecases];
     let _activeDS = [...this.state.activeDS];
     let _data = [...this.state.data];
+    let _Service = [...this.state.Service];
 
     if (usecaseLimit === this.state.activeUsecases.length) {
       console.log("Usecase limit reached");
@@ -229,6 +231,7 @@ export default class AddCamera extends Component {
           });
           let isUCPresent = 0;
           this.parentLoop(_data, (ele) => {
+            //removing UC
             if (ele.Usecases.includes(service_item.Service_id)) {
               isUCPresent += 1;
             }
@@ -237,6 +240,19 @@ export default class AddCamera extends Component {
               _activeUsecases.splice(index, 1);
               isUCPresent = 1;
             }
+            //removing DS
+            let arr = [];
+            // _activeDS = [...arr];
+
+            this.parentLoop(_activeUsecases, (ele) => {
+              this.parentLoop(_Service, (ele2) => {
+                if (ele2.Service_id === ele) {
+                  Array.prototype.push.apply(arr, ele2.Parent_container_id.AI);
+                  arr = [...new Set(arr)];
+                }
+              });
+            });
+            _activeDS = [...arr];
           });
         } else {
           // _activeDS.push(service_item.Service_id);
@@ -268,7 +284,21 @@ export default class AddCamera extends Component {
       () => console.log(this.state)
     );
   };
-  componentDidMount() {}
+  onLoad = () => {
+    let _data = [...this.state.data];
+    let _Service = [...this.state.Service];
+    this.parentLoop(_Service, (item) => {
+      if (item.Parent_container_id.AI.length > deepStreamLimit) {
+        this.parentLoop(_data, (ele) => {
+          ele.disabledService.push(item.Service_id);
+        });
+      }
+    });
+    this.setState({ data: _data }, () => console.log(this.state));
+  };
+  componentDidMount() {
+    this.onLoad();
+  }
   render() {
     return (
       <div className="addCamera">
@@ -333,29 +363,51 @@ export default class AddCamera extends Component {
                 <h4 className="name">{service_item.Service_name}</h4>
                 <div
                   className="dummy"
-                  // onMouseLeave={() => this.setState({ mouseState: false })}
+                  onMouseLeave={() => this.setState({ mouseState: false })}
                 >
                   {this.state.data.map((item, index) => (
                     <div
                       key={item.slot}
-                      className="child"
                       className={
                         item.Usecases.includes(service_item.Service_id)
                           ? "child active"
                           : "child"
                       }
+                      style={{
+                        backgroundColor: item.isDisabled
+                          ? "Gray"
+                          : item.disabledService.includes(
+                              service_item.Service_id
+                            )
+                          ? "gray"
+                          : "",
+                      }}
                       onMouseDown={() => {
-                        if (!item.isDisabled)
-                          this.usecaseMouseDown(item, index, service_item);
+                        if (!item.isDisabled) {
+                          if (
+                            !item.disabledService.includes(
+                              service_item.Service_id
+                            )
+                          ) {
+                            this.usecaseMouseDown(item, index, service_item);
+                          }
+                        }
                       }}
                       onMouseEnter={() => {
                         if (this.state.mouseState) {
-                          if (!item.isDisabled)
-                            this.usecaseMouseDown(item, index, service_item);
+                          if (!item.isDisabled) {
+                            if (
+                              !item.disabledService.includes(
+                                service_item.Service_id
+                              )
+                            ) {
+                              this.usecaseMouseDown(item, index, service_item);
+                            }
+                          }
                         }
                       }}
                       onMouseUp={() => this.setState({ mouseState: false })}
-                    ></div>
+                    />
                   ))}
                 </div>
               </div>

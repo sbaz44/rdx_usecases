@@ -59,6 +59,36 @@
         "Firmware": [],
         "Database": []
       }
+    },
+    {
+      "Service_id": "DUMMYV1",
+      "Service_name": "Dummy Service",
+      "Description": "desc",
+      "Status": "Inactive",
+      "Category": "Usecase",
+      "Parent_container_id": {
+        "AI": ["person", "vehicle"],
+        "Usecase": [],
+        "Analytics": [],
+        "Base": [],
+        "Firmware": [],
+        "Database": []
+      }
+    },
+    {
+      "Service_id": "DUMMYV2",
+      "Service_name": "Dummy Service 2",
+      "Description": "desc",
+      "Status": "Inactive",
+      "Category": "Usecase",
+      "Parent_container_id": {
+        "AI": ["person", "vehicle", "dp1"],
+        "Usecase": [],
+        "Analytics": [],
+        "Base": [],
+        "Firmware": [],
+        "Database": []
+      }
     }
   ]
 }
