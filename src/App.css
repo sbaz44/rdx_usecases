@@ -145,11 +145,7 @@ body {
   padding: 10px 0;
   font-weight: normal;
 }
-.submit {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-}
+
 /* .usecase-name {
   width: 22%;
   margin-right: 110px;
