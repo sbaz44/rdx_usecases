@@ -31,6 +31,36 @@
       }
     },
     {
+      "Service_id": "MASKV1",
+      "Service_name": "Mask",
+      "Description": "desc",
+      "Status": "Inactive",
+      "Category": "Usecase",
+      "Parent_container_id": {
+        "AI": ["fmgh"],
+        "Usecase": [],
+        "Analytics": [],
+        "Base": [],
+        "Firmware": [],
+        "Database": []
+      }
+    },
+    {
+      "Service_id": "TRESV1",
+      "Service_name": "Tresspassing",
+      "Description": "desc",
+      "Status": "Inactive",
+      "Category": "Usecase",
+      "Parent_container_id": {
+        "AI": ["person"],
+        "Usecase": [],
+        "Analytics": [],
+        "Base": [],
+        "Firmware": [],
+        "Database": []
+      }
+    },
+    {
       "Service_id": "VEHIV1ANA",
       "Service_name": "Vehicle Analytics",
       "Description": "desc",
@@ -61,6 +91,21 @@
       }
     },
     {
+      "Service_id": "VNUMV1",
+      "Service_name": "Vehicle Number Plate",
+      "Description": "desc",
+      "Status": "Inactive",
+      "Category": "Usecase",
+      "Parent_container_id": {
+        "AI": ["vehicle"],
+        "Usecase": [],
+        "Analytics": [],
+        "Base": [],
+        "Firmware": [],
+        "Database": []
+      }
+    },
+    {
       "Service_id": "DUMMYV1",
       "Service_name": "Dummy Service",
       "Description": "desc",
@@ -68,6 +113,21 @@
       "Category": "Usecase",
       "Parent_container_id": {
         "AI": ["person", "vehicle"],
+        "Usecase": [],
+        "Analytics": [],
+        "Base": [],
+        "Firmware": [],
+        "Database": []
+      }
+    },
+    {
+      "Service_id": "DUMMYV3",
+      "Service_name": "Dummy Service 3",
+      "Description": "desc",
+      "Status": "Inactive",
+      "Category": "Usecase",
+      "Parent_container_id": {
+        "AI": ["person", "fmgh"],
         "Usecase": [],
         "Analytics": [],
         "Base": [],
