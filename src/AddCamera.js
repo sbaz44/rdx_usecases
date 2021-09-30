@@ -133,6 +133,23 @@ export default class AddCamera extends Component {
       callback(element);
     }
   };
+  toggleUsecase = (service_id, type) => {
+    let _data = [...this.state.data];
+    if (type === "push") {
+      this.parentLoop(_data, (ele) => {
+        ele.disabledService.push(service_id);
+      });
+    } else {
+      this.parentLoop(_data, (ele) => {
+        if (ele.disabledService.includes(service_id)) {
+          var index = ele.disabledService.indexOf(service_id);
+          ele.disabledService.splice(index, 1);
+        }
+        // else ele.Usecases.push(service_id);
+      });
+    }
+    this.setState({ data: _data });
+  };
 
   timeslotMouseDown = (i) => {
     let _selectedTimeSlot = [...this.state.selectedTimeSlot];
@@ -188,59 +205,59 @@ export default class AddCamera extends Component {
     let _Service = [...this.state.Service];
     let _activeDS = [...this.state.activeDS];
     console.log("isDSPresentInState");
-
-    if (service_item.Parent_container_id.AI.length === 1) {
-      console.log("selectedDS length is  1: " + service_item.Service_id);
-      if (_activeDS.includes(service_item.Parent_container_id.AI[0])) {
-        if (_activeDS.length === deepStreamLimit) {
-          return true;
-        } else return false;
-      }
-    } else {
-      console.log(
-        "selectedDS length is greater than 1: " + service_item.Service_id
-      );
-
-      if (_activeDS.length === 0) {
-        return false;
-      }
-
-      if (service_item.Parent_container_id.AI.length === deepStreamLimit) {
-        console.log("selected DS length === deepStreamLimit");
-        return true;
-      } else {
-        let result = [];
-        this.parentLoop(_activeDS, (ele) => {
-          this.parentLoop(service_item.Parent_container_id.AI, (ele2) => {
-            if (ele === ele2) result.push(true);
-            else result.push(false);
-          });
-        });
-        if (result.includes(true)) {
-          const intersection = _activeDS.filter(
-            (value) => !service_item.Parent_container_id.AI.includes(value)
-          );
-          console.log(intersection);
-          let add = _activeDS.length + intersection.length;
-          console.log(deepStreamLimit + "<" + add);
-          if (deepStreamLimit < add) return true;
-          else return false;
-        }
-      }
+    console.log(_activeDS);
+    if (_activeDS.length === deepStreamLimit) {
     }
-    // this.parentLoop(_Service, (ele) => {
-    //   let result = [];
-    //   if (ele.Parent_container_id.AI.length <= deepStreamLimit) {
-    //     this.parentLoop(ele.Parent_container_id.AI, (ele2) => {
-    //       this.parentLoop(_activeDS, (ele3) => {
-    //         if (ele3 === ele2) result.push(true);
+    // if (service_item.Parent_container_id.AI.length === 1) {
+    //   console.log("selectedDS length is  1: " + service_item.Service_id);
+    //   if (_activeDS.includes(service_item.Parent_container_id.AI[0])) {
+    //     if (_activeDS.length === deepStreamLimit) {
+    //       return true;
+    //     } else return false;
+    //   }
+    // } else {
+    //   console.log(
+    //     "selectedDS length is greater than 1: " + service_item.Service_id
+    //   );
+
+    //   if (_activeDS.length === 0) {
+    //     return false;
+    //   }
+
+    //   if (service_item.Parent_container_id.AI.length === deepStreamLimit) {
+    //     console.log("selected DS length === deepStreamLimit");
+    //     return true;
+    //   } else {
+    //     let result = [];
+    //     this.parentLoop(_activeDS, (ele) => {
+    //       this.parentLoop(service_item.Parent_container_id.AI, (ele2) => {
+    //         if (ele === ele2) result.push(true);
     //         else result.push(false);
     //       });
     //     });
-    //     console.log(result);
+    //     if (result.includes(true)) {
+    //       const intersection = _activeDS.filter(
+    //         (value) => !service_item.Parent_container_id.AI.includes(value)
+    //       );
+    //       let add = _activeDS.length + intersection.length;
+    //       if (deepStreamLimit < add) return true;
+    //       else return false;
+    //     }
     //   }
-    // });
+    // }
   };
+  // this.parentLoop(_Service, (ele) => {
+  //   let result = [];
+  //   if (ele.Parent_container_id.AI.length <= deepStreamLimit) {
+  //     this.parentLoop(ele.Parent_container_id.AI, (ele2) => {
+  //       this.parentLoop(_activeDS, (ele3) => {
+  //         if (ele3 === ele2) result.push(true);
+  //         else result.push(false);
+  //       });
+  //     });
+  //     console.log(result);
+  //   }
+  // });
 
   _DSLimitReached = (data_item, service_item) => {
     console.log("DISABLING USING DS");
@@ -257,7 +274,6 @@ export default class AddCamera extends Component {
             else result.push(false);
           });
         });
-
         if (!result.includes(true)) {
           this.parentLoop(_data, (data_ele) => {
             data_ele.disabledService.push(ele.Service_id);
@@ -272,16 +288,31 @@ export default class AddCamera extends Component {
           // Array.prototype.push.apply(arr, intersection);
           // arr = [...new Set(arr)];
           // console.log(arr);
+          // console.log(ele.Service_id);
           let add = _activeDS.length + intersection.length;
           if (deepStreamLimit < add) {
             console.log("disabled DS: " + ele.Service_id);
             this.parentLoop(_data, (data_ele) => {
               data_ele.disabledService.push(ele.Service_id);
+              data_ele.disabledService = [...new Set(data_ele.disabledService)];
             });
+          } else {
+            console.log(ele.Service_id);
+
+            // console.log(_data);
+            this.parentLoop(_data, (data_ele) => {
+              if (data_ele.disabledService.includes(ele.Service_id)) {
+                var index = data_ele.disabledService.indexOf(ele.Service_id);
+                data_ele.disabledService.splice(index, 1);
+              }
+              // else ele.Usecases.push(service_id);
+            });
+            console.log(_data);
           }
         }
       }
     });
+    this.setState({ data: _data });
   };
 
   _UCLimitReached = () => {
@@ -300,6 +331,7 @@ export default class AddCamera extends Component {
   };
 
   _unchecked = () => {
+    console.log("_unchecked");
     let _data = [...this.state.data];
     let _Service = [...this.state.Service];
     let _activeDS = [...this.state.activeDS];
@@ -358,9 +390,11 @@ export default class AddCamera extends Component {
                 console.log(intersection);
                 let add = _activeDS.length + intersection.length;
                 if (deepStreamLimit < add) {
-                  console.log(element.Service_id);
+                  console.log("disable: " + element.Service_id);
+                  this.toggleUsecase(element.Service_id, "push");
                 } else {
-                  console.log(element.Service_id);
+                  console.log("enable: " + element.Service_id);
+                  this.toggleUsecase(element.Service_id, "put");
                 }
               } else {
                 let intersection = element.Parent_container_id.AI.filter(
@@ -370,20 +404,14 @@ export default class AddCamera extends Component {
                 let add = _activeDS.length + intersection.length;
                 console.log(add);
                 if (deepStreamLimit < add) {
-                  console.log(element.Service_id);
+                  console.log("disable1: " + element.Service_id);
+                  this.toggleUsecase(element.Service_id, "push");
                 } else {
-                  console.log(element.Service_id);
+                  console.log("enable1: " + element.Service_id);
+                  this.toggleUsecase(element.Service_id, "put");
+                  // this.toggleUsecase(element.Service_id);
                 }
               }
-              // if (result.includes(true)) {
-              //   this.resultIntersection(element, "schedule", arr, (obj) => {
-              //     element = { ...obj };
-              //   });
-              // } else {
-              //   this.resultIntersection(element, "schedule", arr, (obj) => {
-              //     element = { ...obj };
-              //   });
-              // }
             } else {
               let result = [];
               this.parentLoop(arr, (ele) => {
@@ -401,9 +429,11 @@ export default class AddCamera extends Component {
                 console.log(intersection);
                 let add = _activeDS.length + intersection.length;
                 if (deepStreamLimit < add) {
-                  console.log(element.Service_id);
+                  this.toggleUsecase(element.Service_id, "push");
+                  console.log("disable2: " + element.Service_id);
                 } else {
-                  console.log(element.Service_id);
+                  this.toggleUsecase(element.Service_id, "put");
+                  console.log("enable2: " + element.Service_id);
                 }
               } else {
                 let intersection = element.Parent_container_id.AI.filter(
@@ -413,9 +443,10 @@ export default class AddCamera extends Component {
                 let add = _activeDS.length + intersection.length;
                 console.log(add);
                 if (deepStreamLimit < add) {
-                  console.log(element.Service_id);
+                  this.toggleUsecase(element.Service_id, "push");
+                  console.log("disable3: " + element.Service_id);
                 } else {
-                  console.log(element.Service_id);
+                  console.log("enable3: " + element.Service_id);
                 }
               }
             }
@@ -430,7 +461,8 @@ export default class AddCamera extends Component {
     if (usecaseLimit === this.state.activeUsecases.length) {
       console.log("Usecase limit reached");
       this._UCLimitReached();
-    } else if (this.isDSPresentInState(data_item, service_item)) {
+      // } else if (this.isDSPresentInState(data_item, service_item)) {
+    } else if (this.state.activeDS.length === deepStreamLimit) {
       console.log("DS limit reached");
       this._DSLimitReached(data_item, service_item);
     } else {
