@@ -61,6 +61,21 @@
       }
     },
     {
+      "Service_id": "TRESANAV1",
+      "Service_name": "Tresspassing Analytics",
+      "Description": "desc",
+      "Status": "Inactive",
+      "Category": "Analytics",
+      "Parent_container_id": {
+        "AI": ["person"],
+        "Usecase": ["LOITV1"],
+        "Analytics": [],
+        "Base": [],
+        "Firmware": [],
+        "Database": []
+      }
+    },
+    {
       "Service_id": "VEHIV1ANA",
       "Service_name": "Vehicle Analytics",
       "Description": "desc",
@@ -144,6 +159,21 @@
       "Parent_container_id": {
         "AI": ["person", "vehicle", "dp1"],
         "Usecase": [],
+        "Analytics": [],
+        "Base": [],
+        "Firmware": [],
+        "Database": []
+      }
+    },
+    {
+      "Service_id": "DUMMYANAV1",
+      "Service_name": "Dummy Analytics",
+      "Description": "desc",
+      "Status": "Inactive",
+      "Category": "Analytics",
+      "Parent_container_id": {
+        "AI": ["person"],
+        "Usecase": ["LOITV1", "VEHIV1"],
         "Analytics": [],
         "Base": [],
         "Firmware": [],

@@ -24,8 +24,12 @@ export default class AddCamera extends Component {
     ],
     mouseState: false,
     arr: [],
+    isCamerPresent: false,
     Service: Services,
     selectedTimeSlot: ["0-2", "2-4", "4-6", "6-8"],
+    staticDS: [],
+    staticUC: [],
+    staticDependent: [],
     data: [
       {
         slot: "0-2",
@@ -124,8 +128,168 @@ export default class AddCamera extends Component {
         Dependent: [],
       },
     ],
+    apiData: {
+      // "0-2": {
+      //   global: {
+      //     Cameras: [],
+      //     Usecases: [],
+      //     Dependent: [],
+      //     AI: [],
+      //   },
+      //   local: {},
+      // },
+      // "2-4": {
+      //   global: {
+      //     Cameras: [],
+      //     Usecases: [],
+      //     Dependent: [],
+      //     AI: [],
+      //   },
+      //   local: {},
+      // },
+      "0-2": {
+        global: {
+          Cameras: ["1"],
+          Usecases: ["LOITV1", "LOITV1ANA", "TRESV1", "MASKV1"],
+          Dependent: ["LOITV1"],
+          AI: ["person", "fmgh"],
+        },
+        local: {
+          1: {
+            Usecases: ["LOITV1", "LOITV1ANA", "TRESV1", "MASKV1"],
+            Dependent: ["LOITV1"],
+            AI: ["person", "fmgh"],
+          },
+          // 2: {
+          //   Usecases: ["LOITV1"],
+          //   Dependent: [],
+          //   AI: ["person"],
+          // },
+        },
+      },
+      "2-4": {
+        global: {
+          Cameras: [],
+          Usecases: [],
+          Dependent: [],
+          AI: [],
+        },
+        local: {},
+      },
+      // "2-4": {
+      //   global: {
+      //     Cameras: ["2", "3"],
+      //     Usecases: ["LOITVANALYTICS", "LOITV1"],
+      //     Dependent: ["LOITV1"],
+      //     AI: ["person"],
+      //   },
+      //   local: {
+      //     2: {
+      //       Usecases: ["LOITVANALYTICS", "LOITV1"],
+      //       Dependent: ["LOITV1"],
+      //       AI: ["person"],
+      //     },
+      //     3: {
+      //       Usecases: ["LOITVANALYTICS", "LOITV1"],
+      //       Dependent: ["LOITV1"],
+      //       AI: ["person"],
+      //     },
+      //   },
+      // },
+      "4-6": {
+        global: {
+          Cameras: [],
+          Usecases: [],
+          Dependent: [],
+          AI: [],
+        },
+        local: {},
+      },
+      "6-8": {
+        global: {
+          Cameras: [],
+          Usecases: [],
+          Dependent: [],
+          AI: [],
+        },
+        local: {},
+      },
+      "8-10": {
+        global: {
+          Cameras: [],
+          Usecases: [],
+          Dependent: [],
+          AI: [],
+        },
+        local: {},
+      },
+      "10-12": {
+        global: {
+          Cameras: [],
+          Usecases: [],
+          Dependent: [],
+          AI: [],
+        },
+        local: {},
+      },
+      "12-14": {
+        global: {
+          Cameras: [],
+          Usecases: [],
+          Dependent: [],
+          AI: [],
+        },
+        local: {},
+      },
+      "14-16": {
+        global: {
+          Cameras: [],
+          Usecases: [],
+          Dependent: [],
+          AI: [],
+        },
+        local: {},
+      },
+      "16-18": {
+        global: {
+          Cameras: [],
+          Usecases: [],
+          Dependent: [],
+          AI: [],
+        },
+        local: {},
+      },
+      "18-20": {
+        global: {
+          Cameras: [],
+          Usecases: [],
+          Dependent: [],
+          AI: [],
+        },
+        local: {},
+      },
+      "20-22": {
+        global: {
+          Cameras: [],
+          Usecases: [],
+          Dependent: [],
+          AI: [],
+        },
+        local: {},
+      },
+      "22-0": {
+        global: {
+          Cameras: [],
+          Usecases: [],
+          Dependent: [],
+          AI: [],
+        },
+        local: {},
+      },
+    },
     activeUsecases: [],
     activeDS: [],
+    activeDependent: [],
   };
 
   parentLoop = (arr, callback) => {
@@ -297,8 +461,6 @@ export default class AddCamera extends Component {
               data_ele.disabledService = [...new Set(data_ele.disabledService)];
             });
           } else {
-            console.log(ele.Service_id);
-
             // console.log(_data);
             this.parentLoop(_data, (data_ele) => {
               if (data_ele.disabledService.includes(ele.Service_id)) {
@@ -307,7 +469,6 @@ export default class AddCamera extends Component {
               }
               // else ele.Usecases.push(service_id);
             });
-            console.log(_data);
           }
         }
       }
@@ -316,12 +477,12 @@ export default class AddCamera extends Component {
   };
 
   _UCLimitReached = () => {
+    console.log("_UCLimitReached");
     let _Service = [...this.state.Service];
     let _activeDS = [...this.state.activeDS];
     let _activeUsecases = [...this.state.activeUsecases];
     let _data = [...this.state.data];
     this.parentLoop(_Service, (ele) => {
-      console.log(_activeUsecases.includes(ele.Service_id));
       if (!_activeUsecases.includes(ele.Service_id)) {
         this.parentLoop(_data, (data_ele) => {
           data_ele.disabledService.push(ele.Service_id);
@@ -330,12 +491,13 @@ export default class AddCamera extends Component {
     });
   };
 
-  _unchecked = () => {
+  _unchecked = (service_item) => {
     console.log("_unchecked");
     let _data = [...this.state.data];
     let _Service = [...this.state.Service];
     let _activeDS = [...this.state.activeDS];
     let _activeUsecases = [...this.state.activeUsecases];
+    let _activeDependent = [...this.state.activeDependent];
     if (!_activeDS.length) {
       console.log("DEFAULT STATE");
       this.parentLoop(_Service, (item) => {
@@ -346,6 +508,7 @@ export default class AddCamera extends Component {
         } else {
           this.parentLoop(_data, (ele) => {
             ele.disabledService = [];
+            ele.Dependent = [];
           });
         }
       });
@@ -353,7 +516,6 @@ export default class AddCamera extends Component {
       console.log("_unchecked ELSE");
 
       let arr = [];
-
       this.parentLoop(_activeUsecases, (ele) => {
         this.parentLoop(_Service, (ele2) => {
           if (ele2.Service_id === ele) {
@@ -369,6 +531,44 @@ export default class AddCamera extends Component {
           (item) => item.Parent_container_id.AI.length <= deepStreamLimit
         );
         console.log(filterData);
+        this.parentLoop(filterData, (element) => {
+          let result = [];
+          this.parentLoop(arr, (ele) => {
+            this.parentLoop(element.Parent_container_id.AI, (ele2) => {
+              if (ele === ele2) result.push(true);
+              else result.push(false);
+            });
+          });
+
+          if (result.includes(true)) {
+            let intersection = element.Parent_container_id.AI.filter(
+              (x) => !_activeDS.includes(x)
+            );
+            console.log(intersection);
+            let add = _activeDS.length + intersection.length;
+            if (deepStreamLimit < add) {
+              console.log("disable4: " + element.Service_id);
+              this.toggleUsecase(element.Service_id, "push");
+            } else {
+              console.log("enable4: " + element.Service_id);
+              this.toggleUsecase(element.Service_id, "put");
+            }
+          } else {
+            let intersection = element.Parent_container_id.AI.filter(
+              (x) => !_activeDS.includes(x)
+            );
+            console.log(intersection);
+            let add = _activeDS.length + intersection.length;
+            console.log(add);
+            if (deepStreamLimit < add) {
+              console.log("disable5: " + element.Service_id);
+              this.toggleUsecase(element.Service_id, "push");
+            } else {
+              console.log("enable5: " + element.Service_id);
+              this.toggleUsecase(element.Service_id, "put");
+            }
+          }
+        });
       } else {
         console.log("ARR === 1");
         this.parentLoop(_Service, (element) => {
@@ -382,12 +582,10 @@ export default class AddCamera extends Component {
                 });
               });
 
-              console.log(result);
               if (result.includes(true)) {
                 let intersection = element.Parent_container_id.AI.filter(
                   (x) => !_activeDS.includes(x)
                 );
-                console.log(intersection);
                 let add = _activeDS.length + intersection.length;
                 if (deepStreamLimit < add) {
                   console.log("disable: " + element.Service_id);
@@ -400,9 +598,7 @@ export default class AddCamera extends Component {
                 let intersection = element.Parent_container_id.AI.filter(
                   (x) => !_activeDS.includes(x)
                 );
-                console.log(intersection);
                 let add = _activeDS.length + intersection.length;
-                console.log(add);
                 if (deepStreamLimit < add) {
                   console.log("disable1: " + element.Service_id);
                   this.toggleUsecase(element.Service_id, "push");
@@ -421,12 +617,10 @@ export default class AddCamera extends Component {
                 });
               });
 
-              console.log(result);
               if (result.includes(true)) {
                 let intersection = element.Parent_container_id.AI.filter(
                   (x) => !_activeDS.includes(x)
                 );
-                console.log(intersection);
                 let add = _activeDS.length + intersection.length;
                 if (deepStreamLimit < add) {
                   this.toggleUsecase(element.Service_id, "push");
@@ -439,9 +633,7 @@ export default class AddCamera extends Component {
                 let intersection = element.Parent_container_id.AI.filter(
                   (x) => !_activeDS.includes(x)
                 );
-                console.log(intersection);
                 let add = _activeDS.length + intersection.length;
-                console.log(add);
                 if (deepStreamLimit < add) {
                   this.toggleUsecase(element.Service_id, "push");
                   console.log("disable3: " + element.Service_id);
@@ -457,8 +649,11 @@ export default class AddCamera extends Component {
   };
   DisableServices = (data_item, service_item) => {
     console.log(this.state);
+    let addArr = [...this.state.activeUsecases];
+    Array.prototype.push.apply(addArr, this.state.activeDependent);
+    addArr = [...new Set(addArr)];
 
-    if (usecaseLimit === this.state.activeUsecases.length) {
+    if (usecaseLimit === addArr.length) {
       console.log("Usecase limit reached");
       this._UCLimitReached();
       // } else if (this.isDSPresentInState(data_item, service_item)) {
@@ -467,107 +662,118 @@ export default class AddCamera extends Component {
       this._DSLimitReached(data_item, service_item);
     } else {
       console.log("DisableServices ELSE");
-      this._unchecked();
+      this._unchecked(service_item);
     }
-
-    // console.log(item, service_item);
-    // let _data = [...this.state.data];
-    // this.parentLoop(_data, (ele) => {
-    //   if (ele.slot === item.slot) {
-    //     if (ele.Usecases.includes(service_item.Service_id)) {
-    //       var index = ele.Usecases.indexOf(service_item.Service_id);
-    //       ele.Usecases.splice(index, 1);
-    //     } else ele.Usecases.push(service_item.Service_id);
-    //   }
-    // });
-    // this.setState({ data: _data });
   };
 
-  isUsecasePresent = (_data) => {};
-  usecaseMouseDown = (item, index, service_item) => {
-    console.log(service_item.Service_id);
+  usecaseMouseDown = (item, indexx, service_item) => {
     let _activeUsecases = [...this.state.activeUsecases];
     let _activeDS = [...this.state.activeDS];
     let _data = [...this.state.data];
     let _Service = [...this.state.Service];
+    let _activeDependent = [...this.state.activeDependent];
 
-    // if (usecaseLimit === this.state.activeUsecases.length) {
-    //   console.log("Usecase limit reached");
-    // }
-    // // else if (
-    // //   deepStreamLimit === this.state.activeDS.length &&
-    // //   _activeDS.includes(service_item.)
-    // // ) {
-    // //   console.log("Deepstream limit reached");
-    // // }
-    // else {
-    // console.log("within DS and UC limit");
-    if (service_item.Category === "Analytics") {
-      console.log("Type is analytics");
-    } else {
-      console.log("Type is usecase");
-      if (_activeUsecases.includes(service_item.Service_id)) {
-        console.log("ELSE IF");
-        this.parentLoop(_data, (ele) => {
-          if (ele.slot === item.slot) {
-            if (ele.Usecases.includes(service_item.Service_id)) {
-              var index = ele.Usecases.indexOf(service_item.Service_id);
-              ele.Usecases.splice(index, 1);
-            } else ele.Usecases.push(service_item.Service_id);
-          }
-        });
-        let isUCPresent = 0;
-        this.parentLoop(_data, (ele) => {
-          //removing UC condition
+    console.log("Type is usecase");
+    if (_activeUsecases.includes(service_item.Service_id)) {
+      console.log("ELSE IF");
+      this.parentLoop(_data, (ele) => {
+        if (ele.slot === item.slot) {
           if (ele.Usecases.includes(service_item.Service_id)) {
-            isUCPresent += 1;
-          }
-          // console.log(isUCPresent);
-          // if (!isUCPresent) {
-          //   var index = _activeUsecases.indexOf(service_item.Service_id);
-          //   _activeUsecases.splice(index, 1);
-          //   isUCPresent = 1;
-          // }
-        });
-        //removing UC
-        if (isUCPresent === 0) {
-          console.log("removing: " + service_item.Service_id);
-          var index = _activeUsecases.indexOf(service_item.Service_id);
-          _activeUsecases.splice(index, 1);
-          isUCPresent = 1;
+            var index = ele.Usecases.indexOf(service_item.Service_id);
+            ele.Usecases.splice(index, 1);
+          } else ele.Usecases.push(service_item.Service_id);
         }
+      });
 
-        //removing DS
-        let arr = [];
-        // _activeDS = [...arr];
+      let isUCPresent = 0;
+      this.parentLoop(_data, (ele) => {
+        //removing UC condition
+        if (ele.Usecases.includes(service_item.Service_id)) {
+          isUCPresent += 1;
+        }
+      });
+      //removing UC
+      if (isUCPresent === 0) {
+        console.log("removing: " + service_item.Service_id);
+        var index = _activeUsecases.indexOf(service_item.Service_id);
+        _activeUsecases.splice(index, 1);
+        isUCPresent = 1;
+      }
 
+      //removing DS
+      let arr = [];
+      // _activeDS = [...arr];
+      this.parentLoop(_activeUsecases, (ele) => {
+        this.parentLoop(_Service, (ele2) => {
+          if (ele2.Service_id === ele) {
+            Array.prototype.push.apply(arr, ele2.Parent_container_id.AI);
+            arr = [...new Set(arr)];
+          }
+        });
+      });
+      _activeDS = [...arr];
+
+      //removing dependent
+      if (service_item.Category === "Analytics") {
+        let arr2 = [];
         this.parentLoop(_activeUsecases, (ele) => {
           this.parentLoop(_Service, (ele2) => {
-            if (ele2.Service_id === ele) {
-              Array.prototype.push.apply(arr, ele2.Parent_container_id.AI);
-              arr = [...new Set(arr)];
+            if (ele2.Category === "Analytics") {
+              if (ele2.Service_id === ele) {
+                Array.prototype.push.apply(
+                  arr2,
+                  ele2.Parent_container_id.Usecase
+                );
+                // arr2 = [...new Set(arr2)];
+              }
             }
           });
         });
-        _activeDS = [...arr];
-      } else {
-        console.log("ELSE");
-        // _activeDS.push(service_item.Service_id);
-        Array.prototype.push.apply(
-          _activeDS,
-          service_item.Parent_container_id.AI
-        );
-        _activeDS = [...new Set(_activeDS)];
-        _activeUsecases.push(service_item.Service_id);
-        this.parentLoop(_data, (ele) => {
-          if (ele.slot === item.slot) {
-            if (ele.Usecases.includes(service_item.Service_id)) {
-              var index = ele.Usecases.indexOf(service_item.Service_id);
-              ele.Usecases.splice(index, 1);
-            } else ele.Usecases.push(service_item.Service_id);
-          }
-        });
+        _activeDependent = [...arr2];
       }
+    } else {
+      console.log("ELSE");
+      Array.prototype.push.apply(
+        _activeDS,
+        service_item.Parent_container_id.AI
+      );
+      _activeDS = [...new Set(_activeDS)];
+      _activeUsecases.push(service_item.Service_id);
+      if (service_item.Category === "Analytics") {
+        Array.prototype.push.apply(
+          _activeDependent,
+          service_item.Parent_container_id.Usecase
+        );
+      }
+      this.parentLoop(_data, (ele) => {
+        if (ele.slot === item.slot) {
+          if (ele.Usecases.includes(service_item.Service_id)) {
+            var index = ele.Usecases.indexOf(service_item.Service_id);
+            ele.Usecases.splice(index, 1);
+          } else {
+            ele.Usecases.push(service_item.Service_id);
+          }
+          if (service_item.Category === "Analytics") {
+            Array.prototype.push.apply(
+              ele.Dependent,
+              _Service[indexx].Parent_container_id.Usecase
+            );
+          }
+          // if (
+          //   ele.Dependent.includes(
+          //     _Service[indexx].Parent_container_id.Usecase[0]
+          //   )
+          // ) {
+          //   alert("hi");
+          //   var index = ele.Dependent.indexOf(
+          //     _Service[indexx].Parent_container_id.Usecase[0]
+          //   );
+          //   ele.Dependent.splice(index, 1);
+          // } else {
+
+          // }
+        }
+      });
     }
 
     this.setState(
@@ -576,21 +782,308 @@ export default class AddCamera extends Component {
         data: _data,
         activeUsecases: _activeUsecases,
         activeDS: _activeDS,
+        activeDependent: _activeDependent,
       },
       () => this.DisableServices(item, service_item)
     );
   };
+
+  usecaseMouseDown2 = (item, indexx, service_item) => {
+    let _activeUsecases = [...this.state.activeUsecases];
+    let _activeDS = [...this.state.activeDS];
+    let _data = [...this.state.data];
+    let _Service = [...this.state.Service];
+    let _activeDependent = [...this.state.activeDependent];
+
+    console.log("Type is usecase");
+    if (_activeUsecases.includes(service_item.Service_id)) {
+      console.log("ELSE IF");
+      this.parentLoop(_data, (ele) => {
+        if (ele.slot === item.slot) {
+          if (ele.Usecases.includes(service_item.Service_id)) {
+            var index = ele.Usecases.indexOf(service_item.Service_id);
+            ele.Usecases.splice(index, 1);
+          } else ele.Usecases.push(service_item.Service_id);
+        }
+      });
+
+      let isUCPresent = 0;
+      this.parentLoop(_data, (ele) => {
+        //removing UC condition
+        if (ele.Usecases.includes(service_item.Service_id)) {
+          isUCPresent += 1;
+        }
+      });
+      //removing UC
+      if (isUCPresent === 0) {
+        console.log("removing: " + service_item.Service_id);
+        var index = _activeUsecases.indexOf(service_item.Service_id);
+        _activeUsecases.splice(index, 1);
+        isUCPresent = 1;
+      }
+
+      //removing DS
+      let arr = [];
+      // _activeDS = [...arr];
+      this.parentLoop(_activeUsecases, (ele) => {
+        this.parentLoop(_Service, (ele2) => {
+          if (ele2.Service_id === ele) {
+            Array.prototype.push.apply(arr, ele2.Parent_container_id.AI);
+            arr = [...new Set(arr)];
+          }
+        });
+      });
+      _activeDS = [...arr];
+
+      //removing dependent
+      if (service_item.Category === "Analytics") {
+        let arr2 = [];
+        this.parentLoop(_activeUsecases, (ele) => {
+          this.parentLoop(_Service, (ele2) => {
+            if (ele2.Category === "Analytics") {
+              if (ele2.Service_id === ele) {
+                Array.prototype.push.apply(
+                  arr2,
+                  ele2.Parent_container_id.Usecase
+                );
+                // arr2 = [...new Set(arr2)];
+              }
+            }
+          });
+        });
+        _activeDependent = [...arr2];
+      }
+    } else {
+      console.log("ELSE");
+      Array.prototype.push.apply(
+        _activeDS,
+        service_item.Parent_container_id.AI
+      );
+      _activeDS = [...new Set(_activeDS)];
+      _activeUsecases.push(service_item.Service_id);
+      if (service_item.Category === "Analytics") {
+        Array.prototype.push.apply(
+          _activeDependent,
+          service_item.Parent_container_id.Usecase
+        );
+      }
+      this.parentLoop(_data, (ele) => {
+        if (ele.slot === item.slot) {
+          if (ele.Usecases.includes(service_item.Service_id)) {
+            var index = ele.Usecases.indexOf(service_item.Service_id);
+            ele.Usecases.splice(index, 1);
+          } else {
+            ele.Usecases.push(service_item.Service_id);
+          }
+          if (service_item.Category === "Analytics") {
+            Array.prototype.push.apply(
+              ele.Dependent,
+              _Service[indexx].Parent_container_id.Usecase
+            );
+          }
+          // if (
+          //   ele.Dependent.includes(
+          //     _Service[indexx].Parent_container_id.Usecase[0]
+          //   )
+          // ) {
+          //   alert("hi");
+          //   var index = ele.Dependent.indexOf(
+          //     _Service[indexx].Parent_container_id.Usecase[0]
+          //   );
+          //   ele.Dependent.splice(index, 1);
+          // } else {
+
+          // }
+        }
+      });
+    }
+
+    this.setState(
+      {
+        mouseState: true,
+        data: _data,
+        activeUsecases: _activeUsecases,
+        activeDS: _activeDS,
+        activeDependent: _activeDependent,
+      },
+      () => this.DisableServices(item, service_item)
+    );
+  };
+
   onLoad = () => {
     let _data = [...this.state.data];
     let _Service = [...this.state.Service];
-    this.parentLoop(_Service, (item) => {
-      if (item.Parent_container_id.AI.length > deepStreamLimit) {
-        this.parentLoop(_data, (ele) => {
-          ele.disabledService.push(item.Service_id);
+    let _staticDS = [...this.state.staticDS];
+    let _staticDependent = [...this.state.staticDependent];
+    let staticUC = [...this.state.staticUC];
+
+    let keys = Object.keys(this.state.apiData);
+    let cameraLength = 0;
+    for (let i = 0; i < keys.length; i++) {
+      // console.log(this.state.apiData[keys[i]]);
+
+      if (this.state.apiData[keys[i]].global.Cameras.length) {
+        cameraLength += 1;
+        Array.prototype.push.apply(
+          staticUC,
+          this.state.apiData[keys[i]].global.Usecases
+        );
+        Array.prototype.push.apply(
+          _staticDS,
+          this.state.apiData[keys[i]].global.AI
+        );
+        Array.prototype.push.apply(
+          _staticDependent,
+          this.state.apiData[keys[i]].global.Dependent
+        );
+      }
+    }
+    staticUC = [...new Set(staticUC)];
+    _staticDS = [...new Set(_staticDS)];
+    this.setState(
+      {
+        staticUC: staticUC,
+        staticDS: _staticDS,
+        activeDependent: _staticDependent,
+      },
+      () => {
+        if (staticUC.length) {
+          console.log("CAMERA IS PRESENT");
+          this.onLoadDisableServices();
+          this.setState({ isCamerPresent: true });
+        } else {
+          console.log("CAMERA IS NOT PRESENT");
+          this.setState({ isCamerPresent: false });
+        }
+        console.log(this.state);
+      }
+    );
+
+    // this.parentLoop(_Service, (item) => {
+    //   if (item.Parent_container_id.AI.length > deepStreamLimit) {
+    //     this.parentLoop(_data, (ele) => {
+    //       ele.disabledService.push(item.Service_id);
+    //     });
+    //   }
+    // });
+    // this.setState({ data: _data }, () => console.log(this.state));
+  };
+  onLoadDisableServices = () => {
+    let _data = [...this.state.data];
+    let _Service = [...this.state.Service];
+    let _activeDS = [...this.state.staticDS];
+    let _activeUsecases = [...this.state.staticUC];
+
+    let addArr = [...this.state.staticUC];
+    Array.prototype.push.apply(addArr, this.state.staticDependent);
+    addArr = [...new Set(addArr)];
+    if (addArr.length >= usecaseLimit) {
+      console.log("USE CASE LIMIT REACHED: " + addArr.length);
+      this.parentLoop(_Service, (item) => {
+        //disable other usecase and DS
+        if (!_activeUsecases.includes(item.Service_id)) {
+          this.parentLoop(_data, (ele) => {
+            ele.disabledService.push(item.Service_id);
+          });
+        }
+      });
+    } else {
+      console.log("USE CASE LIMIT NOT REACHED: " + addArr.length);
+      if (deepStreamLimit === _activeDS.length) {
+        console.log("DS LIMIT REACHED V2");
+        this.parentLoop(_Service, (item) => {
+          if (item.Parent_container_id.AI.length <= _activeDS.length) {
+            let result = [];
+
+            this.parentLoop(item.Parent_container_id.AI, (ele) => {
+              this.parentLoop(_activeDS, (ele2) => {
+                if (ele2 === ele) result.push(true);
+                else result.push(false);
+              });
+            });
+            if (!result.includes(true)) {
+              let intersection = item.Parent_container_id.AI.filter(
+                (x) => !_activeDS.includes(x)
+              );
+              let add = _activeDS.length + intersection.length;
+              if (deepStreamLimit < add) {
+                console.log("disable: " + item.Service_id);
+                this.toggleUsecase(item.Service_id, "push");
+              } else {
+                console.log("enable: " + item.Service_id);
+                this.toggleUsecase(item.Service_id, "put");
+              }
+            } else {
+              let intersection = item.Parent_container_id.AI.filter(
+                (x) => !_activeDS.includes(x)
+              );
+              let add = _activeDS.length + intersection.length;
+              if (deepStreamLimit < add) {
+                console.log("disable1: " + item.Service_id);
+                this.toggleUsecase(item.Service_id, "push");
+              } else {
+                console.log("enable1: " + item.Service_id);
+                this.toggleUsecase(item.Service_id, "put");
+              }
+            }
+          } else {
+            this.toggleUsecase(item.Service_id, "push");
+          }
+        });
+      } else {
+        console.log("DS LIMIT NOT REACHED V2");
+        this.parentLoop(_Service, (item) => {
+          if (item.Parent_container_id.AI.length <= deepStreamLimit) {
+            let result = [];
+
+            this.parentLoop(item.Parent_container_id.AI, (ele) => {
+              this.parentLoop(_activeDS, (ele2) => {
+                if (ele2 === ele) result.push(true);
+                else result.push(false);
+              });
+            });
+            if (!result.includes(true)) {
+              let intersection = item.Parent_container_id.AI.filter(
+                (x) => !_activeDS.includes(x)
+              );
+              let add = _activeDS.length + intersection.length;
+              if (deepStreamLimit < add) {
+                console.log("disable: " + item.Service_id);
+                this.toggleUsecase(item.Service_id, "push");
+              } else {
+                console.log("enable: " + item.Service_id);
+                this.toggleUsecase(item.Service_id, "put");
+              }
+            } else {
+              let intersection = item.Parent_container_id.AI.filter(
+                (x) => !_activeDS.includes(x)
+              );
+              let add = _activeDS.length + intersection.length;
+              if (deepStreamLimit < add) {
+                console.log("disable1: " + item.Service_id);
+                this.toggleUsecase(item.Service_id, "push");
+              } else {
+                console.log("enable1: " + item.Service_id);
+                this.toggleUsecase(item.Service_id, "put");
+              }
+            }
+          } else {
+            this.toggleUsecase(item.Service_id, "push");
+          }
         });
       }
-    });
-    this.setState({ data: _data }, () => console.log(this.state));
+      // this.parentLoop(_Service, (item) => {
+      //   //disable other usecase and DS
+      //   console.log(item.Service_id);
+      //   if (!_activeUsecases.includes(item.Service_id)) {
+      //     console.log("service name: " + item.Service_name);
+      //     this.parentLoop(_data, (ele) => {
+      //       ele.disabledService.push(item.Service_id);
+      //     });
+      //   }
+      // });
+    }
+    this.setState({ data: _data });
   };
   componentDidMount() {
     this.onLoad();
@@ -654,7 +1147,7 @@ export default class AddCamera extends Component {
               <h1>Usecases</h1>
               <div className="dummy" />
             </div>
-            {this.state.Service.map((service_item) => (
+            {this.state.Service.map((service_item, service_index) => (
               <div className="flex">
                 <h4 className="name">{service_item.Service_name}</h4>
                 <pre>
@@ -689,7 +1182,19 @@ export default class AddCamera extends Component {
                               service_item.Service_id
                             )
                           ) {
-                            this.usecaseMouseDown(item, index, service_item);
+                            if (this.state.isCamerPresent) {
+                              this.usecaseMouseDown2(
+                                item,
+                                service_index,
+                                service_item
+                              );
+                            } else {
+                              this.usecaseMouseDown(
+                                item,
+                                service_index,
+                                service_item
+                              );
+                            }
                           }
                         }
                       }}
@@ -701,7 +1206,19 @@ export default class AddCamera extends Component {
                                 service_item.Service_id
                               )
                             ) {
-                              this.usecaseMouseDown(item, index, service_item);
+                              if (this.state.isCamerPresent) {
+                                this.usecaseMouseDown2(
+                                  item,
+                                  service_index,
+                                  service_item
+                                );
+                              } else {
+                                this.usecaseMouseDown(
+                                  item,
+                                  service_index,
+                                  service_item
+                                );
+                              }
                             }
                           }
                         }
@@ -719,3 +1236,6 @@ export default class AddCamera extends Component {
     );
   }
 }
+
+//NOTE:
+//Remove duplicate from Dependent Array onSubmit

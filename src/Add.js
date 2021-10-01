@@ -17,20 +17,20 @@ class Add extends Component {
       detail: {
         DeviceScheduleDetail: {
           ScheduledUC: [
-            // "LOITV1",
-            // "TRESSPASSV1",
+            "LOITV1",
+            "TRESSPASSV1",
             // "OCCUPANCYANALYSISV1",
-            // "QUEUEV1",
-            // "MASKHELMETV1",
+            "QUEUEV1",
+            "MASKHELMETV1",
             // "DUMMY2V1",
             // "DUMMY1V1",
           ],
-          // ScheduledDP: [],
+          ScheduledDP: ["person"],
           // ScheduledDP: ["person", "dp1", "dp2", "fmgh"],
           // ScheduledDP: ["dp1", "dp2"],
-          ScheduledDP: [
-            // "person", "vehicle"
-          ],
+          // ScheduledDP: [
+          //   // "person", "vehicle"
+          // ],
           // ScheduledDP: ["person", "fmgh"],
           UnScheduledUC: [
             // "DUMMY3V1",
