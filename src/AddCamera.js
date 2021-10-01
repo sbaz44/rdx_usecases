@@ -26,7 +26,8 @@ export default class AddCamera extends Component {
     arr: [],
     isCamerPresent: false,
     Service: Services,
-    selectedTimeSlot: ["0-2", "2-4", "4-6", "6-8"],
+    // selectedTimeSlot: ["0-2", "2-4", "4-6", "6-8"],
+    selectedTimeSlot: [],
     staticDS: [],
     staticUC: [],
     staticDependent: [],
@@ -35,7 +36,7 @@ export default class AddCamera extends Component {
         slot: "0-2",
         Usecases: [],
         AI: [],
-        isDisabled: false,
+        isDisabled: true,
         disabledService: [],
         Dependent: [],
       },
@@ -43,7 +44,7 @@ export default class AddCamera extends Component {
         slot: "2-4",
         Usecases: [],
         AI: [],
-        isDisabled: false,
+        isDisabled: true,
         disabledService: [],
         Dependent: [],
       },
@@ -51,7 +52,7 @@ export default class AddCamera extends Component {
         slot: "4-6",
         Usecases: [],
         AI: [],
-        isDisabled: false,
+        isDisabled: true,
         disabledService: [],
         Dependent: [],
       },
@@ -59,7 +60,7 @@ export default class AddCamera extends Component {
         slot: "6-8",
         Usecases: [],
         AI: [],
-        isDisabled: false,
+        isDisabled: true,
         disabledService: [],
         Dependent: [],
       },
@@ -312,7 +313,7 @@ export default class AddCamera extends Component {
         // else ele.Usecases.push(service_id);
       });
     }
-    this.setState({ data: _data });
+    this.setState({ data: _data }, () => console.log(this.state));
   };
 
   timeslotMouseDown = (i) => {
@@ -338,11 +339,14 @@ export default class AddCamera extends Component {
       });
     }
 
-    this.setState({
-      selectedTimeSlot: _selectedTimeSlot,
-      data: _data,
-      mouseState: true,
-    });
+    this.setState(
+      {
+        selectedTimeSlot: _selectedTimeSlot,
+        data: _data,
+        mouseState: true,
+      },
+      () => console.log(this.state)
+    );
   };
   submitTime = () => {
     let _selectedTimeSlot = [...this.state.selectedTimeSlot];
@@ -363,65 +367,6 @@ export default class AddCamera extends Component {
     }
     this.setState({ data: _data });
   };
-
-  isDSPresentInState = (data_item, service_item) => {
-    let _data = [...this.state.data];
-    let _Service = [...this.state.Service];
-    let _activeDS = [...this.state.activeDS];
-    console.log("isDSPresentInState");
-    console.log(_activeDS);
-    if (_activeDS.length === deepStreamLimit) {
-    }
-    // if (service_item.Parent_container_id.AI.length === 1) {
-    //   console.log("selectedDS length is  1: " + service_item.Service_id);
-    //   if (_activeDS.includes(service_item.Parent_container_id.AI[0])) {
-    //     if (_activeDS.length === deepStreamLimit) {
-    //       return true;
-    //     } else return false;
-    //   }
-    // } else {
-    //   console.log(
-    //     "selectedDS length is greater than 1: " + service_item.Service_id
-    //   );
-
-    //   if (_activeDS.length === 0) {
-    //     return false;
-    //   }
-
-    //   if (service_item.Parent_container_id.AI.length === deepStreamLimit) {
-    //     console.log("selected DS length === deepStreamLimit");
-    //     return true;
-    //   } else {
-    //     let result = [];
-    //     this.parentLoop(_activeDS, (ele) => {
-    //       this.parentLoop(service_item.Parent_container_id.AI, (ele2) => {
-    //         if (ele === ele2) result.push(true);
-    //         else result.push(false);
-    //       });
-    //     });
-    //     if (result.includes(true)) {
-    //       const intersection = _activeDS.filter(
-    //         (value) => !service_item.Parent_container_id.AI.includes(value)
-    //       );
-    //       let add = _activeDS.length + intersection.length;
-    //       if (deepStreamLimit < add) return true;
-    //       else return false;
-    //     }
-    //   }
-    // }
-  };
-  // this.parentLoop(_Service, (ele) => {
-  //   let result = [];
-  //   if (ele.Parent_container_id.AI.length <= deepStreamLimit) {
-  //     this.parentLoop(ele.Parent_container_id.AI, (ele2) => {
-  //       this.parentLoop(_activeDS, (ele3) => {
-  //         if (ele3 === ele2) result.push(true);
-  //         else result.push(false);
-  //       });
-  //     });
-  //     console.log(result);
-  //   }
-  // });
 
   _DSLimitReached = (data_item, service_item) => {
     console.log("DISABLING USING DS");
@@ -476,6 +421,63 @@ export default class AddCamera extends Component {
     this.setState({ data: _data });
   };
 
+  _DSLimitReached2 = (data_item, service_item) => {
+    console.log("DISABLING USING DS");
+    let _Service = [...this.state.Service];
+    let _activeDS = [...this.state.activeDS];
+    let _data = [...this.state.data];
+
+    let addDS = [...this.state.staticDS];
+
+    Array.prototype.push.apply(addDS, this.state.activeDS);
+
+    this.parentLoop(_Service, (ele) => {
+      let result = [];
+      if (ele.Parent_container_id.AI.length <= deepStreamLimit) {
+        this.parentLoop(ele.Parent_container_id.AI, (ele2) => {
+          this.parentLoop(addDS, (ele3) => {
+            if (ele3 === ele2) result.push(true);
+            else result.push(false);
+          });
+        });
+        if (!result.includes(true)) {
+          this.parentLoop(_data, (data_ele) => {
+            data_ele.disabledService.push(ele.Service_id);
+          });
+        } else {
+          const intersection = ele.Parent_container_id.AI.filter(
+            (value) => !addDS.includes(value)
+          );
+          // let arr = [...addDS];
+          // console.log(arr);
+          // console.log(intersection);
+          // Array.prototype.push.apply(arr, intersection);
+          // arr = [...new Set(arr)];
+          // console.log(arr);
+          // console.log(ele.Service_id);
+          let add = addDS.length + intersection.length;
+          if (deepStreamLimit < add) {
+            console.log("disabled DS: " + ele.Service_id);
+            this.parentLoop(_data, (data_ele) => {
+              data_ele.disabledService.push(ele.Service_id);
+              data_ele.disabledService = [...new Set(data_ele.disabledService)];
+            });
+          } else {
+            // console.log(_data);
+            this.parentLoop(_data, (data_ele) => {
+              if (data_ele.disabledService.includes(ele.Service_id)) {
+                var index = data_ele.disabledService.indexOf(ele.Service_id);
+                data_ele.disabledService.splice(index, 1);
+              }
+              // else ele.Usecases.push(service_id);
+            });
+          }
+        }
+      }
+    });
+    this.setState({ data: _data });
+  };
+
   _UCLimitReached = () => {
     console.log("_UCLimitReached");
     let _Service = [...this.state.Service];
@@ -484,6 +486,27 @@ export default class AddCamera extends Component {
     let _data = [...this.state.data];
     this.parentLoop(_Service, (ele) => {
       if (!_activeUsecases.includes(ele.Service_id)) {
+        this.parentLoop(_data, (data_ele) => {
+          data_ele.disabledService.push(ele.Service_id);
+        });
+      }
+    });
+  };
+
+  _UCLimitReached2 = () => {
+    let _Service = [...this.state.Service];
+    let _activeDS = [...this.state.activeDS];
+    let _activeUsecases = [...this.state.activeUsecases];
+
+    let addUC = [...this.state.staticUC];
+    Array.prototype.push.apply(addUC, this.state.activeUsecases);
+    Array.prototype.push.apply(addUC, this.state.activeDependent);
+    Array.prototype.push.apply(addUC, this.state.staticDependent);
+    addUC = [...new Set(addUC)];
+    console.log(addUC);
+    let _data = [...this.state.data];
+    this.parentLoop(_Service, (ele) => {
+      if (!addUC.includes(ele.Service_id)) {
         this.parentLoop(_data, (data_ele) => {
           data_ele.disabledService.push(ele.Service_id);
         });
@@ -647,6 +670,172 @@ export default class AddCamera extends Component {
       }
     }
   };
+
+  _unchecked2 = (service_item) => {
+    console.log("_unchecked2");
+    let _data = [...this.state.data];
+    let _Service = [...this.state.Service];
+    let _activeDS = [...this.state.activeDS];
+    let _activeUsecases = [...this.state.activeUsecases];
+    let _activeDependent = [...this.state.activeDependent];
+    let addUC = [...this.state.staticUC];
+    let addDS = [...this.state.staticDS];
+    Array.prototype.push.apply(addUC, this.state.activeUsecases);
+    Array.prototype.push.apply(addUC, this.state.activeDependent);
+    Array.prototype.push.apply(addUC, this.state.staticDependent);
+    Array.prototype.push.apply(addDS, this.state.activeDS);
+
+    if (!_activeDS.length) {
+      console.log("DEFAULT STATE");
+      this.onLoadDisableServices();
+      // this.parentLoop(_Service, (item) => {
+      //   if (item.Parent_container_id.AI.length > deepStreamLimit) {
+      //     this.parentLoop(_data, (ele) => {
+      //       ele.disabledService.push(item.Service_id);
+      //     });
+      //   } else {
+      //     this.parentLoop(_data, (ele) => {
+      //       ele.disabledService = [];
+      //       ele.Dependent = [];
+      //     });
+      //   }
+      // });
+    } else {
+      console.log("_unchecked2 ELSE");
+
+      let arr = [];
+      this.parentLoop(_activeUsecases, (ele) => {
+        this.parentLoop(_Service, (ele2) => {
+          if (ele2.Service_id === ele) {
+            Array.prototype.push.apply(arr, ele2.Parent_container_id.AI);
+            arr = [...new Set(arr)];
+          }
+        });
+      });
+      console.log(arr);
+      if (arr.length > 1) {
+        console.log("ARR > 1");
+        let filterData = _Service.filter(
+          (item) => item.Parent_container_id.AI.length <= deepStreamLimit
+        );
+        console.log(filterData);
+        this.parentLoop(filterData, (element) => {
+          let result = [];
+          this.parentLoop(arr, (ele) => {
+            this.parentLoop(element.Parent_container_id.AI, (ele2) => {
+              if (ele === ele2) result.push(true);
+              else result.push(false);
+            });
+          });
+
+          if (result.includes(true)) {
+            let intersection = element.Parent_container_id.AI.filter(
+              (x) => !_activeDS.includes(x)
+            );
+            console.log(intersection);
+            let add = _activeDS.length + intersection.length;
+            if (deepStreamLimit < add) {
+              console.log("disable4: " + element.Service_id);
+              this.toggleUsecase(element.Service_id, "push");
+            } else {
+              console.log("enable4: " + element.Service_id);
+              this.toggleUsecase(element.Service_id, "put");
+            }
+          } else {
+            let intersection = element.Parent_container_id.AI.filter(
+              (x) => !_activeDS.includes(x)
+            );
+            console.log(intersection);
+            let add = _activeDS.length + intersection.length;
+            console.log(add);
+            if (deepStreamLimit < add) {
+              console.log("disable5: " + element.Service_id);
+              this.toggleUsecase(element.Service_id, "push");
+            } else {
+              console.log("enable5: " + element.Service_id);
+              this.toggleUsecase(element.Service_id, "put");
+            }
+          }
+        });
+      } else {
+        console.log("ARR === 1");
+        this.parentLoop(_Service, (element) => {
+          if (element.Parent_container_id.AI.length <= deepStreamLimit) {
+            if (element.Parent_container_id.AI.length === 1) {
+              let result = [];
+              this.parentLoop(arr, (ele) => {
+                this.parentLoop(element.Parent_container_id.AI, (ele2) => {
+                  if (ele === ele2) result.push(true);
+                  else result.push(false);
+                });
+              });
+
+              if (result.includes(true)) {
+                let intersection = element.Parent_container_id.AI.filter(
+                  (x) => !_activeDS.includes(x)
+                );
+                let add = _activeDS.length + intersection.length;
+                if (deepStreamLimit < add) {
+                  console.log("disable: " + element.Service_id);
+                  this.toggleUsecase(element.Service_id, "push");
+                } else {
+                  console.log("enable: " + element.Service_id);
+                  this.toggleUsecase(element.Service_id, "put");
+                }
+              } else {
+                let intersection = element.Parent_container_id.AI.filter(
+                  (x) => !_activeDS.includes(x)
+                );
+                let add = _activeDS.length + intersection.length;
+                if (deepStreamLimit < add) {
+                  console.log("disable1: " + element.Service_id);
+                  this.toggleUsecase(element.Service_id, "push");
+                } else {
+                  console.log("enable1: " + element.Service_id);
+                  this.toggleUsecase(element.Service_id, "put");
+                  // this.toggleUsecase(element.Service_id);
+                }
+              }
+            } else {
+              let result = [];
+              this.parentLoop(arr, (ele) => {
+                this.parentLoop(element.Parent_container_id.AI, (ele2) => {
+                  if (ele === ele2) result.push(true);
+                  else result.push(false);
+                });
+              });
+
+              if (result.includes(true)) {
+                let intersection = element.Parent_container_id.AI.filter(
+                  (x) => !_activeDS.includes(x)
+                );
+                let add = _activeDS.length + intersection.length;
+                if (deepStreamLimit < add) {
+                  this.toggleUsecase(element.Service_id, "push");
+                  console.log("disable2: " + element.Service_id);
+                } else {
+                  this.toggleUsecase(element.Service_id, "put");
+                  console.log("enable2: " + element.Service_id);
+                }
+              } else {
+                let intersection = element.Parent_container_id.AI.filter(
+                  (x) => !_activeDS.includes(x)
+                );
+                let add = _activeDS.length + intersection.length;
+                if (deepStreamLimit < add) {
+                  this.toggleUsecase(element.Service_id, "push");
+                  console.log("disable3: " + element.Service_id);
+                } else {
+                  console.log("enable3: " + element.Service_id);
+                }
+              }
+            }
+          }
+        });
+      }
+    }
+  };
+
   DisableServices = (data_item, service_item) => {
     console.log(this.state);
     let addArr = [...this.state.activeUsecases];
@@ -663,6 +852,29 @@ export default class AddCamera extends Component {
     } else {
       console.log("DisableServices ELSE");
       this._unchecked(service_item);
+    }
+  };
+
+  _DisableService2 = (data_item, service_item) => {
+    console.log(this.state);
+    let addUC = [...this.state.staticUC];
+    let addDS = [...this.state.staticDS];
+    Array.prototype.push.apply(addUC, this.state.activeUsecases);
+    Array.prototype.push.apply(addUC, this.state.activeDependent);
+    Array.prototype.push.apply(addUC, this.state.staticDependent);
+    Array.prototype.push.apply(addDS, this.state.activeDS);
+    addUC = [...new Set(addUC)];
+    console.log(addUC);
+    console.log(usecaseLimit + " ===" + addUC.length);
+    if (usecaseLimit === addUC.length) {
+      console.log("Usecase limit reached");
+      this._UCLimitReached2();
+    } else if (addDS.length === deepStreamLimit) {
+      console.log("DS limit reached");
+      this._DSLimitReached2();
+    } else {
+      console.log("DisableServices ELSE");
+      this._unchecked2();
     }
   };
 
@@ -759,19 +971,6 @@ export default class AddCamera extends Component {
               _Service[indexx].Parent_container_id.Usecase
             );
           }
-          // if (
-          //   ele.Dependent.includes(
-          //     _Service[indexx].Parent_container_id.Usecase[0]
-          //   )
-          // ) {
-          //   alert("hi");
-          //   var index = ele.Dependent.indexOf(
-          //     _Service[indexx].Parent_container_id.Usecase[0]
-          //   );
-          //   ele.Dependent.splice(index, 1);
-          // } else {
-
-          // }
         }
       });
     }
@@ -789,13 +988,15 @@ export default class AddCamera extends Component {
   };
 
   usecaseMouseDown2 = (item, indexx, service_item) => {
+    console.log("usecaseMouseDown2");
     let _activeUsecases = [...this.state.activeUsecases];
+    let _staticUC = [...this.state.staticUC];
+    let _staticDS = [...this.state.staticDS];
     let _activeDS = [...this.state.activeDS];
     let _data = [...this.state.data];
     let _Service = [...this.state.Service];
     let _activeDependent = [...this.state.activeDependent];
 
-    console.log("Type is usecase");
     if (_activeUsecases.includes(service_item.Service_id)) {
       console.log("ELSE IF");
       this.parentLoop(_data, (ele) => {
@@ -881,19 +1082,6 @@ export default class AddCamera extends Component {
               _Service[indexx].Parent_container_id.Usecase
             );
           }
-          // if (
-          //   ele.Dependent.includes(
-          //     _Service[indexx].Parent_container_id.Usecase[0]
-          //   )
-          // ) {
-          //   alert("hi");
-          //   var index = ele.Dependent.indexOf(
-          //     _Service[indexx].Parent_container_id.Usecase[0]
-          //   );
-          //   ele.Dependent.splice(index, 1);
-          // } else {
-
-          // }
         }
       });
     }
@@ -906,7 +1094,9 @@ export default class AddCamera extends Component {
         activeDS: _activeDS,
         activeDependent: _activeDependent,
       },
-      () => this.DisableServices(item, service_item)
+      // () => this.DisableServices(item, service_item)
+      // () => console.log(this.state)
+      () => this._DisableService2(item, service_item)
     );
   };
 
@@ -944,7 +1134,7 @@ export default class AddCamera extends Component {
       {
         staticUC: staticUC,
         staticDS: _staticDS,
-        activeDependent: _staticDependent,
+        staticDependent: _staticDependent,
       },
       () => {
         if (staticUC.length) {
