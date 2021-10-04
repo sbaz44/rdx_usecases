@@ -358,7 +358,6 @@ export default class AddCamera extends Component {
       Array.prototype.push.apply(UCadd, UCnDependent);
       console.log(UCadd);
       UCadd = [...new Set(UCadd)];
-      // let UCadd = addUC.length + UCnDependent.length;
       console.log(usecaseLimit + "<" + UCadd.length);
       if (usecaseLimit < UCadd.length) {
         this.toggleUsecase(service_item.Service_id, "push");
@@ -367,12 +366,6 @@ export default class AddCamera extends Component {
         this.toggleUsecase(service_item.Service_id, "put");
       }
     }
-    // let arr2 = [];
-    // this.parentLoop(service_item.Parent_container_id.AI, (ele) => {
-    //   if (!addUC.includes(ele)) {
-    //     this.toggleUsecase(service_item.Service_id, "push");
-    //   }
-    // });
   };
 
   timeslotMouseDown = (i) => {
@@ -505,6 +498,52 @@ export default class AddCamera extends Component {
     this.setState({ data: _data });
   };
 
+  toggleAnalytics = (element, data_index) => {
+    console.log("toggleAnalytics2()");
+    console.log(element, data_index);
+    let _data = [...this.state.data];
+    let _Service = [...this.state.Service];
+    let _usecases = _data[data_index].Usecases;
+    let _AI = _data[data_index].AI;
+    let _Dependent = _data[data_index].Dependent;
+    let uniqueUC = [..._usecases];
+    Array.prototype.push.apply(uniqueUC, _Dependent);
+    uniqueUC = [...new Set(uniqueUC)];
+
+    let intersection = element.Parent_container_id.AI.filter(
+      (x) => !_AI.includes(x)
+    );
+    console.log(intersection);
+    let add = _AI.length + intersection.length;
+    if (deepStreamLimit < add) {
+      _data[data_index].disabledService.push(element.Service_id);
+    } else {
+      console.log("below DS range");
+      let UCnDependent = [...element.Parent_container_id.Usecase];
+      UCnDependent.push(element.Service_id);
+      console.log(UCnDependent);
+      let UCadd = [...uniqueUC];
+      Array.prototype.push.apply(UCadd, UCnDependent);
+      UCadd = [...new Set(UCadd)];
+      console.log(UCadd);
+      console.log(usecaseLimit + "<" + UCadd.length);
+      if (usecaseLimit < UCadd.length) {
+        _data[data_index].disabledService.push(element.Service_id);
+      } else {
+        console.log("false");
+        var ucIndex = _data[data_index].disabledService.indexOf(
+          element.Service_id
+        );
+        console.log(ucIndex);
+        if (ucIndex >= 0) {
+          _data[data_index].disabledService.splice(ucIndex, 1);
+        }
+      }
+    }
+
+    this.setState({ data: _data });
+  };
+
   toggleService = (data_item, service_index, service_item, data_index) => {
     console.log(this.state);
     let _data = [...this.state.data];
@@ -567,32 +606,67 @@ export default class AddCamera extends Component {
           });
 
           if (result.includes(true)) {
-            let intersection = element.Parent_container_id.AI.filter(
-              (x) => !_AI.includes(x)
-            );
-            console.log(intersection);
-            let add = _AI.length + intersection.length;
-            if (deepStreamLimit < add) {
-              console.log("disable4: " + element.Service_id);
-              // this.toggleUsecase(element.Service_id, "push");
+            if (element.Category === "Analytics") {
+              console.log("calling analytics " + element.Service_name);
+              this.toggleAnalytics(element, data_index);
             } else {
-              console.log("enable4: " + element.Service_id);
-              // this.toggleUsecase(element.Service_id, "put");
+              let intersection = element.Parent_container_id.AI.filter(
+                (x) => !_AI.includes(x)
+              );
+              console.log(intersection);
+              let add = _AI.length + intersection.length;
+              if (deepStreamLimit < add) {
+                console.log("disable4: " + element.Service_id);
+                _data[data_index].disabledService.push(element.Service_id);
+                // this.toggleUsecase(element.Service_id, "push");
+              } else {
+                console.log("enable4: " + element.Service_id);
+                var ucIndex = _data[data_index].disabledService.indexOf(
+                  element.Service_id
+                );
+                console.log(ucIndex);
+                if (ucIndex >= 0) {
+                  _data[data_index].disabledService.splice(ucIndex, 1);
+                }
+              }
             }
           } else {
-            let intersection = element.Parent_container_id.AI.filter(
-              (x) => !_AI.includes(x)
-            );
-            console.log(intersection);
-            let add = _AI.length + intersection.length;
-            console.log(add);
-            if (deepStreamLimit < add) {
-              console.log("disable5: " + element.Service_id);
-              // this.toggleUsecase(element.Service_id, "push");
+            if (element.Category === "Analytics") {
+              console.log("calling analytics " + element.Service_name);
+              this.toggleAnalytics(element, data_index);
             } else {
-              console.log("enable5: " + element.Service_id);
-              // this.toggleUsecase(element.Service_id, "put");
+              let intersection = element.Parent_container_id.AI.filter(
+                (x) => !_AI.includes(x)
+              );
+              console.log(intersection);
+              let add = _AI.length + intersection.length;
+              if (deepStreamLimit < add) {
+                console.log("disable5: " + element.Service_id);
+                _data[data_index].disabledService.push(element.Service_id);
+                // this.toggleUsecase(element.Service_id, "push");
+              } else {
+                console.log("enable5: " + element.Service_id);
+                var ucIndex = _data[data_index].disabledService.indexOf(
+                  element.Service_id
+                );
+                console.log(ucIndex);
+                if (ucIndex >= 0) {
+                  _data[data_index].disabledService.splice(ucIndex, 1);
+                }
+              }
             }
+
+            // let intersection = element.Parent_container_id.AI.filter(
+            //   (x) => !_AI.includes(x)
+            // );
+            // console.log(intersection);
+            // let add = _AI.length + intersection.length;
+            // console.log(add);
+            // if (deepStreamLimit < add) {
+            //   console.log("disable5: " + element.Service_id);
+            // } else {
+            //   console.log("enable5: " + element.Service_id);
+            // }
           }
         });
       } else {
@@ -768,20 +842,25 @@ export default class AddCamera extends Component {
       _activeDS = [...arr];
       console.log(arr);
       _data[data_index].AI = [...arr];
-
       if (service_item.Category === "Analytics") {
-        console.log("ANALY");
-        this.parentLoop(_data[data_index].Dependent, (dep_ele) => {
-          this.parentLoop(
-            service_item.Parent_container_id.Usecase,
-            (ser_item) => {
-              if (dep_ele === ser_item) {
-                let index = _data[data_index].Dependent.indexOf(ser_item);
-                console.log(index);
-                _data[data_index].Dependent.splice(index, 1);
-              }
-            }
-          );
+        console.log("Analytics: " + service_item.Service_name);
+        console.log(_data[data_index].Dependent);
+        let dArr = _data[data_index].Dependent;
+        this.parentLoop(dArr, (dep_ele) => {
+          console.log(dep_ele);
+          // this.parentLoop(
+          //   service_item.Parent_container_id.Usecase,
+          //   (ser_item) => {
+          //     console.log(dep_ele + "====" + ser_item);
+          //     if (dep_ele === ser_item) {
+          //       let index = _data[data_index].Dependent.indexOf(ser_item);
+          //       console.log(index);
+          //       if (index >= 0) {
+          //         _data[data_index].Dependent.splice(index, 1);
+          //       }
+          //     }
+          //   }
+          // );
         });
         // var filteredDependent = _data[data_index].Dependent.filter(
         //   (data_ele) =>
