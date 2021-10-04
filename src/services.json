@@ -173,6 +173,21 @@
       "Category": "Analytics",
       "Parent_container_id": {
         "AI": ["person"],
+        "Usecase": ["LOITV1", "TRESV1"],
+        "Analytics": [],
+        "Base": [],
+        "Firmware": [],
+        "Database": []
+      }
+    },
+    {
+      "Service_id": "DUMMYANAV2",
+      "Service_name": "Dummy Analytics 2",
+      "Description": "desc",
+      "Status": "Inactive",
+      "Category": "Analytics",
+      "Parent_container_id": {
+        "AI": ["person", "vehicle"],
         "Usecase": ["LOITV1", "VEHIV1"],
         "Analytics": [],
         "Base": [],

@@ -24,7 +24,7 @@ function App() {
           Learn React
         </a>
       </header> */}
-      <Add />
+      {/* <Add /> */}
       {/* <Add2 /> */}
       {/* <Page1 /> */}
       <AddCamera />

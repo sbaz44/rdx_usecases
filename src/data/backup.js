@@ -1,314 +1,593 @@
-import React, { Component } from "react";
+import React, { Children, Component } from "react";
+import logo from "./logo.svg";
 import limits from "./limits.json";
-import usecases from "./data/service2.json";
-// const useCasesAndDS = usecases["data"];
+import servicess from "./services.json";
+const Services = servicess["Services"];
 const Limits = limits["details"]["Limitations"];
 const deepStreamLimit = Limits["Deepstream"];
 const usecaseLimit = Limits["Usecase"];
-
-class Add extends Component {
+export default class AddCamera extends Component {
   state = {
-    data: usecases.Services,
-    scheduleChecked: [],
-    unscheduleChecked: [],
-    selectedDS: [],
-    selectedUsDS: [],
-    apiData: {
-      detail: {
-        DeviceScheduleDetail: {
-          ScheduledUC: [
-            // "LOITV1",
-            // "TRESSPASSV1",
-            // "OCCUPANCYANALYSISV1",
-            // "QUEUEV1",
-            // "MASKHELMETV1",
-            // "DUMMY2V1",
-            // "DUMMY1V1",
-          ],
-          ScheduledDP: [],
-          // ScheduledDP: ["person", "dp1", "dp2", "fmgh"],
-          // ScheduledDP: ["dp1", "dp2"],
-          // ScheduledDP: ["person"],
-          // ScheduledDP: ["person", "fmgh"],
-          UnScheduledUC: ["LOITV1", "TRESSPASSV1"],
-          UnScheduledDP: [],
-          // UnScheduledDP: ["person"],
-        },
+    time: [
+      "0-2",
+      "2-4",
+      "4-6",
+      "6-8",
+      "8-10",
+      "10-12",
+      "12-14",
+      "14-16",
+      "16-18",
+      "18-20",
+      "20-22",
+      "22-0",
+    ],
+    mouseState: false,
+    arr: [],
+    isCamerPresent: false,
+    Service: Services,
+    // selectedTimeSlot: ["0-2", "2-4", "4-6", "6-8"],
+    selectedTimeSlot: [],
+    staticDS: [],
+    staticUC: [],
+    staticDependent: [],
+    data: [
+      {
+        slot: "0-2",
+        Usecases: [],
+        AI: [],
+        isDisabled: true,
+        disabledService: [],
+        Dependent: [],
       },
-      module_data: [
-        {
-          Service_id: "string",
-          Parent_container_id: ["string"],
+      {
+        slot: "2-4",
+        Usecases: [],
+        AI: [],
+        isDisabled: true,
+        disabledService: [],
+        Dependent: [],
+      },
+      {
+        slot: "4-6",
+        Usecases: [],
+        AI: [],
+        isDisabled: true,
+        disabledService: [],
+        Dependent: [],
+      },
+      {
+        slot: "6-8",
+        Usecases: [],
+        AI: [],
+        isDisabled: true,
+        disabledService: [],
+        Dependent: [],
+      },
+      {
+        slot: "8-10",
+        Usecases: [],
+        AI: [],
+        isDisabled: true,
+        disabledService: [],
+        Dependent: [],
+      },
+      {
+        slot: "10-12",
+        Usecases: [],
+        AI: [],
+        isDisabled: true,
+        disabledService: [],
+        Dependent: [],
+      },
+      {
+        slot: "12-14",
+        Usecases: [],
+        AI: [],
+        isDisabled: true,
+        disabledService: [],
+        Dependent: [],
+      },
+      {
+        slot: "14-16",
+        Usecases: [],
+        AI: [],
+        isDisabled: true,
+        disabledService: [],
+        Dependent: [],
+      },
+      {
+        slot: "16-18",
+        Usecases: [],
+        AI: [],
+        isDisabled: true,
+        disabledService: [],
+        Dependent: [],
+      },
+      {
+        slot: "18-20",
+        Usecases: [],
+        AI: [],
+        isDisabled: true,
+        disabledService: [],
+        Dependent: [],
+      },
+      {
+        slot: "20-22",
+        Usecases: [],
+        AI: [],
+        isDisabled: true,
+        disabledService: [],
+        Dependent: [],
+      },
+      {
+        slot: "22-0",
+        Usecases: [],
+        AI: [],
+        isDisabled: true,
+        disabledService: [],
+        Dependent: [],
+      },
+    ],
+    apiData: {
+      "0-2": {
+        global: {
+          Cameras: [],
+          Usecases: [],
+          Dependent: [],
+          AI: [],
         },
-      ],
+        local: {},
+        // },
+        // "2-4": {
+        //   global: {
+        //     Cameras: [],
+        //     Usecases: [],
+        //     Dependent: [],
+        //     AI: [],
+        //   },
+        //   local: {},
+        // },
+        // "0-2": {
+        //   global: {
+        //     Cameras: ["1"],
+        //     Usecases: [
+        //       // "LOITV1",
+        //       "LOITV1ANA",
+        //       // "TRESV1",
+        //       // "MASKV1",
+        //       "VEHIV1",
+        //     ],
+        //     Dependent: ["LOITV1"],
+        //     AI: ["person", "vehicle"],
+        //   },
+        //   local: {
+        //     1: {
+        //       Usecases: ["LOITV1", "LOITV1ANA", "TRESV1", "MASKV1"],
+        //       Dependent: ["LOITV1"],
+        //       // AI: ["person", "fmgh"],
+        //     },
+        // 2: {
+        //   Usecases: ["LOITV1"],
+        //   Dependent: [],
+        //   AI: ["person"],
+        // },
+        // },
+      },
+      "2-4": {
+        global: {
+          Cameras: [],
+          Usecases: [],
+          Dependent: [],
+          AI: [],
+        },
+        local: {},
+      },
+      // "2-4": {
+      //   global: {
+      //     Cameras: ["2", "3"],
+      //     Usecases: ["LOITVANALYTICS", "LOITV1"],
+      //     Dependent: ["LOITV1"],
+      //     AI: ["person"],
+      //   },
+      //   local: {
+      //     2: {
+      //       Usecases: ["LOITVANALYTICS", "LOITV1"],
+      //       Dependent: ["LOITV1"],
+      //       AI: ["person"],
+      //     },
+      //     3: {
+      //       Usecases: ["LOITVANALYTICS", "LOITV1"],
+      //       Dependent: ["LOITV1"],
+      //       AI: ["person"],
+      //     },
+      //   },
+      // },
+      "4-6": {
+        global: {
+          Cameras: [],
+          Usecases: [],
+          Dependent: [],
+          AI: [],
+        },
+        local: {},
+      },
+      "6-8": {
+        global: {
+          Cameras: [],
+          Usecases: [],
+          Dependent: [],
+          AI: [],
+        },
+        local: {},
+      },
+      "8-10": {
+        global: {
+          Cameras: [],
+          Usecases: [],
+          Dependent: [],
+          AI: [],
+        },
+        local: {},
+      },
+      "10-12": {
+        global: {
+          Cameras: [],
+          Usecases: [],
+          Dependent: [],
+          AI: [],
+        },
+        local: {},
+      },
+      "12-14": {
+        global: {
+          Cameras: [],
+          Usecases: [],
+          Dependent: [],
+          AI: [],
+        },
+        local: {},
+      },
+      "14-16": {
+        global: {
+          Cameras: [],
+          Usecases: [],
+          Dependent: [],
+          AI: [],
+        },
+        local: {},
+      },
+      "16-18": {
+        global: {
+          Cameras: [],
+          Usecases: [],
+          Dependent: [],
+          AI: [],
+        },
+        local: {},
+      },
+      "18-20": {
+        global: {
+          Cameras: [],
+          Usecases: [],
+          Dependent: [],
+          AI: [],
+        },
+        local: {},
+      },
+      "20-22": {
+        global: {
+          Cameras: [],
+          Usecases: [],
+          Dependent: [],
+          AI: [],
+        },
+        local: {},
+      },
+      "22-0": {
+        global: {
+          Cameras: [],
+          Usecases: [],
+          Dependent: [],
+          AI: [],
+        },
+        local: {},
+      },
     },
-    ScheduledUC: [],
-    ScheduledDP: [],
-    UnScheduledUC: [],
-    UnScheduledDP: [],
-    disabledSchedule: [],
+    activeUsecases: [],
+    activeDS: [],
+    activeDependent: [],
   };
-
-  //reusable functions
-
-  //function to get USESCASES
-  // parentLoop = (arr, callback) => {
-  //   for (let element of arr) {
-  //     if (
-  //       callback(element);
-  //     }
-  //   }
-  // };
 
   parentLoop = (arr, callback) => {
     for (let element of arr) {
       callback(element);
     }
   };
-
-  resultIntersection = (element, type, arr, callback) => {
-    let selectedDS = [...arr];
-    // let selectedDS =
-    //   type === "unschedule"
-    //     ? [...this.state.selectedUsDS]
-    //     : [...this.state.selectedDS];
-
-    let intersection = element.Parent_container_id.filter(
-      (x) => !selectedDS.includes(x)
-    );
-    let add = arr.length + intersection.length;
-
-    if (deepStreamLimit < add) {
-      console.log("DISABLED: " + element.Service_name);
-      if (type === "unschedule") element.disableUnscheduleCheckbox = true;
-      else element.disableScheduleCheckbox = true;
+  toggleUsecase = (service_id, type) => {
+    let _data = [...this.state.data];
+    if (type === "push") {
+      this.parentLoop(_data, (ele) => {
+        ele.disabledService.push(service_id);
+        ele.disabledService = [...new Set(ele.disabledService)];
+      });
     } else {
-      if (type === "unschedule") element.disableUnscheduleCheckbox = false;
-      else element.disableScheduleCheckbox = false;
+      this.parentLoop(_data, (ele) => {
+        if (ele.disabledService.includes(service_id)) {
+          var filterArr = ele.disabledService.filter(
+            (item) => item != service_id
+          );
+          ele.disabledService = [...filterArr];
+          // var index = ele.disabledService.indexOf(service_id);
+          // ele.disabledService.splice(index, 1);
+        }
+        // else ele.Usecases.push(service_id);
+      });
     }
-
-    callback(element);
+    this.setState({ data: _data });
   };
 
-  handleGlobalScheduleDisable = () => {
-    //to disable all schedule checkbox after it meets its limit eg: "Usecase": 3 so scheduleChecked.length should not be greater than 3
+  timeslotMouseDown = (i) => {
+    let _selectedTimeSlot = [...this.state.selectedTimeSlot];
+    let _data = [...this.state.data];
+    let _activeUsecases = [...this.state.activeUsecases];
 
-    console.log("Checking use case limit");
-    let scheduleChecked = [...this.state.scheduleChecked];
-    let data = [...this.state.data];
-
-    if (scheduleChecked.length === usecaseLimit) {
-      console.log("Usecase limit reached");
-
-      this.parentLoop(data, (items) => {
-        if (!scheduleChecked.some((item) => item === items.Service_id)) {
-          items.disableScheduleCheckbox = true;
+    if (_selectedTimeSlot.includes(i)) {
+      var index = _selectedTimeSlot.indexOf(i);
+      _selectedTimeSlot.splice(index, 1);
+      this.parentLoop(_data, (ele) => {
+        if (ele.slot === i) {
+          ele.isDisabled = true;
+          ele.Usecases = [];
         }
       });
+    } else {
+      _selectedTimeSlot.push(i);
+      this.parentLoop(_data, (ele) => {
+        if (ele.slot === i) {
+          ele.isDisabled = false;
+        }
+      });
+    }
 
-      this.setState({ data });
-    } else if (this.state.selectedDS.length === deepStreamLimit) {
-      console.log("Deepstream limit reached");
+    this.setState(
+      {
+        selectedTimeSlot: _selectedTimeSlot,
+        data: _data,
+        mouseState: true,
+      },
+      () => console.log(this.state)
+    );
+  };
+  submitTime = () => {
+    let _selectedTimeSlot = [...this.state.selectedTimeSlot];
+    let _data = [...this.state.data];
+    const intersection = _data.filter((element) => {
+      if (_selectedTimeSlot.includes(element.slot)) {
+        element.isDisabled = false;
+      } else element.isDisabled = true;
+      return element;
+    });
+    this.setState({ data: intersection });
+  };
+  resetTime = () => {
+    let _selectedTimeSlot = [...this.state.selectedTimeSlot];
+    let _data = [...this.state.data];
+    for (let ele of _data) {
+      ele.isDisabled = false;
+    }
+    this.setState({ data: _data });
+  };
 
-      this.parentLoop(data, (items) => {
-        this.parentLoop(items.Parent_container_id, (item2) => {
-          if (!this.state.selectedDS.includes(item2)) {
-            items.disableScheduleCheckbox = true;
-          }
+  _DSLimitReached = (data_item, service_item) => {
+    console.log("DISABLING USING DS");
+    let _Service = [...this.state.Service];
+    let _activeDS = [...this.state.activeDS];
+    let _data = [...this.state.data];
+
+    this.parentLoop(_Service, (ele) => {
+      let result = [];
+      if (ele.Parent_container_id.AI.length <= deepStreamLimit) {
+        this.parentLoop(ele.Parent_container_id.AI, (ele2) => {
+          this.parentLoop(_activeDS, (ele3) => {
+            if (ele3 === ele2) result.push(true);
+            else result.push(false);
+          });
         });
-      });
-
-      this.setState({ data });
-    } else {
-      console.log("handleGlobalScheduleDisable ELSE");
-
-      this.parentLoop(data, (items) => {
-        if (this.state.selectedDS.length > 1) {
-          //if selectedDS length is greater than 1
-          console.log("selectedDS length is greater than 1");
-
-          if (
-            // items.Parent_container_id.length >= this.state.selectedDS.length
-            items.Parent_container_id.length <= this.state.selectedDS.length
-          ) {
-            //parent is greater/equal to selectedDS
-            let result = [];
-            for (let ele of this.state.selectedDS) {
-              this.parentLoop(items.Parent_container_id, (item2) => {
-                if (ele === item2) result.push(true);
-                else result.push(false);
-              });
-            }
-            if (!result.includes(true)) {
-              this.resultIntersection(
-                items,
-                "schedule",
-                this.state.selectedDS,
-                (obj) => {
-                  items = { ...obj };
-                }
-              );
-            } else {
-              this.resultIntersection(
-                items,
-                "schedule",
-                this.state.selectedDS,
-                (obj) => {
-                  items = { ...obj };
-                }
-              );
-            }
-
-            // if (!result.includes(true)) {
-            //   let intersection = items.Parent_container_id.filter(
-            //     (x) => !this.state.selectedDS.includes(x)
-            //   );
-            //   let add = this.state.selectedDS.length + intersection.length;
-            //   if (deepStreamLimit < add) {
-            //     items.disableScheduleCheckbox = true;
-            //   }
-            // } else {
-            //   let intersection = items.Parent_container_id.filter(
-            //     (x) => !this.state.selectedDS.includes(x)
-            //   );
-            //   let add = this.state.selectedDS.length + intersection.length;
-
-            //   if (deepStreamLimit < add) {
-            //     items.disableScheduleCheckbox = true;
-            //   }
-            // }
-          } else {
-            //parent length is greater than selectedDS
-            console.log("parent length is greater than selectedDS");
-            let result = [];
-            for (let ele of this.state.selectedDS) {
-              this.parentLoop(items.Parent_container_id, (item2) => {
-                if (ele === item2) result.push(true);
-                else result.push(false);
-              });
-            }
-
-            if (!result.includes(true)) {
-              this.resultIntersection(
-                items,
-                "schedule",
-                this.state.selectedDS,
-                (obj) => {
-                  items = { ...obj };
-                }
-              );
-            } else {
-              this.resultIntersection(
-                items,
-                "schedule",
-                this.state.selectedDS,
-                (obj) => {
-                  items = { ...obj };
-                }
-              );
-            }
-
-            // if (!result.includes(true)) {
-            //   let intersection = items.Parent_container_id.filter(
-            //     (x) => !this.state.selectedDS.includes(x)
-            //   );
-            //   let add = this.state.selectedDS.length + intersection.length;
-            //   if (deepStreamLimit < add) {
-            //     items.disableScheduleCheckbox = true;
-            //   }
-            // } else {
-            //   let intersection = items.Parent_container_id.filter(
-            //     (x) => !this.state.selectedDS.includes(x)
-            //   );
-            //   let add = this.state.selectedDS.length + intersection.length;
-
-            //   if (deepStreamLimit < add) {
-            //     items.disableScheduleCheckbox = true;
-            //   }
-            // }
-          }
+        if (!result.includes(true)) {
+          this.parentLoop(_data, (data_ele) => {
+            data_ele.disabledService.push(ele.Service_id);
+          });
         } else {
-          // selectedDS length is 1
-          if (items.Parent_container_id.length > 1) {
-            console.log("selectedDS length is 1: " + items.Service_name);
-            let result = [];
-            for (let ele of this.state.selectedDS) {
-              this.parentLoop(items.Parent_container_id, (item2) => {
-                if (ele === item2) result.push(true);
-                else result.push(false);
-              });
-            }
-            if (!result.includes(true)) {
-              if (items.Parent_container_id.length < deepStreamLimit) {
-              } else {
-                let intersection = items.Parent_container_id.filter(
-                  (x) => !this.state.selectedDS.includes(x)
-                );
-                if (intersection.length) items.disableScheduleCheckbox = true;
+          const intersection = ele.Parent_container_id.AI.filter(
+            (value) => !_activeDS.includes(value)
+          );
+          // let arr = [..._activeDS];
+          // console.log(arr);
+          // console.log(intersection);
+          // Array.prototype.push.apply(arr, intersection);
+          // arr = [...new Set(arr)];
+          // console.log(arr);
+          // console.log(ele.Service_id);
+          let add = _activeDS.length + intersection.length;
+          if (deepStreamLimit < add) {
+            console.log("disabled DS: " + ele.Service_id);
+            this.parentLoop(_data, (data_ele) => {
+              data_ele.disabledService.push(ele.Service_id);
+              data_ele.disabledService = [...new Set(data_ele.disabledService)];
+            });
+          } else {
+            // console.log(_data);
+            this.parentLoop(_data, (data_ele) => {
+              if (data_ele.disabledService.includes(ele.Service_id)) {
+                var index = data_ele.disabledService.indexOf(ele.Service_id);
+                data_ele.disabledService.splice(index, 1);
               }
-            } else {
-              let intersection = items.Parent_container_id.filter(
-                (x) => !this.state.selectedDS.includes(x)
-              );
-              let add = this.state.selectedDS.length + intersection.length;
-              if (deepStreamLimit < add) {
-                items.disableScheduleCheckbox = true;
-              }
-            }
+              // else ele.Usecases.push(service_id);
+            });
           }
         }
-      });
-      this.setState({ data });
-    }
+      }
+    });
+    this.setState({ data: _data });
   };
 
-  handleScheduleCheck = (index) => {
-    // reusable function to check Schedule
+  _DSLimitReached2 = (data_item, service_item) => {
+    console.log("DISABLING USING DS");
+    let _Service = [...this.state.Service];
+    let _activeDS = [...this.state.activeDS];
+    let _data = [...this.state.data];
+    let addDS = [...this.state.staticDS];
+    Array.prototype.push.apply(addDS, this.state.activeDS);
+    addDS = [...new Set(addDS)];
+    this.parentLoop(_Service, (ele) => {
+      let result = [];
+      if (ele.Parent_container_id.AI.length <= deepStreamLimit) {
+        console.log(ele.Service_id);
+        this.parentLoop(ele.Parent_container_id.AI, (ele2) => {
+          this.parentLoop(addDS, (ele3) => {
+            if (ele3 === ele2) result.push(true);
+            else result.push(false);
+          });
+        });
 
-    let data = [...this.state.data];
-    data[index].scheduleChecked = true;
-    let selected = data[index].Service_id;
-    let arr = [...this.state.scheduleChecked];
-    arr.push(selected);
-    this.setState({ data, scheduleChecked: arr }, () =>
-      this.handleGlobalScheduleDisable()
-    );
+        if (!result.includes(true)) {
+          console.log("IF");
+          this.parentLoop(_data, (data_ele) => {
+            data_ele.disabledService.push(ele.Service_id);
+          });
+        } else {
+          console.log("ELSE");
+          const intersection = ele.Parent_container_id.AI.filter(
+            (value) => !addDS.includes(value)
+          );
+          let add = addDS.length + intersection.length;
+          console.log(deepStreamLimit + "< " + add);
+          if (deepStreamLimit < add) {
+            console.log("ELSE IF");
+            console.log("disabled DS: " + ele.Service_id);
+            this.toggleUsecase(ele.Service_id, "push");
+          } else {
+            // this.toggleUsecase(ele.Service_id, "put");
+            console.log("ELSE ELSE");
+            console.log("enabled DS: " + ele.Service_id);
+            this.onLoadDisableServices();
+          }
+        }
+
+        // this.parentLoop(ele.Parent_container_id.AI, (ele2) => {
+        //   this.parentLoop(addDS, (ele3) => {
+        //     if (ele3 === ele2) result.push(true);
+        //     else result.push(false);
+        //   });
+        // });
+        // console.log(result, ele.Service_id);
+        // if (!result.includes(true)) {
+        //   console.log("if");
+        //   this.parentLoop(_data, (data_ele) => {
+        //     data_ele.disabledService.push(ele.Service_id);
+        //   });
+        // } else {
+        //   console.log("else");
+        //   const intersection = ele.Parent_container_id.AI.filter(
+        //     (value) => !addDS.includes(value)
+        //   );
+        //   let arr = [...addDS];
+        //   Array.prototype.push.apply(arr, intersection);
+        //   arr = [...new Set(arr)];
+        //   // console.log(intersection);
+        //   // console.log(arr);
+        //   console.log(arr);
+        //   let add = addDS.length + intersection.length;
+        //   console.log(deepStreamLimit + "< " + add);
+        //   if (deepStreamLimit < add) {
+        //     console.log("IF");
+        //     console.log("disabled DS: " + ele.Service_id);
+        //     this.parentLoop(_data, (data_ele) => {
+        //       data_ele.disabledService.push(ele.Service_id);
+        //       data_ele.disabledService = [...new Set(data_ele.disabledService)];
+        //     });
+        //   } else {
+        //     console.log("ELSE");
+        //     this.parentLoop(_data, (data_ele) => {
+        //       if (data_ele.disabledService.includes(ele.Service_id)) {
+        //         var index = data_ele.disabledService.indexOf(ele.Service_id);
+        //         data_ele.disabledService.splice(index, 1);
+        //       }
+        //       // else ele.Usecases.push(service_id);
+        //     });
+        //   }
+        // }
+      }
+    });
+    // this.setState({ data: _data });
   };
 
-  handleScheduleUncheck = (index, item) => {
-    // reusable function to uncheck Schedule
-    let data = [...this.state.data];
-    data[index].scheduleChecked = false;
-    let selected = data[index].Service_id;
-    let arr = [...this.state.scheduleChecked];
-    let result = arr.filter((item) => item !== selected);
-
-    this.setState({ data, scheduleChecked: result }, () =>
-      this.toggleSchduleUsecase()
-    );
+  _UCLimitReached = () => {
+    console.log("_UCLimitReached");
+    let _Service = [...this.state.Service];
+    let _activeDS = [...this.state.activeDS];
+    let _activeUsecases = [...this.state.activeUsecases];
+    let _data = [...this.state.data];
+    this.parentLoop(_Service, (ele) => {
+      if (!_activeUsecases.includes(ele.Service_id)) {
+        this.parentLoop(_data, (data_ele) => {
+          data_ele.disabledService.push(ele.Service_id);
+        });
+      }
+    });
   };
 
-  toggleSchduleUsecase = () => {
-    let data = [...this.state.data];
-    let scheduleChecked = [...this.state.scheduleChecked];
+  _UCLimitReached2 = () => {
+    let _Service = [...this.state.Service];
+    let _activeDS = [...this.state.activeDS];
+    let _activeUsecases = [...this.state.activeUsecases];
 
-    //to toggle usecase if user uncheck schedule
-    if (this.state.scheduleChecked.length === 0) {
+    let addUC = [...this.state.staticUC];
+    Array.prototype.push.apply(addUC, this.state.activeUsecases);
+    Array.prototype.push.apply(addUC, this.state.activeDependent);
+    Array.prototype.push.apply(addUC, this.state.staticDependent);
+    addUC = [...new Set(addUC)];
+    console.log(addUC);
+    let _data = [...this.state.data];
+    this.parentLoop(_Service, (ele) => {
+      if (!addUC.includes(ele.Service_id)) {
+        this.parentLoop(_data, (data_ele) => {
+          data_ele.disabledService.push(ele.Service_id);
+        });
+      }
+    });
+  };
+
+  _unchecked = (service_item) => {
+    console.log("_unchecked");
+    let _data = [...this.state.data];
+    let _Service = [...this.state.Service];
+    let _activeDS = [...this.state.activeDS];
+    let _activeUsecases = [...this.state.activeUsecases];
+    let _activeDependent = [...this.state.activeDependent];
+    if (!_activeDS.length) {
       console.log("DEFAULT STATE");
-      this.parentLoop(data, (ele) => {
-        if (ele.Parent_container_id.length <= deepStreamLimit) {
-          ele.disableScheduleCheckbox = false;
+      this.parentLoop(_Service, (item) => {
+        if (item.Parent_container_id.AI.length > deepStreamLimit) {
+          this.parentLoop(_data, (ele) => {
+            ele.disabledService.push(item.Service_id);
+          });
+        } else {
+          this.parentLoop(_data, (ele) => {
+            ele.disabledService = [];
+            ele.Dependent = [];
+          });
         }
       });
-      this.setState({ selectedDS: [] });
     } else {
-      console.log("toggleSchduleUsecase ELSE");
-      let arr = [];
+      console.log("_unchecked ELSE");
 
-      this.parentLoop(scheduleChecked, (ele) => {
-        this.parentLoop(data, (ele2) => {
+      let arr = [];
+      this.parentLoop(_activeUsecases, (ele) => {
+        this.parentLoop(_Service, (ele2) => {
           if (ele2.Service_id === ele) {
-            Array.prototype.push.apply(arr, ele2.Parent_container_id);
+            Array.prototype.push.apply(arr, ele2.Parent_container_id.AI);
             arr = [...new Set(arr)];
           }
         });
@@ -316,902 +595,1333 @@ class Add extends Component {
       console.log(arr);
       if (arr.length > 1) {
         console.log("ARR > 1");
-        let filterData = data.filter(
-          (item) => item.Parent_container_id.length <= deepStreamLimit
+        let filterData = _Service.filter(
+          (item) => item.Parent_container_id.AI.length <= deepStreamLimit
         );
+        console.log(filterData);
         this.parentLoop(filterData, (element) => {
           let result = [];
           this.parentLoop(arr, (ele) => {
-            this.parentLoop(element.Parent_container_id, (ele2) => {
+            this.parentLoop(element.Parent_container_id.AI, (ele2) => {
               if (ele === ele2) result.push(true);
               else result.push(false);
             });
           });
 
           if (result.includes(true)) {
-            this.resultIntersection(element, "schedule", arr, (obj) => {
-              element = { ...obj };
-            });
+            let intersection = element.Parent_container_id.AI.filter(
+              (x) => !_activeDS.includes(x)
+            );
+            console.log(intersection);
+            let add = _activeDS.length + intersection.length;
+            if (deepStreamLimit < add) {
+              console.log("disable4: " + element.Service_id);
+              this.toggleUsecase(element.Service_id, "push");
+            } else {
+              console.log("enable4: " + element.Service_id);
+              this.toggleUsecase(element.Service_id, "put");
+            }
           } else {
-            this.resultIntersection(element, "schedule", arr, (obj) => {
-              element = { ...obj };
-            });
+            let intersection = element.Parent_container_id.AI.filter(
+              (x) => !_activeDS.includes(x)
+            );
+            console.log(intersection);
+            let add = _activeDS.length + intersection.length;
+            console.log(add);
+            if (deepStreamLimit < add) {
+              console.log("disable5: " + element.Service_id);
+              this.toggleUsecase(element.Service_id, "push");
+            } else {
+              console.log("enable5: " + element.Service_id);
+              this.toggleUsecase(element.Service_id, "put");
+            }
           }
         });
       } else {
         console.log("ARR === 1");
-        this.parentLoop(data, (element) => {
-          if (element.Parent_container_id.length <= deepStreamLimit) {
-            if (element.Parent_container_id.length === 1) {
-              element.disableScheduleCheckbox = false;
-            } else {
+        this.parentLoop(_Service, (element) => {
+          if (element.Parent_container_id.AI.length <= deepStreamLimit) {
+            if (element.Parent_container_id.AI.length === 1) {
               let result = [];
               this.parentLoop(arr, (ele) => {
-                this.parentLoop(element.Parent_container_id, (ele2) => {
-                  console.log(ele + "===" + ele2);
+                this.parentLoop(element.Parent_container_id.AI, (ele2) => {
                   if (ele === ele2) result.push(true);
                   else result.push(false);
                 });
               });
 
               if (result.includes(true)) {
-                this.resultIntersection(element, "schedule", arr, (obj) => {
-                  element = { ...obj };
-                });
-              } else {
-                console.log("object");
-                this.resultIntersection(element, "schedule", arr, (obj) => {
-                  element = { ...obj };
-                });
-              }
-            }
-          }
-        });
-      }
-      this.setState({ selectedDS: arr, data });
-    }
-  };
-
-  disableUsecaseDSLimitReached = (indexx) => {
-    // disable use case if deepstream limit reached
-    if (this.state.selectedDS.length === deepStreamLimit) {
-      if (this.state.scheduleChecked.length >= usecaseLimit) {
-        console.log("disableUsecaseDSLimitReached IF");
-        let data = [...this.state.data];
-
-        this.parentLoop(data, (items) => {
-          this.parentLoop(items.Parent_container_id, (item2) => {
-            if (!this.state.selectedDS.some((item) => item === item2)) {
-              items.disableScheduleCheckbox = true;
-            }
-          });
-        });
-        this.setState({ data });
-      } else {
-        this.handleScheduleCheck(indexx);
-      }
-    } else {
-      this.handleScheduleCheck(indexx);
-      console.log("disableUsecaseDSLimitReached ELSE");
-    }
-  };
-
-  onScheduleClickHandle = (e, item, index) => {
-    let parentContainerArr = item.Parent_container_id;
-    let selectedDS = [...this.state.selectedDS];
-    const isChecked = this.state.scheduleChecked.some(
-      (itemm) => itemm === item.Service_id
-    );
-    //if else condition to check and uncheck scheduled usecase
-    if (isChecked) {
-      //if unchecked
-      this.handleScheduleUncheck(index, item);
-    } else {
-      // if checked
-      if (!this.state.selectedDS.length) {
-        console.log("IF");
-        this.setState({ selectedDS: parentContainerArr }, () => {
-          this.disableUsecaseDSLimitReached(index);
-        });
-      } else {
-        console.log("ELSE");
-        this.parentLoop(parentContainerArr, (ele) => {
-          if (!selectedDS.some((item) => item === ele)) {
-            selectedDS.push(ele);
-          }
-        });
-
-        this.setState({ selectedDS }, () => {
-          this.disableUsecaseDSLimitReached(index);
-        });
-      }
-    }
-  };
-
-  // UNSCHEDULE FUNCTION
-
-  handleGlobalUnscheduleDisable = () => {
-    //to disable all schedule checkbox after it meets its limit eg: "Usecase": 3 so scheduleChecked.length should not be greater than 3
-
-    console.log("Checking use case limit");
-    let scheduleChecked = [...this.state.unscheduleChecked];
-    let data = [...this.state.data];
-
-    if (scheduleChecked.length === usecaseLimit) {
-      console.log("Usecase limit reached");
-
-      this.parentLoop(data, (items) => {
-        if (!scheduleChecked.some((item) => item === items.Service_id)) {
-          items.disableUnscheduleCheckbox = true;
-        }
-      });
-
-      this.setState({ data });
-    } else if (this.state.selectedUsDS.length === deepStreamLimit) {
-      console.log("Deepstream limit reached");
-
-      this.parentLoop(data, (items) => {
-        this.parentLoop(items.Parent_container_id, (item2) => {
-          if (!this.state.selectedUsDS.includes(item2)) {
-            items.disableUnscheduleCheckbox = true;
-          }
-        });
-      });
-
-      this.setState({ data });
-    } else {
-      console.log("handleGlobalScheduleDisable ELSE");
-
-      this.parentLoop(data, (items) => {
-        if (this.state.selectedUsDS.length > 1) {
-          //if selectedUsDS length is greater than 1
-          console.log("selectedUsDS length is greater than 1");
-
-          if (
-            items.Parent_container_id.length <= this.state.selectedUsDS.length
-          ) {
-            //parent is greater/equal to selectedUsDS
-
-            let result = [];
-            for (let ele of this.state.selectedUsDS) {
-              this.parentLoop(items.Parent_container_id, (item2) => {
-                if (ele === item2) result.push(true);
-                else result.push(false);
-              });
-            }
-            if (!result.includes(true)) {
-              let intersection = items.Parent_container_id.filter(
-                (x) => !this.state.selectedUsDS.includes(x)
-              );
-              let add = this.state.selectedUsDS.length + intersection.length;
-              if (deepStreamLimit < add) {
-                items.disableUnscheduleCheckbox = true;
-              }
-              // if (intersection.length) items.disableUnscheduleCheckbox = true;
-            } else {
-              let intersection = items.Parent_container_id.filter(
-                (x) => !this.state.selectedUsDS.includes(x)
-              );
-              let add = this.state.selectedUsDS.length + intersection.length;
-
-              if (deepStreamLimit < add) {
-                items.disableUnscheduleCheckbox = true;
-              }
-            }
-          } else {
-            //parent length is less than selectedUsDS
-          }
-        } else {
-          // selectedUsDS length is 1
-          if (items.Parent_container_id.length > 1) {
-            console.log("selectedUsDS length is 1: " + items.Service_name);
-            let result = [];
-            for (let ele of this.state.selectedUsDS) {
-              this.parentLoop(items.Parent_container_id, (item2) => {
-                if (ele === item2) result.push(true);
-                else result.push(false);
-              });
-            }
-            if (!result.includes(true)) {
-              if (items.Parent_container_id.length < deepStreamLimit) {
-              } else {
-                let intersection = items.Parent_container_id.filter(
-                  (x) => !this.state.selectedUsDS.includes(x)
+                let intersection = element.Parent_container_id.AI.filter(
+                  (x) => !_activeDS.includes(x)
                 );
-                if (intersection.length) items.disableUnscheduleCheckbox = true;
+                let add = _activeDS.length + intersection.length;
+                if (deepStreamLimit < add) {
+                  console.log("disable: " + element.Service_id);
+                  this.toggleUsecase(element.Service_id, "push");
+                } else {
+                  console.log("enable: " + element.Service_id);
+                  this.toggleUsecase(element.Service_id, "put");
+                }
+              } else {
+                let intersection = element.Parent_container_id.AI.filter(
+                  (x) => !_activeDS.includes(x)
+                );
+                let add = _activeDS.length + intersection.length;
+                if (deepStreamLimit < add) {
+                  console.log("disable1: " + element.Service_id);
+                  this.toggleUsecase(element.Service_id, "push");
+                } else {
+                  console.log("enable1: " + element.Service_id);
+                  this.toggleUsecase(element.Service_id, "put");
+                  // this.toggleUsecase(element.Service_id);
+                }
               }
             } else {
-              let intersection = items.Parent_container_id.filter(
-                (x) => !this.state.selectedUsDS.includes(x)
-              );
-              let add = this.state.selectedUsDS.length + intersection.length;
-              if (deepStreamLimit < add) {
-                items.disableUnscheduleCheckbox = true;
+              let result = [];
+              this.parentLoop(arr, (ele) => {
+                this.parentLoop(element.Parent_container_id.AI, (ele2) => {
+                  if (ele === ele2) result.push(true);
+                  else result.push(false);
+                });
+              });
+
+              if (result.includes(true)) {
+                let intersection = element.Parent_container_id.AI.filter(
+                  (x) => !_activeDS.includes(x)
+                );
+                let add = _activeDS.length + intersection.length;
+                if (deepStreamLimit < add) {
+                  this.toggleUsecase(element.Service_id, "push");
+                  console.log("disable2: " + element.Service_id);
+                } else {
+                  this.toggleUsecase(element.Service_id, "put");
+                  console.log("enable2: " + element.Service_id);
+                }
+              } else {
+                let intersection = element.Parent_container_id.AI.filter(
+                  (x) => !_activeDS.includes(x)
+                );
+                let add = _activeDS.length + intersection.length;
+                if (deepStreamLimit < add) {
+                  this.toggleUsecase(element.Service_id, "push");
+                  console.log("disable3: " + element.Service_id);
+                } else {
+                  console.log("enable3: " + element.Service_id);
+                }
               }
             }
           }
-        }
-      });
-      this.setState({ data });
+        });
+      }
     }
   };
 
-  handleUnscheduleCheck = (index) => {
-    // reusable function to check Schedule
-
-    let data = [...this.state.data];
-    data[index].unScheduleChecked = true;
-    let selected = data[index].Service_id;
-    let arr = [...this.state.unscheduleChecked];
-    arr.push(selected);
-    this.setState({ data, unscheduleChecked: arr }, () =>
-      this.handleGlobalUnscheduleDisable()
-    );
-  };
-
-  handleUnscheduleUncheck = (index, item) => {
-    // reusable function to uncheck Schedule
-    let data = [...this.state.data];
-    data[index].unScheduleChecked = false;
-    let selected = data[index].Service_id;
-    let arr = [...this.state.unscheduleChecked];
-    let result = arr.filter((item) => item !== selected);
-
-    this.setState({ data, unscheduleChecked: result }, () =>
-      this.toggleUnschduleUsecase()
-    );
-  };
-
-  toggleUnschduleUsecase = () => {
-    let data = [...this.state.data];
-    let scheduleChecked = [...this.state.unscheduleChecked];
-
-    //to toggle usecase if user uncheck schedule
-    if (scheduleChecked.length === 0) {
+  _unchecked2 = (service_item) => {
+    console.log("_unchecked2");
+    let _data = [...this.state.data];
+    let _Service = [...this.state.Service];
+    let _activeDS = [...this.state.activeDS];
+    let _activeUsecases = [...this.state.activeUsecases];
+    let _activeDependent = [...this.state.activeDependent];
+    let addUC = [...this.state.staticUC];
+    let addDS = [...this.state.staticDS];
+    Array.prototype.push.apply(addUC, this.state.activeUsecases);
+    Array.prototype.push.apply(addUC, this.state.activeDependent);
+    Array.prototype.push.apply(addDS, this.state.activeDS);
+    addUC = [...new Set(addUC)];
+    addDS = [...new Set(addDS)];
+    console.log(addDS);
+    if (!_activeDS.length) {
       console.log("DEFAULT STATE");
-
-      this.parentLoop(data, (ele) => {
-        if (ele.Parent_container_id.length <= deepStreamLimit) {
-          ele.disableUnscheduleCheckbox = false;
-        }
-      });
-      this.setState({ selectedUsDS: [] });
+      this.onLoadDisableServices();
     } else {
-      console.log("toggleUnschduleUsecase ELSE");
+      console.log("_unchecked2 ELSE");
+
       let arr = [];
-      this.parentLoop(scheduleChecked, (ele) => {
-        this.parentLoop(data, (ele2) => {
+      this.parentLoop(_activeUsecases, (ele) => {
+        this.parentLoop(_Service, (ele2) => {
           if (ele2.Service_id === ele) {
-            Array.prototype.push.apply(arr, ele2.Parent_container_id);
+            Array.prototype.push.apply(arr, ele2.Parent_container_id.AI);
             arr = [...new Set(arr)];
           }
         });
       });
-
+      console.log(arr);
       if (arr.length > 1) {
         console.log("ARR > 1");
-        let filterData = data.filter(
-          (item) => item.Parent_container_id.length <= deepStreamLimit
+        let filterData = _Service.filter(
+          (item) => item.Parent_container_id.AI.length <= deepStreamLimit
         );
-
         this.parentLoop(filterData, (element) => {
           let result = [];
-          this.parentLoop(arr, (ele) => {
-            this.parentLoop(element.Parent_container_id, (ele2) => {
+          this.parentLoop(addDS, (ele) => {
+            this.parentLoop(element.Parent_container_id.AI, (ele2) => {
               if (ele === ele2) result.push(true);
               else result.push(false);
             });
           });
-
+          console.log(result);
           if (result.includes(true)) {
-            this.resultIntersection(element, "unschedule", arr, (obj) => {
-              element = { ...obj };
-            });
+            if (element.Category === "Analytics") {
+              console.log("calling analytics");
+              this.toggleAnalytics2(element);
+            } else {
+              let intersection = element.Parent_container_id.AI.filter(
+                (x) => !addDS.includes(x)
+              );
+              let add = addDS.length + intersection.length;
+              if (deepStreamLimit < add) {
+                console.log("disable4: " + element.Service_id);
+                this.toggleUsecase(element.Service_id, "push");
+              } else {
+                console.log("enable4: " + element.Service_id);
+                this.toggleUsecase(element.Service_id, "put");
+                // this.toggleUsecase(element.Service_id);
+              }
+            }
+
+            // let intersection = element.Parent_container_id.AI.filter(
+            //   (x) => !addDS.includes(x)
+            // );
+            // console.log(intersection);
+            // let add = addDS.length + intersection.length;
+            // if (deepStreamLimit < add) {
+            //   console.log("disable4: " + element.Service_id);
+            //   this.toggleUsecase(element.Service_id, "push");
+            // } else {
+            //   console.log("enable4: " + element.Service_id);
+            //   this.toggleUsecase(element.Service_id, "put");
+            // }
           } else {
-            this.resultIntersection(element, "unschedule", arr, (obj) => {
-              element = { ...obj };
-            });
+            if (element.Category === "Analytics") {
+              this.toggleAnalytics2(element);
+            } else {
+              let intersection = element.Parent_container_id.AI.filter(
+                (x) => !addDS.includes(x)
+              );
+              let add = addDS.length + intersection.length;
+              if (deepStreamLimit < add) {
+                console.log("disable1: " + element.Service_id);
+                this.toggleUsecase(element.Service_id, "push");
+              } else {
+                console.log("enable1: " + element.Service_id);
+                this.toggleUsecase(element.Service_id, "put");
+                // this.toggleUsecase(element.Service_id);
+              }
+            }
+            // let intersection = element.Parent_container_id.AI.filter(
+            //   (x) => !addDS.includes(x)
+            // );
+            // console.log(intersection);
+            // let add = addDS.length + intersection.length;
+            // console.log(add);
+            // if (deepStreamLimit < add) {
+            //   console.log("disable5: " + element.Service_id);
+            //   this.toggleUsecase(element.Service_id, "push");
+            // } else {
+            //   console.log("enable5: " + element.Service_id);
+            //   this.toggleUsecase(element.Service_id, "put");
+            // }
           }
         });
       } else {
         console.log("ARR === 1");
-        this.parentLoop(data, (element) => {
-          if (element.Parent_container_id.length <= deepStreamLimit) {
-            if (element.Parent_container_id.length === 1) {
-              element.disableUnscheduleCheckbox = false;
-            } else {
+        this.parentLoop(_Service, (element) => {
+          if (element.Parent_container_id.AI.length <= deepStreamLimit) {
+            if (element.Parent_container_id.AI.length === 1) {
               let result = [];
-              this.parentLoop(arr, (ele) => {
-                this.parentLoop(element.Parent_container_id, (ele2) => {
+              this.parentLoop(addDS, (ele) => {
+                this.parentLoop(element.Parent_container_id.AI, (ele2) => {
                   if (ele === ele2) result.push(true);
                   else result.push(false);
                 });
               });
+              console.log(result);
               if (result.includes(true)) {
-                this.resultIntersection(element, "unschedule", arr, (obj) => {
-                  element = { ...obj };
-                });
+                let intersection = element.Parent_container_id.AI.filter(
+                  (x) => !addDS.includes(x)
+                );
+                let add = addDS.length + intersection.length;
+                if (deepStreamLimit < add) {
+                  console.log("disable: " + element.Service_id);
+                  this.toggleUsecase(element.Service_id, "push");
+                } else {
+                  console.log("enable: " + element.Service_id);
+                  this.toggleUsecase(element.Service_id, "put");
+                }
               } else {
-                this.resultIntersection(element, "unschedule", arr, (obj) => {
-                  element = { ...obj };
+                if (element.Category === "Analytics") {
+                  this.toggleAnalytics2(element);
+                } else {
+                  let intersection = element.Parent_container_id.AI.filter(
+                    (x) => !addDS.includes(x)
+                  );
+                  let add = addDS.length + intersection.length;
+                  if (deepStreamLimit < add) {
+                    console.log("disable1: " + element.Service_id);
+                    this.toggleUsecase(element.Service_id, "push");
+                  } else {
+                    console.log("enable1: " + element.Service_id);
+                    this.toggleUsecase(element.Service_id, "put");
+                    // this.toggleUsecase(element.Service_id);
+                  }
+                }
+              }
+            } else {
+              let result = [];
+              this.parentLoop(arr, (ele) => {
+                this.parentLoop(element.Parent_container_id.AI, (ele2) => {
+                  if (ele === ele2) result.push(true);
+                  else result.push(false);
                 });
+              });
+
+              if (result.includes(true)) {
+                let intersection = element.Parent_container_id.AI.filter(
+                  (x) => !addDS.includes(x)
+                );
+                let add = addDS.length + intersection.length;
+                if (deepStreamLimit < add) {
+                  this.toggleUsecase(element.Service_id, "push");
+                  console.log("disable2: " + element.Service_id);
+                } else {
+                  this.toggleUsecase(element.Service_id, "put");
+                  console.log("enable2: " + element.Service_id);
+                }
+              } else {
+                if (element.Category === "Analytics") {
+                  this.toggleAnalytics2(element);
+                } else {
+                  let intersection = element.Parent_container_id.AI.filter(
+                    (x) => !addDS.includes(x)
+                  );
+                  let add = addDS.length + intersection.length;
+                  if (deepStreamLimit < add) {
+                    console.log("disable3: " + element.Service_id);
+                    this.toggleUsecase(element.Service_id, "push");
+                  } else {
+                    console.log("enable3: " + element.Service_id);
+                    this.toggleUsecase(element.Service_id, "put");
+                    // this.toggleUsecase(element.Service_id);
+                  }
+                }
               }
             }
           }
         });
       }
-      this.setState({ selectedUsDS: arr, data });
     }
   };
 
-  disableUsecaseDSLimitReached2 = (indexx) => {
-    // disable use case if deepstream limit reached
-    if (this.state.selectedUsDS.length === deepStreamLimit) {
-      if (this.state.unscheduleChecked.length >= usecaseLimit) {
-        console.log("disableUsecaseDSLimitReached IF");
-        let data = [...this.state.data];
+  DisableServices = (data_item, service_item) => {
+    console.log(this.state);
+    let addArr = [...this.state.activeUsecases];
+    Array.prototype.push.apply(addArr, this.state.activeDependent);
+    addArr = [...new Set(addArr)];
 
-        this.parentLoop(data, (items) => {
-          this.parentLoop(items.Parent_container_id, (item2) => {
-            if (!this.state.selectedUsDS.some((item) => item === item2)) {
-              items.disableUnscheduleCheckbox = true;
+    if (usecaseLimit === addArr.length) {
+      console.log("Usecase limit reached");
+      this._UCLimitReached();
+      // } else if (this.isDSPresentInState(data_item, service_item)) {
+    } else if (this.state.activeDS.length === deepStreamLimit) {
+      console.log("DS limit reached");
+      this._DSLimitReached(data_item, service_item);
+    } else {
+      console.log("DisableServices ELSE");
+      this._unchecked(service_item);
+    }
+  };
+
+  _DisableService2 = (data_item, service_item) => {
+    console.log(this.state);
+    let addUC = [...this.state.staticUC];
+    let addDS = [...this.state.staticDS];
+    Array.prototype.push.apply(addUC, this.state.activeUsecases);
+    Array.prototype.push.apply(addUC, this.state.activeDependent);
+    Array.prototype.push.apply(addUC, this.state.staticDependent);
+    Array.prototype.push.apply(addDS, this.state.activeDS);
+    addUC = [...new Set(addUC)];
+    addDS = [...new Set(addDS)];
+    console.log(addUC);
+    console.log(addDS);
+    console.log(usecaseLimit + " ===" + addUC.length);
+    console.log(deepStreamLimit + " ===" + addDS.length);
+    if (usecaseLimit === addUC.length) {
+      console.log("Usecase limit reached");
+      this._UCLimitReached2();
+    } else if (addDS.length === deepStreamLimit) {
+      console.log("DS limit reached");
+      this._DSLimitReached2();
+    } else {
+      console.log("DisableServices ELSE");
+      this._unchecked2();
+    }
+  };
+
+  usecaseMouseDown = (item, indexx, service_item) => {
+    let _activeUsecases = [...this.state.activeUsecases];
+    let _activeDS = [...this.state.activeDS];
+    let _data = [...this.state.data];
+    let _Service = [...this.state.Service];
+    let _activeDependent = [...this.state.activeDependent];
+
+    console.log("Type is usecase");
+    if (_activeUsecases.includes(service_item.Service_id)) {
+      console.log("ELSE IF");
+      this.parentLoop(_data, (ele) => {
+        if (ele.slot === item.slot) {
+          if (ele.Usecases.includes(service_item.Service_id)) {
+            var index = ele.Usecases.indexOf(service_item.Service_id);
+            ele.Usecases.splice(index, 1);
+          } else ele.Usecases.push(service_item.Service_id);
+        }
+      });
+
+      let isUCPresent = 0;
+      this.parentLoop(_data, (ele) => {
+        //removing UC condition
+        if (ele.Usecases.includes(service_item.Service_id)) {
+          isUCPresent += 1;
+        }
+      });
+      //removing UC
+      if (isUCPresent === 0) {
+        console.log("removing: " + service_item.Service_id);
+        var index = _activeUsecases.indexOf(service_item.Service_id);
+        _activeUsecases.splice(index, 1);
+        isUCPresent = 1;
+      }
+
+      //removing DS
+      let arr = [];
+      // _activeDS = [...arr];
+      this.parentLoop(_activeUsecases, (ele) => {
+        this.parentLoop(_Service, (ele2) => {
+          if (ele2.Service_id === ele) {
+            Array.prototype.push.apply(arr, ele2.Parent_container_id.AI);
+            arr = [...new Set(arr)];
+          }
+        });
+      });
+      _activeDS = [...arr];
+
+      //removing dependent
+      if (service_item.Category === "Analytics") {
+        let arr2 = [];
+        this.parentLoop(_activeUsecases, (ele) => {
+          this.parentLoop(_Service, (ele2) => {
+            if (ele2.Category === "Analytics") {
+              if (ele2.Service_id === ele) {
+                Array.prototype.push.apply(
+                  arr2,
+                  ele2.Parent_container_id.Usecase
+                );
+                // arr2 = [...new Set(arr2)];
+              }
             }
           });
         });
-        this.setState({ data });
-      } else {
-        this.handleUnscheduleCheck(indexx);
+        _activeDependent = [...arr2];
       }
     } else {
-      this.handleUnscheduleCheck(indexx);
-      console.log("disableUsecaseDSLimitReached ELSE");
-    }
-  };
-
-  onUnscheduleClickHandle = (e, item, index, type) => {
-    let parentContainerArr = item.Parent_container_id;
-    let selectedDS = [...this.state.selectedUsDS];
-    const isChecked = this.state.unscheduleChecked.some(
-      (itemm) => itemm === item.Service_id
-    );
-    //if else condition to check and uncheck scheduled usecase
-    if (isChecked) {
-      //if unchecked
-      this.handleUnscheduleUncheck(index, item);
-    } else {
-      // if checked
-      if (!selectedDS.length) {
-        console.log("IF");
-        this.setState({ selectedUsDS: parentContainerArr }, () => {
-          this.disableUsecaseDSLimitReached2(index);
-        });
-      } else {
-        console.log("ELSE");
-        this.parentLoop(parentContainerArr, (ele) => {
-          if (!selectedDS.some((item) => item === ele)) {
-            selectedDS.push(ele);
+      console.log("ELSE");
+      Array.prototype.push.apply(
+        _activeDS,
+        service_item.Parent_container_id.AI
+      );
+      _activeDS = [...new Set(_activeDS)];
+      _activeUsecases.push(service_item.Service_id);
+      if (service_item.Category === "Analytics") {
+        Array.prototype.push.apply(
+          _activeDependent,
+          service_item.Parent_container_id.Usecase
+        );
+      }
+      this.parentLoop(_data, (ele) => {
+        if (ele.slot === item.slot) {
+          if (ele.Usecases.includes(service_item.Service_id)) {
+            var index = ele.Usecases.indexOf(service_item.Service_id);
+            ele.Usecases.splice(index, 1);
+          } else {
+            ele.Usecases.push(service_item.Service_id);
           }
-        });
-
-        this.setState({ selectedUsDS: selectedDS }, () => {
-          this.disableUsecaseDSLimitReached2(index);
-        });
-      }
-    }
-  };
-
-  onLoad = () => {
-    let data = [...this.state.data];
-    let _ScheduledUC = [
-        ...this.state.apiData.detail.DeviceScheduleDetail.ScheduledUC,
-      ],
-      _ScheduledDP = [
-        ...this.state.apiData.detail.DeviceScheduleDetail.ScheduledDP,
-      ],
-      _UnScheduledUC = [
-        ...this.state.apiData.detail.DeviceScheduleDetail.UnScheduledUC,
-      ],
-      _UnScheduledDP = [
-        ...this.state.apiData.detail.DeviceScheduleDetail.UnScheduledDP,
-      ];
-
-    for (let ele of data) {
-      ele.scheduleChecked = false;
-      ele.unScheduleChecked = false;
-      ele.disableScheduleCheckbox = false;
-      ele.disableUnscheduleCheckbox = false;
+          if (service_item.Category === "Analytics") {
+            Array.prototype.push.apply(
+              ele.Dependent,
+              _Service[indexx].Parent_container_id.Usecase
+            );
+          }
+        }
+      });
     }
 
     this.setState(
       {
-        data,
-        ScheduledUC: [..._ScheduledUC],
-        ScheduledDP: [..._ScheduledDP],
-        UnScheduledUC: [..._UnScheduledUC],
-        UnScheduledDP: [..._UnScheduledDP],
+        mouseState: true,
+        data: _data,
+        activeUsecases: _activeUsecases,
+        activeDS: _activeDS,
+        activeDependent: _activeDependent,
       },
-      () => {
-        if (_ScheduledDP.length !== 0 || _UnScheduledDP.length !== 0) {
-          console.log("CAMERA IS PRESENT");
-          this.setState({ selectedDS: [..._ScheduledDP] });
-          // if (_ScheduledDP.length < deepStreamLimit) {
-          //   console.log("DS LIMIT NOT REACHED");
-          //   this.dsScheduleAvailable();
-          // } else {
-          //   console.log("DS LIMIT REACHED");
-          this.dsScheduleAvailable();
-          // }
-        } else {
-          console.log("CAMERA IS NOT PRESENT");
-          this.parentLoop(data, (item) => {
-            if (item.Parent_container_id.length > deepStreamLimit) {
-              item.disableScheduleCheckbox = true;
-              item.disableUnscheduleCheckbox = true;
-            }
-          });
-          this.setState({ data });
-        }
-      }
+      () => this.DisableServices(item, service_item)
     );
   };
 
-  //IF CAMEARA IS PRESENT
-
-  dsScheduleAvailable = () => {
+  disableUsecaseDSLimitReached = (item, service_item) => {
     let _data = [...this.state.data];
-    let _ScheduledUC = [...this.state.ScheduledUC];
-    let _ScheduledDP = [...this.state.ScheduledDP];
-    let _disabledSchedule = [...this.state.disabledSchedule];
-    if (this.state.ScheduledUC.length >= usecaseLimit) {
-      console.log("USE CASE LIMIT REACHED");
-      this.parentLoop(_data, (item) => {
+    let _Service = [...this.state.Service];
+    let _activeDS = [...this.state.activeDS];
+
+    // disable use case if deepstream limit reached
+    if (this.state.activeDS.length === deepStreamLimit) {
+      if (this.state.activeUsecases.length >= usecaseLimit) {
+        console.log("disableUsecaseDSLimitReached IF");
+        let _Service = [...this.state.Service];
+
+        // this.parentLoop(_Service, (items) => {
+        //   this.parentLoop(items.Parent_container_id, (item2) => {
+        //     if (!this.state.selectedDS.some((item) => item === item2)) {
+        //       items.disableScheduleCheckbox = true;
+        //     }
+        //   });
+        // });
+
+        this.parentLoop(_Service, (ele) => {
+          let result = [];
+          if (ele.Parent_container_id.AI.length <= deepStreamLimit) {
+            this.parentLoop(ele.Parent_container_id.AI, (ele2) => {
+              this.parentLoop(_activeDS, (ele3) => {
+                if (ele3 === ele2) {
+                  console.log(_Service.Service_id);
+                }
+              });
+            });
+            // if (!result.includes(true)) {
+            //   this.parentLoop(_data, (data_ele) => {
+            //     data_ele.disabledService.push(ele.Service_id);
+            //   });
+            // } else {
+            //   const intersection = ele.Parent_container_id.AI.filter(
+            //     (value) => !_activeDS.includes(value)
+            //   );
+
+            //   let add = _activeDS.length + intersection.length;
+            //   if (deepStreamLimit < add) {
+            //     console.log("disabled DS: " + ele.Service_id);
+            //     this.parentLoop(_data, (data_ele) => {
+            //       data_ele.disabledService.push(ele.Service_id);
+            //       data_ele.disabledService = [...new Set(data_ele.disabledService)];
+            //     });
+            //   } else {
+            //     this.parentLoop(_data, (data_ele) => {
+            //       if (data_ele.disabledService.includes(ele.Service_id)) {
+            //         var index = data_ele.disabledService.indexOf(ele.Service_id);
+            //         data_ele.disabledService.splice(index, 1);
+            //       }
+            //     });
+            //   }
+            // }
+          }
+        });
+
+        // this.parentLoop(_Service, (ele) => {
+        //   let result = [];
+        //   if (ele.Parent_container_id.AI.length <= deepStreamLimit) {
+        //     this.parentLoop(ele.Parent_container_id.AI, (ele2) => {
+        //       this.parentLoop(_activeDS, (ele3) => {
+        //         if (ele3 === ele2) result.push(true);
+        //         else result.push(false);
+        //       });
+        //     });
+        //     if (!result.includes(true)) {
+        //       this.parentLoop(_data, (data_ele) => {
+        //         data_ele.disabledService.push(ele.Service_id);
+        //       });
+        //     } else {
+        //       const intersection = ele.Parent_container_id.AI.filter(
+        //         (value) => !_activeDS.includes(value)
+        //       );
+
+        //       let add = _activeDS.length + intersection.length;
+        //       if (deepStreamLimit < add) {
+        //         console.log("disabled DS: " + ele.Service_id);
+        //         this.parentLoop(_data, (data_ele) => {
+        //           data_ele.disabledService.push(ele.Service_id);
+        //           data_ele.disabledService = [...new Set(data_ele.disabledService)];
+        //         });
+        //       } else {
+        //         // console.log(_data);
+        //         this.parentLoop(_data, (data_ele) => {
+        //           if (data_ele.disabledService.includes(ele.Service_id)) {
+        //             var index = data_ele.disabledService.indexOf(ele.Service_id);
+        //             data_ele.disabledService.splice(index, 1);
+        //           }
+        //           // else ele.Usecases.push(service_id);
+        //         });
+        //       }
+        //     }
+        //   }
+        // });
+
+        // this.setState({ data:_data });
+      } else {
+        // this.handleScheduleCheck(indexx);
+      }
+    } else {
+      // this.handleScheduleCheck(indexx);
+      // console.log("disableUsecaseDSLimitReached ELSE");
+    }
+  };
+
+  // usecaseMouseDown2 = (item, indexx, service_item) => {
+  //   console.log("usecaseMouseDown2");
+  //   let _activeUsecases = [...this.state.activeUsecases];
+  //   let _staticUC = [...this.state.staticUC];
+  //   let _staticDS = [...this.state.staticDS];
+  //   let _activeDS = [...this.state.activeDS];
+  //   let _data = [...this.state.data];
+  //   let _Service = [...this.state.Service];
+  //   let _activeDependent = [...this.state.activeDependent];
+
+  //   let addUC = [...this.state.staticUC];
+  //   Array.prototype.push.apply(addUC, this.state.activeUsecases);
+  //   Array.prototype.push.apply(addUC, this.state.activeDependent);
+  //   Array.prototype.push.apply(addUC, this.state.staticDependent);
+  //   addUC = [...new Set(addUC)];
+  //   console.log(service_item.Service_id);
+  //   const isChecked = _activeUsecases.includes(item.Service_id);
+  //   console.log(isChecked);
+  //   if (isChecked) {
+  //     console.log("IF");
+  //   } else {
+  //     console.log("ELSE");
+  //     console.log(_activeDS);
+  //     if (!_activeDS.length) {
+  //       console.log("IF");
+  //       // this.setState({ selectedDS: parentContainerArr }, () => {
+  //       //   this.disableUsecaseDSLimitReached(index);
+  //       // });
+  //     } else {
+  //       console.log("ELSE");
+  //       this.parentLoop(service_item.Parent_container_id.AI, (ele) => {
+  //         if (!_activeDS.some((item) => item === ele)) {
+  //           _activeDS.push(ele);
+  //         }
+  //       });
+  //       console.log(_activeDS);
+  //     }
+  //   }
+  //   this.setState(
+  //     {
+  //       mouseState: true,
+  //       data: _data,
+  //       activeUsecases: _activeUsecases,
+  //       activeDS: _activeDS,
+  //       activeDependent: _activeDependent,
+  //     },
+
+  //     () => this.disableUsecaseDSLimitReached(item, service_item)
+  //   );
+  //   // if (addUC.includes(service_item.Service_id)) {
+  //   //   console.log("IF");
+  //   //   this.parentLoop(_data, (ele) => {
+  //   //     if (ele.slot === item.slot) {
+  //   //       if (ele.Usecases.includes(service_item.Service_id)) {
+  //   //         var index = ele.Usecases.indexOf(service_item.Service_id);
+  //   //         ele.Usecases.splice(index, 1);
+  //   //       } else {
+  //   //         ele.Usecases.push(service_item.Service_id);
+  //   //       }
+  //   //     }
+  //   //   });
+
+  //   //   let isUCPresent = 0;
+  //   //   this.parentLoop(_data, (ele) => {
+  //   //     //removing UC condition
+  //   //     if (ele.Usecases.includes(service_item.Service_id)) {
+  //   //       isUCPresent += 1;
+  //   //     }
+  //   //   });
+  //   //   //removing UC
+  //   //   if (isUCPresent === 0) {
+  //   //     console.log("removing: " + service_item.Service_id);
+  //   //     var index = _activeUsecases.indexOf(service_item.Service_id);
+  //   //     _activeUsecases.splice(index, 1);
+  //   //     isUCPresent = 1;
+  //   //   }
+
+  //   //   //removing DS
+  //   //   let arr = [];
+  //   //   // _activeDS = [...arr];
+  //   //   this.parentLoop(_activeUsecases, (ele) => {
+  //   //     this.parentLoop(_Service, (ele2) => {
+  //   //       if (ele2.Service_id === ele) {
+  //   //         Array.prototype.push.apply(arr, ele2.Parent_container_id.AI);
+  //   //         arr = [...new Set(arr)];
+  //   //       }
+  //   //     });
+  //   //   });
+  //   //   _activeDS = [...arr];
+
+  //   //   //removing dependent
+  //   //   if (service_item.Category === "Analytics") {
+  //   //     console.log("Analytics");
+  //   //     let arr2 = [];
+  //   //     this.parentLoop(_activeUsecases, (ele) => {
+  //   //       this.parentLoop(_Service, (ele2) => {
+  //   //         if (ele2.Category === "Analytics") {
+  //   //           if (ele2.Service_id === ele) {
+  //   //             Array.prototype.push.apply(
+  //   //               arr2,
+  //   //               ele2.Parent_container_id.Usecase
+  //   //             );
+  //   //             // arr2 = [...new Set(arr2)];
+  //   //           }
+  //   //         }
+  //   //       });
+  //   //     });
+  //   //     console.log(arr2);
+  //   //     _activeDependent = [...arr2];
+  //   //   }
+  //   // } else {
+  //   //   console.log("ELSE");
+  //   //   Array.prototype.push.apply(
+  //   //     _activeDS,
+  //   //     service_item.Parent_container_id.AI
+  //   //   );
+  //   //   _activeDS = [...new Set(_activeDS)];
+  //   //   _activeUsecases.push(service_item.Service_id);
+  //   //   if (service_item.Category === "Analytics") {
+  //   //     Array.prototype.push.apply(
+  //   //       _activeDependent,
+  //   //       service_item.Parent_container_id.Usecase
+  //   //     );
+  //   //   }
+  //   //   this.parentLoop(_data, (ele) => {
+  //   //     if (ele.slot === item.slot) {
+  //   //       if (ele.Usecases.includes(service_item.Service_id)) {
+  //   //         var index = ele.Usecases.indexOf(service_item.Service_id);
+  //   //         ele.Usecases.splice(index, 1);
+  //   //       } else {
+  //   //         ele.Usecases.push(service_item.Service_id);
+  //   //       }
+  //   //       if (service_item.Category === "Analytics") {
+  //   //         Array.prototype.push.apply(
+  //   //           ele.Dependent,
+  //   //           _Service[indexx].Parent_container_id.Usecase
+  //   //         );
+  //   //       }
+  //   //     }
+  //   //   });
+  //   // }
+  //   // console.log(_activeUsecases);
+  //   // this.setState(
+  //   //   {
+  //   //     mouseState: true,
+  //   //     data: _data,
+  //   //     activeUsecases: _activeUsecases,
+  //   //     activeDS: _activeDS,
+  //   //     activeDependent: _activeDependent,
+  //   //   },
+  //   //   // () => this.DisableServices(item, service_item)
+  //   //   // () => console.log(this.state)
+  //   //   () => this._DisableService2(item, service_item)
+  //   // );
+  // };
+  toggleAnalytics = (service_item) => {
+    console.log("toggleAnalytics");
+    console.log(service_item);
+    let _activeUsecases = [...this.state.activeUsecases];
+    let _staticUC = [...this.state.staticUC];
+    let _staticDS = [...this.state.staticDS];
+    let _activeDS = [...this.state.activeDS];
+    let _data = [...this.state.data];
+    let _Service = [...this.state.Service];
+    let _activeDependent = [...this.state.activeDependent];
+    let addUC = [...this.state.staticUC];
+    Array.prototype.push.apply(addUC, this.state.activeUsecases);
+    Array.prototype.push.apply(addUC, this.state.activeDependent);
+    addUC = [...new Set(addUC)];
+
+    console.log(addUC);
+    let arr2 = [];
+    this.parentLoop(service_item.Parent_container_id.AI, (ele) => {
+      if (!addUC.includes(ele)) {
+        this.toggleUsecase(service_item.Service_id, "push");
+      }
+    });
+  };
+
+  toggleAnalytics2 = (service_item) => {
+    console.log("toggleAnalytics2");
+    console.log(service_item);
+    let _activeUsecases = [...this.state.activeUsecases];
+    let _staticUC = [...this.state.staticUC];
+    let _staticDS = [...this.state.staticDS];
+    let _activeDS = [...this.state.activeDS];
+    let _data = [...this.state.data];
+    let _Service = [...this.state.Service];
+    let _activeDependent = [...this.state.activeDependent];
+    let addUC = [...this.state.staticUC];
+    Array.prototype.push.apply(addUC, this.state.activeUsecases);
+    Array.prototype.push.apply(addUC, this.state.activeDependent);
+    addUC = [...new Set(addUC)];
+    let addDS = [...this.state.staticDS];
+    Array.prototype.push.apply(addDS, this.state.activeDS);
+    addDS = [...new Set(addDS)];
+
+    console.log(addUC);
+    console.log(addDS);
+    let intersection = service_item.Parent_container_id.AI.filter(
+      (x) => !addDS.includes(x)
+    );
+    console.log(intersection);
+    let add = addDS.length + intersection.length;
+    if (deepStreamLimit < add) {
+      this.toggleUsecase(service_item.Service_id, "push");
+    } else {
+      console.log("below DS range");
+      let UCnDependent = [...service_item.Parent_container_id.Usecase];
+      UCnDependent.push(service_item.Service_id);
+      console.log(UCnDependent);
+      console.log(addUC);
+      let UCadd = [...addUC];
+      Array.prototype.push.apply(UCadd, UCnDependent);
+      console.log(UCadd);
+      UCadd = [...new Set(UCadd)];
+      // let UCadd = addUC.length + UCnDependent.length;
+      console.log(usecaseLimit + "<" + UCadd.length);
+      if (usecaseLimit < UCadd.length) {
+        this.toggleUsecase(service_item.Service_id, "push");
+      } else {
+        console.log("false");
+        this.toggleUsecase(service_item.Service_id, "put");
+      }
+    }
+    // let arr2 = [];
+    // this.parentLoop(service_item.Parent_container_id.AI, (ele) => {
+    //   if (!addUC.includes(ele)) {
+    //     this.toggleUsecase(service_item.Service_id, "push");
+    //   }
+    // });
+  };
+
+  usecaseMouseDown2 = (item, indexx, service_item) => {
+    console.log("usecaseMouseDown2");
+    let _activeUsecases = [...this.state.activeUsecases];
+    let _staticUC = [...this.state.staticUC];
+    let _staticDS = [...this.state.staticDS];
+    let _activeDS = [...this.state.activeDS];
+    let _data = [...this.state.data];
+    let _Service = [...this.state.Service];
+    let _activeDependent = [...this.state.activeDependent];
+
+    let addUC = [...this.state.staticUC];
+    Array.prototype.push.apply(addUC, this.state.activeUsecases);
+    Array.prototype.push.apply(addUC, this.state.activeDependent);
+    // Array.prototype.push.apply(addUC, this.state.staticDependent);
+    addUC = [...new Set(addUC)];
+    const isUCPresent = _activeUsecases.includes(service_item.Service_id);
+    console.log(isUCPresent);
+    console.log(addUC);
+    if (isUCPresent) {
+      console.log("UC PRESENT");
+      this.parentLoop(_data, (ele) => {
+        if (ele.slot === item.slot) {
+          if (ele.Usecases.includes(service_item.Service_id)) {
+            var index = ele.Usecases.indexOf(service_item.Service_id);
+            ele.Usecases.splice(index, 1);
+          } else ele.Usecases.push(service_item.Service_id);
+        }
+      });
+
+      let isUCPresent = 0;
+      this.parentLoop(_data, (ele) => {
+        //removing UC condition
+        if (ele.Usecases.includes(service_item.Service_id)) {
+          isUCPresent += 1;
+        }
+      });
+      //removing UC
+      if (isUCPresent === 0) {
+        console.log("removing: " + service_item.Service_id);
+        var index = _activeUsecases.indexOf(service_item.Service_id);
+        _activeUsecases.splice(index, 1);
+        isUCPresent = 1;
+      }
+
+      //removing DS
+      let arr = [];
+      // _activeDS = [...arr];
+      this.parentLoop(_activeUsecases, (ele) => {
+        this.parentLoop(_Service, (ele2) => {
+          if (ele2.Service_id === ele) {
+            Array.prototype.push.apply(arr, ele2.Parent_container_id.AI);
+            arr = [...new Set(arr)];
+          }
+        });
+      });
+      _activeDS = [...arr];
+
+      //removing dependent
+      if (service_item.Category === "Analytics") {
+        let arr2 = [];
+        this.parentLoop(_activeUsecases, (ele) => {
+          this.parentLoop(_Service, (ele2) => {
+            if (ele2.Category === "Analytics") {
+              if (ele2.Service_id === ele) {
+                Array.prototype.push.apply(
+                  arr2,
+                  ele2.Parent_container_id.Usecase
+                );
+                // arr2 = [...new Set(arr2)];
+              }
+            }
+          });
+        });
+        _activeDependent = [...arr2];
+      }
+
+      console.log(_data);
+    } else {
+      console.log("ELSE");
+      _activeUsecases.push(service_item.Service_id);
+      Array.prototype.push.apply(
+        _activeDS,
+        service_item.Parent_container_id.AI
+      );
+      _activeDS = [...new Set(_activeDS)];
+      if (service_item.Category === "Analytics") {
+        Array.prototype.push.apply(
+          _activeDependent,
+          service_item.Parent_container_id.Usecase
+        );
+      }
+      this.parentLoop(_data, (ele) => {
+        if (ele.slot === item.slot) {
+          if (ele.Usecases.includes(service_item.Service_id)) {
+            var index = ele.Usecases.indexOf(service_item.Service_id);
+            ele.Usecases.splice(index, 1);
+          } else {
+            ele.Usecases.push(service_item.Service_id);
+          }
+
+          Array.prototype.push.apply(
+            ele.AI,
+            service_item.Parent_container_id.AI
+          );
+
+          ele.AI = [...new Set(ele.AI)];
+          if (service_item.Category === "Analytics") {
+            Array.prototype.push.apply(
+              ele.Dependent,
+              _Service[indexx].Parent_container_id.Usecase
+            );
+          }
+        }
+      });
+    }
+
+    // if (addUC.includes(service_item.Service_id)) {
+
+    // }
+
+    console.log(_activeUsecases);
+    this.setState(
+      {
+        mouseState: true,
+        data: _data,
+        activeUsecases: _activeUsecases,
+        activeDS: _activeDS,
+        activeDependent: _activeDependent,
+      },
+      // () => this.DisableServices(item, service_item)
+      // () => console.log(this.state)
+      () => this._DisableService2(item, service_item)
+    );
+  };
+
+  onLoad = () => {
+    let _data = [...this.state.data];
+    let _Service = [...this.state.Service];
+    let _staticDS = [...this.state.staticDS];
+    let _staticDependent = [...this.state.staticDependent];
+    let staticUC = [...this.state.staticUC];
+
+    let keys = Object.keys(this.state.apiData);
+    let cameraLength = 0;
+    for (let i = 0; i < keys.length; i++) {
+      // console.log(this.state.apiData[keys[i]]);
+
+      if (this.state.apiData[keys[i]].global.Cameras.length) {
+        cameraLength += 1;
+        Array.prototype.push.apply(
+          staticUC,
+          this.state.apiData[keys[i]].global.Usecases
+        );
+        Array.prototype.push.apply(
+          _staticDS,
+          this.state.apiData[keys[i]].global.AI
+        );
+        Array.prototype.push.apply(
+          _staticDependent,
+          this.state.apiData[keys[i]].global.Dependent
+        );
+      }
+    }
+    staticUC = [...new Set(staticUC)];
+    _staticDS = [...new Set(_staticDS)];
+    this.setState(
+      {
+        staticUC: staticUC,
+        staticDS: _staticDS,
+        staticDependent: _staticDependent,
+      },
+      () => {
+        if (staticUC.length) {
+          console.log("CAMERA IS PRESENT");
+          this.onLoadDisableServices();
+          this.setState({ isCamerPresent: true });
+        } else {
+          console.log("CAMERA IS NOT PRESENT");
+          this.setState({ isCamerPresent: false });
+        }
+        console.log(this.state);
+      }
+    );
+
+    // this.parentLoop(_Service, (item) => {
+    //   if (item.Parent_container_id.AI.length > deepStreamLimit) {
+    //     this.parentLoop(_data, (ele) => {
+    //       ele.disabledService.push(item.Service_id);
+    //     });
+    //   }
+    // });
+    // this.setState({ data: _data }, () => console.log(this.state));
+  };
+  onLoadDisableServices = () => {
+    let _data = [...this.state.data];
+    let _Service = [...this.state.Service];
+    let _activeDS = [...this.state.staticDS];
+    let _activeUsecases = [...this.state.staticUC];
+
+    let addArr = [...this.state.staticUC];
+    Array.prototype.push.apply(addArr, this.state.staticDependent);
+    addArr = [...new Set(addArr)];
+    console.log(addArr);
+    if (addArr.length >= usecaseLimit) {
+      console.log("USE CASE LIMIT REACHED: " + addArr.length);
+      this.parentLoop(_Service, (item) => {
         //disable other usecase and DS
-        if (!_ScheduledUC.includes(item.Service_id)) {
-          console.log("service name: " + item.Service_name);
-          _disabledSchedule.push(item.Service_id);
-          item.disableScheduleCheckbox = true;
+        if (!_activeUsecases.includes(item.Service_id)) {
+          this.parentLoop(_data, (ele) => {
+            ele.disabledService.push(item.Service_id);
+          });
         }
       });
     } else {
-      console.log("USE CASE NOT LIMIT REACHED");
-      if (deepStreamLimit === this.state.ScheduledDP.length) {
+      console.log("USE CASE LIMIT NOT REACHED: " + addArr.length);
+      if (deepStreamLimit === _activeDS.length) {
         console.log("DS LIMIT REACHED V2");
-        console.log(
-          "ENABLE USECASE WHOSE DS IS SELECTED AND DISABLE OTHER DS USECASE"
-        );
-        this.parentLoop(_data, (item) => {
-          if (item.Parent_container_id.length <= _ScheduledDP.length) {
+        this.parentLoop(_Service, (item) => {
+          if (item.Parent_container_id.AI.length <= _activeDS.length) {
             let result = [];
-            this.parentLoop(_ScheduledDP, (ele) => {
-              this.parentLoop(item.Parent_container_id, (ele2) => {
-                if (ele === ele2) result.push(true);
-                else result.push(false);
-              });
-            });
-            if (result.includes(true)) {
-              let intersection = item.Parent_container_id.filter(
-                (x) => !_ScheduledDP.includes(x)
-              );
 
-              let add = _ScheduledDP.length + intersection.length;
-              if (deepStreamLimit < add) {
-                item.disableScheduleCheckbox = true;
-                _disabledSchedule.push(item.Service_id);
-              }
-            } else {
-              item.disableScheduleCheckbox = true;
-              _disabledSchedule.push(item.Service_id);
-            }
-          } else {
-            item.disableScheduleCheckbox = true;
-            _disabledSchedule.push(item.Service_id);
-          }
-        });
-      } else {
-        console.log("DS LIMIT NOT REACHED V2");
-        this.parentLoop(_data, (item) => {
-          if (item.Parent_container_id.length <= deepStreamLimit) {
-            let result = [];
-            this.parentLoop(item.Parent_container_id, (ele) => {
-              this.parentLoop(this.state.ScheduledDP, (ele2) => {
+            this.parentLoop(item.Parent_container_id.AI, (ele) => {
+              this.parentLoop(_activeDS, (ele2) => {
                 if (ele2 === ele) result.push(true);
                 else result.push(false);
               });
             });
             if (!result.includes(true)) {
-              let intersection = item.Parent_container_id.filter(
-                (x) => !_ScheduledDP.includes(x)
+              let intersection = item.Parent_container_id.AI.filter(
+                (x) => !_activeDS.includes(x)
               );
-              let add = _ScheduledDP.length + intersection.length;
-
+              let add = _activeDS.length + intersection.length;
               if (deepStreamLimit < add) {
-                item.disableScheduleCheckbox = true;
-                _disabledSchedule.push(item.Service_id);
-              }
-            } else {
-              let intersection = item.Parent_container_id.filter(
-                (x) => !_ScheduledDP.includes(x)
-              );
-              let add = _ScheduledDP.length + intersection.length;
-
-              if (deepStreamLimit < add) {
-                item.disableScheduleCheckbox = true;
-                _disabledSchedule.push(item.Service_id);
-              }
-            }
-          } else {
-            console.log("GREATER THAN DS");
-            _disabledSchedule.push(item.Service_id);
-            item.disableScheduleCheckbox = true;
-            item.disableUnscheduleCheckbox = true;
-          }
-        });
-      }
-    }
-    this.setState({ data: _data, disabledSchedule: _disabledSchedule });
-  };
-  alwaysDisabled = () => {
-    let _data = [...this.state.data];
-    let _disabledSchedule = [...this.state.disabledSchedule];
-    this.parentLoop(_data, (ele) => {
-      if (_disabledSchedule.includes(ele.Service_id)) {
-        console.log(ele.Service_name);
-        ele.disableScheduleCheckbox = true;
-      }
-    });
-    this.setState({ data: _data });
-  };
-  handleScheduleUncheck2 = (index, item) => {
-    // reusable function to uncheck Schedule
-    let data = [...this.state.data];
-    data[index].scheduleChecked = false;
-    let selected = data[index].Service_id;
-    let arr = [...this.state.scheduleChecked];
-    let result = arr.filter((item) => item !== selected);
-
-    this.setState(
-      { data, scheduleChecked: result },
-      () => this.toggleSchduleUsecase2()
-      // console.log("object")
-    );
-  };
-
-  toggleSchduleUsecase2 = () => {
-    console.log("toggleSchduleUsecase2");
-    let data = [...this.state.data];
-    let scheduleChecked = [...this.state.scheduleChecked];
-
-    //to toggle usecase if user uncheck schedule
-    if (this.state.scheduleChecked.length === 0) {
-      console.log("DEFAULT STATE");
-      this.parentLoop(data, (ele) => {
-        if (ele.Parent_container_id.length <= deepStreamLimit) {
-          ele.disableScheduleCheckbox = false;
-        }
-      });
-      this.setState({ selectedDS: [...this.state.ScheduledDP] }, () =>
-        this.alwaysDisabled()
-      );
-    } else {
-      console.log("toggleSchduleUsecase ELSE");
-      let arr = [...this.state.ScheduledDP];
-
-      this.parentLoop(scheduleChecked, (ele) => {
-        this.parentLoop(data, (ele2) => {
-          if (ele2.Service_id === ele) {
-            Array.prototype.push.apply(arr, ele2.Parent_container_id);
-            arr = [...new Set(arr)];
-          }
-        });
-      });
-      // arr = [...this.state.ScheduledDP];
-      console.log(arr);
-      if (arr.length > 1) {
-        console.log("ARR > 1");
-        let filterData = data.filter(
-          (item) => item.Parent_container_id.length <= deepStreamLimit
-        );
-        this.parentLoop(filterData, (element) => {
-          let result = [];
-          this.parentLoop(arr, (ele) => {
-            this.parentLoop(element.Parent_container_id, (ele2) => {
-              if (ele === ele2) result.push(true);
-              else result.push(false);
-            });
-          });
-
-          if (result.includes(true)) {
-            this.resultIntersection(element, "schedule", arr, (obj) => {
-              element = { ...obj };
-            });
-          } else {
-            this.resultIntersection(element, "schedule", arr, (obj) => {
-              element = { ...obj };
-            });
-          }
-        });
-      } else {
-        console.log("ARR === 1");
-        this.parentLoop(data, (element) => {
-          if (element.Parent_container_id.length <= deepStreamLimit) {
-            if (element.Parent_container_id.length === 1) {
-              element.disableScheduleCheckbox = false;
-            } else {
-              let result = [];
-              this.parentLoop(arr, (ele) => {
-                this.parentLoop(element.Parent_container_id, (ele2) => {
-                  if (ele === ele2) result.push(true);
-                  else result.push(false);
-                });
-              });
-
-              if (result.includes(true)) {
-                this.resultIntersection(element, "schedule", arr, (obj) => {
-                  element = { ...obj };
-                });
-              }
-            }
-          }
-        });
-      }
-      this.setState({ selectedDS: arr, data }, () => this.alwaysDisabled());
-    }
-  };
-
-  onScheduleClickHandle2 = (item, index) => {
-    let parentContainerArr = item.Parent_container_id;
-    let selectedDS = [...this.state.selectedDS];
-    const isChecked = this.state.scheduleChecked.some(
-      (itemm) => itemm === item.Service_id
-    );
-    //if else condition to check and uncheck scheduled usecase
-    if (isChecked) {
-      //if unchecked
-      this.handleScheduleUncheck2(index, item);
-    } else {
-      // if checked
-      if (!selectedDS.length) {
-        console.log("IF");
-        this.setState({ selectedDS: parentContainerArr }, () => {
-          this.disableUsecaseDSLimitReached(index);
-        });
-      } else {
-        console.log("ELSE");
-        this.parentLoop(parentContainerArr, (ele) => {
-          if (!selectedDS.some((item) => item === ele)) {
-            selectedDS.push(ele);
-          }
-        });
-
-        this.setState({ selectedDS }, () => {
-          this.disableUsecaseDSLimitReached(index);
-        });
-      }
-    }
-  };
-
-  disableUsecaseDSLimitReached = (indexx) => {
-    // disable use case if deepstream limit reached
-    if (this.state.selectedDS.length === deepStreamLimit) {
-      if (this.state.scheduleChecked.length >= usecaseLimit) {
-        console.log("disableUsecaseDSLimitReached IF");
-        let data = [...this.state.data];
-
-        this.parentLoop(data, (items) => {
-          this.parentLoop(items.Parent_container_id, (item2) => {
-            if (!this.state.selectedDS.some((item) => item === item2)) {
-              items.disableScheduleCheckbox = true;
-            }
-          });
-        });
-        this.setState({ data });
-      } else {
-        console.log("disableUsecaseDSLimitReached ELSE");
-        this.handleScheduleCheck(indexx);
-      }
-    } else {
-      this.handleScheduleCheck(indexx);
-      console.log("disableUsecaseDSLimitReached ELSE");
-    }
-  };
-
-  handleGlobalScheduleDisable2 = () => {
-    console.log("Checking use case limit");
-    let scheduleChecked = [...this.state.scheduleChecked];
-    let data = [...this.state.data];
-
-    if (scheduleChecked.length === usecaseLimit) {
-      console.log("Usecase limit reached");
-
-      this.parentLoop(data, (items) => {
-        if (!scheduleChecked.some((item) => item === items.Service_id)) {
-          items.disableScheduleCheckbox = true;
-        }
-      });
-
-      this.setState({ data });
-    } else if (this.state.selectedDS.length === deepStreamLimit) {
-      console.log("Deepstream limit reached");
-      this.parentLoop(data, (items) => {
-        this.parentLoop(items.Parent_container_id, (item2) => {
-          if (!this.state.selectedDS.includes(item2)) {
-            items.disableScheduleCheckbox = true;
-          }
-        });
-      });
-      this.setState({ data });
-    } else {
-      console.log("handleGlobalScheduleDisable ELSE");
-      this.parentLoop(data, (items) => {
-        if (this.state.selectedDS.length > 1) {
-          console.log("selectedDS length is greater than 1");
-          if (
-            items.Parent_container_id.length <= this.state.selectedDS.length
-          ) {
-            let result = [];
-            for (let ele of this.state.selectedDS) {
-              this.parentLoop(items.Parent_container_id, (item2) => {
-                if (ele === item2) result.push(true);
-                else result.push(false);
-              });
-            }
-
-            if (!result.includes(true)) {
-              let intersection = items.Parent_container_id.filter(
-                (x) => !this.state.selectedDS.includes(x)
-              );
-              let add = this.state.selectedDS.length + intersection.length;
-
-              if (deepStreamLimit < add) {
-                items.disableScheduleCheckbox = true;
-              }
-              // if (intersection.length) items.disableScheduleCheckbox = true;
-            } else {
-              let intersection = items.Parent_container_id.filter(
-                (x) => !this.state.selectedDS.includes(x)
-              );
-              // console.log("items.ser else" + items.Service_name);
-              let add = this.state.selectedDS.length + intersection.length;
-
-              if (deepStreamLimit < add) {
-                items.disableScheduleCheckbox = true;
-              }
-            }
-          }
-        } else {
-          // selectedDS length is 1
-          if (items.Parent_container_id.length > 1) {
-            console.log("selectedDS length is 1: " + items.Service_name);
-            let result = [];
-
-            this.parentLoop(this.state.selectedDS, (ele) => {
-              this.parentLoop(items.Parent_container_id, (item2) => {
-                if (ele === item2) result.push(true);
-                else result.push(false);
-              });
-            });
-
-            if (!result.includes(true)) {
-              if (items.Parent_container_id.length < deepStreamLimit) {
+                console.log("disable: " + item.Service_id);
+                this.toggleUsecase(item.Service_id, "push");
               } else {
-                let intersection = items.Parent_container_id.filter(
-                  (x) => !this.state.selectedDS.includes(x)
-                );
-                if (intersection.length) items.disableScheduleCheckbox = true;
+                console.log("enable: " + item.Service_id);
+                this.toggleUsecase(item.Service_id, "put");
               }
             } else {
-              let intersection = items.Parent_container_id.filter(
-                (x) => !this.state.selectedDS.includes(x)
+              let intersection = item.Parent_container_id.AI.filter(
+                (x) => !_activeDS.includes(x)
               );
-              let add = this.state.selectedDS.length + intersection.length;
+              let add = _activeDS.length + intersection.length;
               if (deepStreamLimit < add) {
-                items.disableScheduleCheckbox = true;
+                console.log("disable1: " + item.Service_id);
+                this.toggleUsecase(item.Service_id, "push");
+              } else {
+                console.log("enable1: " + item.Service_id);
+                this.toggleUsecase(item.Service_id, "put");
               }
             }
+          } else {
+            this.toggleUsecase(item.Service_id, "push");
           }
-        }
-      });
-      this.setState({ data });
-    }
-  };
+        });
+      } else {
+        console.log("DS LIMIT NOT REACHED V2");
+        this.parentLoop(_Service, (item) => {
+          if (item.Parent_container_id.AI.length <= deepStreamLimit) {
+            let result = [];
 
+            this.parentLoop(item.Parent_container_id.AI, (ele) => {
+              this.parentLoop(_activeDS, (ele2) => {
+                if (ele2 === ele) result.push(true);
+                else result.push(false);
+              });
+            });
+            // console.log(item.Service_id);
+            // console.log(result);
+            if (!result.includes(true)) {
+              console.log(item.Service_id);
+              if (item.Category === "Analytics") {
+                console.log("CATEGORY IS ANALYTIC " + item.Service_id);
+                let UCresult = [];
+                this.parentLoop(
+                  item.Parent_container_id.Usecase,
+                  (item_ele) => {
+                    this.parentLoop(_activeUsecases, (UC_ele) => {
+                      console.log(UC_ele + "===" + item_ele);
+                      if (UC_ele === item_ele) UCresult.push(true);
+                      else UCresult.push(false);
+                    });
+                  }
+                );
+                console.log(UCresult);
+                if (!UCresult.includes(true)) {
+                  let intersection = item.Parent_container_id.AI.filter(
+                    (x) => !_activeDS.includes(x)
+                  );
+                  console.log(addArr, intersection);
+                  let add = _activeUsecases.length + intersection.length;
+                  // let add = addArr.length + intersection.length;
+                  console.log(deepStreamLimit + "<" + add);
+
+                  if (deepStreamLimit < add) {
+                    console.log("disable: " + item.Service_id);
+                    this.toggleUsecase(item.Service_id, "push");
+                  } else {
+                    console.log("enable: " + item.Service_id);
+                    this.toggleUsecase(item.Service_id, "put");
+                  }
+                } else {
+                  let intersection = item.Parent_container_id.AI.filter(
+                    (x) => !_activeDS.includes(x)
+                  );
+                  let add = _activeDS.length + intersection.length;
+                  if (deepStreamLimit < add) {
+                    console.log("disable: " + item.Service_id);
+                    this.toggleUsecase(item.Service_id, "push");
+                  } else {
+                    console.log("enable: " + item.Service_id);
+                    this.toggleUsecase(item.Service_id, "put");
+                  }
+                }
+              } else {
+                let intersection = item.Parent_container_id.AI.filter(
+                  (x) => !_activeDS.includes(x)
+                );
+                let add = _activeDS.length + intersection.length;
+                if (deepStreamLimit < add) {
+                  console.log("disable: " + item.Service_id);
+                  this.toggleUsecase(item.Service_id, "push");
+                } else {
+                  console.log("enable: " + item.Service_id);
+                  this.toggleUsecase(item.Service_id, "put");
+                }
+              }
+            } else {
+              let intersection = item.Parent_container_id.AI.filter(
+                (x) => !_activeDS.includes(x)
+              );
+              let add = _activeDS.length + intersection.length;
+              if (deepStreamLimit < add) {
+                console.log("disable1: " + item.Service_id);
+                this.toggleUsecase(item.Service_id, "push");
+              } else {
+                console.log("enable1: " + item.Service_id);
+                this.toggleUsecase(item.Service_id, "put");
+              }
+            }
+          } else {
+            this.toggleUsecase(item.Service_id, "push");
+          }
+        });
+      }
+      // this.parentLoop(_Service, (item) => {
+      //   //disable other usecase and DS
+      //   console.log(item.Service_id);
+      //   if (!_activeUsecases.includes(item.Service_id)) {
+      //     console.log("service name: " + item.Service_name);
+      //     this.parentLoop(_data, (ele) => {
+      //       ele.disabledService.push(item.Service_id);
+      //     });
+      //   }
+      // });
+    }
+    this.setState(
+      {
+        data: _data,
+        // activeDS: [...this.state.staticDS]
+      },
+      () => console.log(this.state)
+    );
+  };
   componentDidMount() {
     this.onLoad();
   }
   render() {
     return (
-      <div>
-        {console.log(this.state)}
-        Add
-        <div style={{ display: "flex", justifyContent: "space-around" }}>
-          {this.state.ScheduledDP.length === 0 &&
-          this.state.UnScheduledDP.length === 0
-            ? this.state.data.map((item, index) => {
-                return (
-                  <div>
-                    {item.Service_name}
-                    <br />
-                    <label>
-                      <input
-                        type="checkbox"
-                        id="scheduled"
-                        name="scheduled"
-                        value={item.Service_name}
-                        onChange={(e) =>
-                          this.onScheduleClickHandle(e, item, index)
-                        }
-                        checked={item.scheduleChecked}
-                        disabled={item.disableScheduleCheckbox}
-                      />
-                      Scheduled
-                    </label>
-                    <br />
-                    <label>
-                      <input
-                        type="checkbox"
-                        id="unscheduled"
-                        name="unscheduled"
-                        value={item.Service_name}
-                        checked={item.unScheduleChecked}
-                        disabled={item.disableUnscheduleCheckbox}
-                        onChange={(e) =>
-                          this.onUnscheduleClickHandle(e, item, index)
-                        }
-                      />
-                      UnScheduled
-                    </label>
-                    <pre>
-                      {JSON.stringify(item.Parent_container_id, null, 4)}
-                    </pre>
-                  </div>
-                );
-              })
-            : this.state.data.map((item, index) => (
-                <div>
-                  {item.Service_name}
-                  <br />
-                  <label>
-                    <input
-                      type="checkbox"
-                      id="scheduled"
-                      value={item.Service_name}
-                      onChange={(e) => this.onScheduleClickHandle2(item, index)}
-                      checked={item.scheduleChecked}
-                      disabled={item.disableScheduleCheckbox}
-                    />
-                    Scheduled
-                  </label>
-                  <br />
-                  <label>
-                    <input
-                      type="checkbox"
-                      id="unscheduled"
-                      // value={item.service_name}
-                      checked={item.unScheduleChecked}
-                      disabled={item.disableUnscheduleCheckbox}
-                      // onChange={(e) => this.onUnscheduleClickHandle(e, item, index)}
-                    />
-                    UnScheduled
-                  </label>
-                  <pre>{JSON.stringify(item.Parent_container_id, null, 4)}</pre>
-                </div>
-              ))}
+      <div className="addCamera">
+        {/* {console.log(this.state)} */}
+        <div className="header">
+          <img src={logo} className="logo" />
         </div>
-        <p>ScheduledUC</p>
-        <pre>{JSON.stringify(this.state.ScheduledUC, null, 4)}</pre>
-        <p>ScheduledDP</p>
-        <pre>{JSON.stringify(this.state.ScheduledDP, null, 4)}</pre>
-        <p>Selected Schedule</p>
-        <pre>{JSON.stringify(this.state.scheduleChecked, null, 4)}</pre>
-        <p>Selected DP</p>
-        <pre>{JSON.stringify(this.state.selectedDS, null, 4)}</pre>
-        <p>Deepstream limit</p>
-        <pre>{JSON.stringify(deepStreamLimit, null, 4)}</pre>
-        <p>Usecase limit</p>
-        <pre>{JSON.stringify(usecaseLimit, null, 4)}</pre>
+        <div className="container">
+          <div className="timeline-header">
+            <p className="h">Time (24 Hrs)</p>
+            <div className="timeline">
+              <p>0</p>
+              <p>2</p>
+              <p>4</p>
+              <p>6</p>
+              <p>8</p>
+              <p>10</p>
+              <p>12</p>
+              <p>14</p>
+              <p>16</p>
+              <p>18</p>
+              <p>20</p>
+              <p>22</p>
+              <span>24</span>
+            </div>
+          </div>
+
+          <div className="timeline-header">
+            <p className="h">Camera</p>
+            <div
+              className="timeline"
+              onMouseLeave={() => this.setState({ mouseState: false })}
+            >
+              {this.state.data.map((item) => (
+                <div
+                  key={item}
+                  className={
+                    this.state.selectedTimeSlot.includes(item.slot)
+                      ? "child active"
+                      : "child"
+                  }
+                  onMouseDown={() => {
+                    this.timeslotMouseDown(item.slot);
+                  }}
+                  onMouseEnter={() => {
+                    if (this.state.mouseState) {
+                      this.timeslotMouseDown(item.slot);
+                    }
+                  }}
+                  onMouseUp={() => this.setState({ mouseState: false })}
+                ></div>
+              ))}
+            </div>
+          </div>
+          <div className="data-container">
+            <div className="flex">
+              <h1>Usecases</h1>
+              <div className="dummy" />
+            </div>
+            {this.state.Service.map((service_item, service_index) => (
+              <div className="flex">
+                <h4 className="name">{service_item.Service_name}</h4>
+                <pre>
+                  {JSON.stringify(service_item.Parent_container_id.AI, null, 4)}
+                </pre>
+                <div
+                  className="dummy"
+                  onMouseLeave={() => this.setState({ mouseState: false })}
+                  onMouseEnter={() => this.setState({ mouseState: false })}
+                >
+                  {this.state.data.map((item, index) => (
+                    <div
+                      key={item.slot}
+                      className={
+                        item.Usecases.includes(service_item.Service_id)
+                          ? "child active"
+                          : "child"
+                      }
+                      style={{
+                        backgroundColor: item.isDisabled
+                          ? "gray"
+                          : item.disabledService.includes(
+                              service_item.Service_id
+                            )
+                          ? "gray"
+                          : "",
+                      }}
+                      onMouseDown={() => {
+                        if (!item.isDisabled) {
+                          if (
+                            !item.disabledService.includes(
+                              service_item.Service_id
+                            )
+                          ) {
+                            if (this.state.isCamerPresent) {
+                              this.usecaseMouseDown2(
+                                item,
+                                service_index,
+                                service_item
+                              );
+                            } else {
+                              this.usecaseMouseDown(
+                                item,
+                                service_index,
+                                service_item
+                              );
+                            }
+                          }
+                        }
+                      }}
+                      onMouseEnter={() => {
+                        if (this.state.mouseState) {
+                          if (!item.isDisabled) {
+                            if (
+                              !item.disabledService.includes(
+                                service_item.Service_id
+                              )
+                            ) {
+                              if (this.state.isCamerPresent) {
+                                this.usecaseMouseDown2(
+                                  item,
+                                  service_index,
+                                  service_item
+                                );
+                              } else {
+                                this.usecaseMouseDown(
+                                  item,
+                                  service_index,
+                                  service_item
+                                );
+                              }
+                            }
+                          }
+                        }
+                      }}
+                      onMouseUp={() => this.setState({ mouseState: false })}
+                      // onMouseLeave={() => this.setState({ mouseState: false })}
+                    />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     );
   }
 }
 
-export default Add;
+//NOTE:
+//Remove duplicate from Dependent Array onSubmit
