@@ -1402,6 +1402,7 @@ class Add extends Component {
 
   componentDidMount() {
     this.onLoad();
+    console.log(this.props.match.params.idee);
   }
   render() {
     return (

@@ -154,122 +154,123 @@ export default class AddCamera extends Component {
       },
     ],
     apiData: {
-      "0-2": {
-        global: {
-          Cameras: ["1"],
-          Usecases: [
-            // "DUMMYANAV1",
-            // "DUMMYANAV2",
-            // "LOITV1ANA",
-            // "VEHIV1ANA",
-            "VEHIV1",
-            // "TRESANAV1",
-            // "TRESV1",
-            // "MASKV1",
-            // "DUMMYV1",
-            "LOITV1",
-          ],
-          Dependent: [],
-          AI: ["person", "vehicle"],
-        },
-        local: {
-          1: {
-            Usecases: ["LOITV1", "LOITV1ANA", "TRESV1"],
-            Dependent: ["LOITV1"],
-            // AI: ["person", "fmgh"],
-          },
-        },
-      },
-      // "0-2": {
-      //   global: {
-      //     Cameras: [],
-      //     Usecases: [],
-      //     Dependent: [],
-      //     AI: [],
-      //   },
-      //   local: {},
-      // },
-      // "2-4": {
-      //   global: {
-      //     Cameras: [],
-      //     Usecases: [],
-      //     Dependent: [],
-      //     AI: [],
-      //   },
-      //   local: {},
-      // },
       // "0-2": {
       //   global: {
       //     Cameras: ["1"],
       //     Usecases: [
-      //       // "LOITV1",
-      //       "LOITV1ANA",
+      //       // "DUMMYANAV1",
+      //       // "DUMMYANAV2",
+      //       // "LOITV1ANA",
+      //       "DUMMYV2",
+      //       // "VEHIV1ANA",
+      //       // "VEHIV1",
+      //       "TRESANAV1",
       //       // "TRESV1",
       //       // "MASKV1",
-      //       "VEHIV1",
+      //       // "DUMMYV1",
+      //       // "LOITV1",
       //     ],
       //     Dependent: ["LOITV1"],
-      //     AI: ["person", "vehicle"],
+      //     AI: ["person", "vehicle", "dp1"],
       //   },
       //   local: {
       //     1: {
-      //       Usecases: ["LOITV1", "LOITV1ANA", "TRESV1", "MASKV1"],
+      //       Usecases: ["LOITV1", "LOITV1ANA", "TRESV1"],
       //       Dependent: ["LOITV1"],
       //       // AI: ["person", "fmgh"],
       //     },
-      // 2: {
-      //   Usecases: ["LOITV1"],
-      //   Dependent: [],
-      //   AI: ["person"],
+      //   },
       // },
+      // "0-2": {
+      //   global: {
+      //     Cameras: [],
+      //     Usecases: [],
+      //     Dependent: [],
+      //     AI: [],
+      //   },
+      //   local: {},
       // },
+      // "2-4": {
+      //   global: {
+      //     Cameras: [],
+      //     Usecases: [],
+      //     Dependent: [],
+      //     AI: [],
+      //   },
+      //   local: {},
       // },
-      "2-4": {
+      "0-2": {
         global: {
           Cameras: ["1"],
           Usecases: [
-            // "DUMMYANAV1",
-            // "DUMMYANAV2",
+            // "LOITV1",
             "LOITV1ANA",
-            "VEHIV1ANA",
-            "VEHIV1",
-            // "TRESANAV1",
             // "TRESV1",
             // "MASKV1",
-            // "DUMMYV1",
-            "LOITV1",
+            "VEHIV1",
           ],
-          Dependent: ["LOITV1", "VEHIV1"],
+          Dependent: ["LOITV1"],
           AI: ["person", "vehicle"],
         },
-        // global: {
-        //   Cameras: [],
-        //   Usecases: [],
-        //   Dependent: [],
-        //   AI: [],
-        // },
-        local: {},
+        local: {
+          1: {
+            Usecases: ["LOITV1", "LOITV1ANA", "TRESV1", "MASKV1"],
+            Dependent: ["LOITV1"],
+            // AI: ["person", "fmgh"],
+          },
+          2: {
+            Usecases: ["LOITV1"],
+            Dependent: [],
+            AI: ["person"],
+          },
+        },
       },
       // "2-4": {
       //   global: {
-      //     Cameras: ["2", "3"],
-      //     Usecases: ["LOITVANALYTICS", "LOITV1"],
-      //     Dependent: ["LOITV1"],
-      //     AI: ["person"],
+      //     Cameras: ["1"],
+      //     Usecases: [
+      //       // "DUMMYANAV1",
+      //       // "DUMMYANAV2",
+      //       // "LOITV1ANA",
+      //       // "VEHIV1ANA",
+      //       "VEHIV1",
+      //       // "TRESANAV1",
+      //       // "TRESV1",
+      //       // "MASKV1",
+      //       // "DUMMYV1",
+      //       // "LOITV1",
+      //     ],
+      //     Dependent: [],
+      //     AI: ["vehicle"],
       //   },
-      //   local: {
-      //     2: {
-      //       Usecases: ["LOITVANALYTICS", "LOITV1"],
-      //       Dependent: ["LOITV1"],
-      //       AI: ["person"],
-      //     },
-      //     3: {
-      //       Usecases: ["LOITVANALYTICS", "LOITV1"],
-      //       Dependent: ["LOITV1"],
-      //       AI: ["person"],
-      //     },
-      //   },
+      //   // global: {
+      //   //   Cameras: [],
+      //   //   Usecases: [],
+      //   //   Dependent: [],
+      //   //   AI: [],
+      //   // },
+      //   local: {},
       // },
+      "2-4": {
+        global: {
+          Cameras: ["2", "3"],
+          Usecases: ["LOITVANALYTICS", "LOITV1"],
+          Dependent: ["LOITV1"],
+          AI: ["person"],
+        },
+        local: {
+          2: {
+            Usecases: ["LOITVANALYTICS", "LOITV1"],
+            Dependent: ["LOITV1"],
+            AI: ["person"],
+          },
+          3: {
+            Usecases: ["LOITVANALYTICS", "LOITV1"],
+            Dependent: ["LOITV1"],
+            AI: ["person"],
+          },
+        },
+      },
       "4-6": {
         global: {
           Cameras: [],
@@ -480,7 +481,7 @@ export default class AddCamera extends Component {
     console.log("_UCLimitReached");
     let _Service = [...this.state.Service];
     let _data = [...this.state.data];
-    let _usecases = _data[data_index].Usecases;
+    let _usecases = [..._data[data_index].Usecases];
     Array.prototype.push.apply(_usecases, data_item.staticUC);
     Array.prototype.push.apply(_usecases, data_item.staticDependent);
     console.log(_usecases);
@@ -501,6 +502,60 @@ export default class AddCamera extends Component {
     let _Service = [...this.state.Service];
     let _usecases = _data[data_index].Usecases;
     let _AI = _data[data_index].AI;
+    let _Dependent = _data[data_index].Dependent;
+    let uniqueUC = [..._usecases];
+    Array.prototype.push.apply(uniqueUC, _Dependent);
+    uniqueUC = [...new Set(uniqueUC)];
+
+    this.parentLoop(_Service, (serv_ele) => {
+      let result = [];
+      if (serv_ele.Parent_container_id.AI.length <= deepStreamLimit) {
+        this.parentLoop(_usecases, (uc_ele) => {
+          if (uc_ele === serv_ele.Service_id) result.push(true);
+          else result.push(false);
+        });
+        // console.log(serv_ele.Service_id, result);
+        if (result.includes(true)) {
+          console.log("IF " + serv_ele.Service_id);
+        } else {
+          const intersection = serv_ele.Parent_container_id.AI.filter(
+            (value) => !_AI.includes(value)
+          );
+          console.log(intersection);
+          let add = _AI.length + intersection.length;
+          if (deepStreamLimit < add) {
+            console.log("disabled DS: " + serv_ele.Service_id);
+            _data[data_index].disabledService.push(serv_ele.Service_id);
+            _data[data_index].disabledService = [
+              ...new Set(_data[data_index].disabledService),
+            ];
+          } else {
+            if (
+              _data[data_index].disabledService.includes(serv_ele.Service_id)
+            ) {
+              var index = _data[data_index].disabledService.indexOf(
+                serv_ele.Service_id
+              );
+              _data[data_index].disabledService.splice(index, 1);
+              _data[data_index].disabledService = [
+                ...new Set(_data[data_index].disabledService),
+              ];
+            }
+          }
+        }
+      }
+    });
+
+    this.setState({ data: _data });
+  };
+
+  _DSLimitReached2 = (data_item, service_index, service_item, data_index) => {
+    console.log("_DSLimitReached()");
+    console.log(this.state);
+    let _data = [...this.state.data];
+    let _Service = [...this.state.Service];
+    let _usecases = _data[data_index].Usecases;
+    let _AI = [..._data[data_index].AI];
     let _Dependent = _data[data_index].Dependent;
     let uniqueUC = [..._usecases];
     Array.prototype.push.apply(uniqueUC, _Dependent);
@@ -604,9 +659,10 @@ export default class AddCamera extends Component {
     this.setState({ data: _data });
   };
   toggleAnalytics2 = (data_ele, item) => {
+    console.log("toggleAnalytics2()");
     let uniqueUCnD = [...data_ele.staticUC];
     let _data = [...this.state.data];
-    // Array.prototype.push.apply(uniqueUCnD, data_ele.staticUC);
+    Array.prototype.push.apply(uniqueUCnD, data_ele.Usecases);
     Array.prototype.push.apply(uniqueUCnD, data_ele.staticDependent);
     uniqueUCnD = [...new Set(uniqueUCnD)];
     let uniqueAI = [...data_ele.staticAI];
@@ -625,6 +681,7 @@ export default class AddCamera extends Component {
       let UCnDependent = [...item.Parent_container_id.Usecase];
       UCnDependent.push(item.Service_id);
       console.log(UCnDependent);
+      console.log(uniqueUCnD);
       let UCadd = [...uniqueUCnD];
       Array.prototype.push.apply(UCadd, UCnDependent);
       UCadd = [...new Set(UCadd)];
@@ -643,7 +700,7 @@ export default class AddCamera extends Component {
         }
       }
     }
-    // this.setState({ data: _data });
+    this.setState({ data: _data });
   };
 
   toggleService = (data_item, service_index, service_item, data_index) => {
@@ -938,12 +995,12 @@ export default class AddCamera extends Component {
   };
 
   toggleService2 = (data_item, service_index, service_item, data_index) => {
+    console.log("toggleService2()");
     console.log(this.state);
     let _data = [...this.state.data];
     let _Service = [...this.state.Service];
-    console.log("toggleService2()");
     let _usecases = _data[data_index].Usecases;
-    let _AI = _data[data_index].AI;
+    let _AI = [..._data[data_index].AI];
     Array.prototype.push.apply(_AI, data_item.staticAI);
 
     let _Dependent = _data[data_index].Dependent;
@@ -1012,7 +1069,7 @@ export default class AddCamera extends Component {
           if (result.includes(true)) {
             if (element.Category === "Analytics") {
               console.log("calling analytics " + element.Service_name);
-              this.toggleAnalytics2(data_item, service_item);
+              this.toggleAnalytics2(data_item, element);
             } else {
               let intersection = element.Parent_container_id.AI.filter(
                 (x) => !uniqueAI.includes(x)
@@ -1039,7 +1096,7 @@ export default class AddCamera extends Component {
           } else {
             if (element.Category === "Analytics") {
               console.log("calling analytics " + element.Service_name);
-              this.toggleAnalytics2(data_item, service_item);
+              this.toggleAnalytics2(data_item, element);
             } else {
               let intersection = element.Parent_container_id.AI.filter(
                 (x) => !uniqueAI.includes(x)
@@ -1083,7 +1140,7 @@ export default class AddCamera extends Component {
               if (result.includes(true)) {
                 if (element.Category === "Analytics") {
                   console.log("calling analytics " + element.Service_name);
-                  this.toggleAnalytics2(data_item, service_item);
+                  this.toggleAnalytics2(data_item, element);
                 } else {
                   let intersection = element.Parent_container_id.AI.filter(
                     (x) => !uniqueAI.includes(x)
@@ -1114,7 +1171,7 @@ export default class AddCamera extends Component {
               } else {
                 if (element.Category === "Analytics") {
                   console.log("calling analytics " + element.Service_name);
-                  this.toggleAnalytics2(data_item, service_item);
+                  this.toggleAnalytics2(data_item, element);
                 } else {
                   let intersection = element.Parent_container_id.AI.filter(
                     (x) => !uniqueAI.includes(x)
@@ -1156,7 +1213,7 @@ export default class AddCamera extends Component {
               if (result.includes(true)) {
                 if (element.Category === "Analytics") {
                   console.log("calling analytics " + element.Service_name);
-                  this.toggleAnalytics2(data_item, service_item);
+                  this.toggleAnalytics2(data_item, element);
                 } else {
                   let intersection = element.Parent_container_id.AI.filter(
                     (x) => !uniqueAI.includes(x)
@@ -1188,7 +1245,7 @@ export default class AddCamera extends Component {
               } else {
                 if (element.Category === "Analytics") {
                   console.log("calling analytics " + element.Service_name);
-                  this.toggleAnalytics2(data_item, service_item);
+                  this.toggleAnalytics2(data_item, element);
                 } else {
                   let intersection = element.Parent_container_id.AI.filter(
                     (x) => !uniqueAI.includes(x)
@@ -1378,12 +1435,11 @@ export default class AddCamera extends Component {
   };
 
   verifyLimits2 = (data_item, service_index, service_item, data_index) => {
-    console.log(this.state);
     console.log("verifyLimits2()");
+    console.log(this.state);
     let _data = [...this.state.data];
-    let _Service = [...this.state.Service];
     let _usecases = _data[data_index].Usecases;
-    let _AI = _data[data_index].AI;
+    let _AI = [..._data[data_index].AI];
     Array.prototype.push.apply(_AI, data_item.staticAI);
     let _Dependent = _data[data_index].Dependent;
     let addArr = [..._usecases];
@@ -1391,19 +1447,22 @@ export default class AddCamera extends Component {
     Array.prototype.push.apply(addArr, data_item.staticDependent);
     Array.prototype.push.apply(addArr, _Dependent);
     addArr = [...new Set(addArr)];
-    _AI = [...new Set(_AI)];
+    // _AI = [...new Set(_AI)];
     let uniqueAI = [...new Set(_data[data_index].AI)];
+    console.log(uniqueAI);
+    console.log(addArr);
     if (usecaseLimit === addArr.length) {
-      console.log(addArr);
       console.log("Usecase limit reached");
+      console.log(addArr);
       this._UCLimitReached2(data_item, service_index, service_item, data_index);
     } else if (uniqueAI === deepStreamLimit) {
-      console.log(uniqueAI);
       console.log("DS limit reached");
-      // this._DSLimitReached(data_item, service_index, service_item, data_index);
+      console.log(uniqueAI);
+      this._DSLimitReached2(data_item, service_index, service_item, data_index);
     } else {
-      console.log(addArr, _AI);
+      console.log(addArr);
       console.log("verifyLimits ELSE");
+      console.log(this.state);
       this.toggleService2(data_item, service_index, service_item, data_index);
     }
   };
@@ -1443,6 +1502,7 @@ export default class AddCamera extends Component {
       _activeDS = [...arr];
       console.log(arr);
       _data[data_index].AI = [...arr];
+      console.log(_data[data_index].AI);
       if (service_item.Category === "Analytics") {
         console.log("Analytics: " + service_item.Service_name);
         let dArr = _data[data_index].Dependent;
@@ -1488,6 +1548,7 @@ export default class AddCamera extends Component {
         _data[data_index].AI,
         service_item.Parent_container_id.AI
       );
+
       // Array.prototype.push.apply(
       //   _data[data_index].AI,
       //   service_item.Parent_container_id.AI
@@ -1522,8 +1583,11 @@ export default class AddCamera extends Component {
       },
 
       // () => this._DisableService2(item, service_item)
-      () =>
-        this.verifyLimits2(data_item, service_index, service_item, data_index)
+      () => {
+        console.log(this.state.data);
+        this.verifyLimits2(data_item, service_index, service_item, data_index);
+      }
+      // console.log(this.state)
     );
   };
 
@@ -1959,6 +2023,7 @@ export default class AddCamera extends Component {
   render() {
     return (
       <div className="addCamera">
+        {/* {console.log(this.state)} */}
         <div className="header">
           <img src={logo} className="logo" />
         </div>
