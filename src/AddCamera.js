@@ -181,50 +181,50 @@ export default class AddCamera extends Component {
       //     },
       //   },
       // },
-      // "0-2": {
-      //   global: {
-      //     Cameras: [],
-      //     Usecases: [],
-      //     Dependent: [],
-      //     AI: [],
-      //   },
-      //   local: {},
-      // },
-      // "2-4": {
-      //   global: {
-      //     Cameras: [],
-      //     Usecases: [],
-      //     Dependent: [],
-      //     AI: [],
-      //   },
-      //   local: {},
-      // },
       "0-2": {
         global: {
-          Cameras: ["1"],
-          Usecases: [
-            // "LOITV1",
-            "LOITV1ANA",
-            // "TRESV1",
-            // "MASKV1",
-            "VEHIV1",
-          ],
-          Dependent: ["LOITV1"],
-          AI: ["person", "vehicle"],
+          Cameras: [],
+          Usecases: [],
+          Dependent: [],
+          AI: [],
         },
-        local: {
-          1: {
-            Usecases: ["LOITV1", "LOITV1ANA", "TRESV1", "MASKV1"],
-            Dependent: ["LOITV1"],
-            // AI: ["person", "fmgh"],
-          },
-          2: {
-            Usecases: ["LOITV1"],
-            Dependent: [],
-            AI: ["person"],
-          },
-        },
+        local: {},
       },
+      "2-4": {
+        global: {
+          Cameras: [],
+          Usecases: [],
+          Dependent: [],
+          AI: [],
+        },
+        local: {},
+      },
+      // "0-2": {
+      //   global: {
+      //     Cameras: ["1"],
+      //     Usecases: [
+      //       // "LOITV1",
+      //       "LOITV1ANA",
+      //       // "TRESV1",
+      //       // "MASKV1",
+      //       "VEHIV1",
+      //     ],
+      //     Dependent: ["LOITV1"],
+      //     AI: ["person", "vehicle"],
+      //   },
+      //   local: {
+      //     1: {
+      //       Usecases: ["LOITV1", "LOITV1ANA", "TRESV1", "MASKV1"],
+      //       Dependent: ["LOITV1"],
+      //       // AI: ["person", "fmgh"],
+      //     },
+      //     2: {
+      //       Usecases: ["LOITV1"],
+      //       Dependent: [],
+      //       AI: ["person"],
+      //     },
+      //   },
+      // },
       // "2-4": {
       //   global: {
       //     Cameras: ["1"],
@@ -251,26 +251,26 @@ export default class AddCamera extends Component {
       //   // },
       //   local: {},
       // },
-      "2-4": {
-        global: {
-          Cameras: ["2", "3"],
-          Usecases: ["LOITVANALYTICS", "LOITV1"],
-          Dependent: ["LOITV1"],
-          AI: ["person"],
-        },
-        local: {
-          2: {
-            Usecases: ["LOITVANALYTICS", "LOITV1"],
-            Dependent: ["LOITV1"],
-            AI: ["person"],
-          },
-          3: {
-            Usecases: ["LOITVANALYTICS", "LOITV1"],
-            Dependent: ["LOITV1"],
-            AI: ["person"],
-          },
-        },
-      },
+      // "2-4": {
+      //   global: {
+      //     Cameras: ["2", "3"],
+      //     Usecases: ["LOITVANALYTICS", "LOITV1"],
+      //     Dependent: ["LOITV1"],
+      //     AI: ["person"],
+      //   },
+      //   local: {
+      //     2: {
+      //       Usecases: ["LOITVANALYTICS", "LOITV1"],
+      //       Dependent: ["LOITV1"],
+      //       AI: ["person"],
+      //     },
+      //     3: {
+      //       Usecases: ["LOITVANALYTICS", "LOITV1"],
+      //       Dependent: ["LOITV1"],
+      //       AI: ["person"],
+      //     },
+      //   },
+      // },
       "4-6": {
         global: {
           Cameras: [],
@@ -465,8 +465,10 @@ export default class AddCamera extends Component {
     console.log("_UCLimitReached");
     let _Service = [...this.state.Service];
     let _data = [...this.state.data];
-    let _usecases = _data[data_index].Usecases;
-
+    let _usecases = [..._data[data_index].Usecases];
+    Array.prototype.push.apply(_usecases, data_item.Dependent);
+    _usecases = [...new Set(_usecases)];
+    console.log(_usecases);
     this.parentLoop(_Service, (ele) => {
       if (!_usecases.includes(ele.Service_id)) {
         _data[data_index].disabledService.push(ele.Service_id);
