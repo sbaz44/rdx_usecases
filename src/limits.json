@@ -2,7 +2,7 @@
   "details": {
     "Limitations": {
       "Camera": 2,
-      "Deepstream": 2,
+      "Deepstream": 3,
       "Usecase": 4
     }
   }

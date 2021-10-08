@@ -7,6 +7,7 @@ import Add from "./Add";
 import Add2 from "./Add2";
 import AddCamera from "./AddCamera";
 import UpdateCamera from "./UpdateCamera";
+import EditService from "./EditService";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Switch>
           <Route path="/" component={AddCamera} exact />
           <Route path="/update/:idee" component={UpdateCamera} exact strict />
+          <Route path="/edit/:idee" component={EditService} exact strict />
         </Switch>
       </BrowserRouter>
       {/* <header className="App-header">
