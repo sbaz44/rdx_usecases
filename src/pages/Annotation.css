@@ -1,0 +1,195 @@
+body {
+  overflow: hidden;
+}
+
+.Project {
+  display: grid;
+  grid-template-columns: 20% 60% 20%;
+  grid-template-rows: 110px 200px 100px 100px auto;
+  grid-template-areas:
+    "header header header"
+    "uploaded-list tagger top-right-side-panel"
+    "uploaded-list tagger top-right-side-panel"
+    "uploaded-list tagger tags"
+    "uploaded-list tagger tags"
+    "uploaded-list tagger tags";
+
+  justify-content: stretch;
+
+  height: 100%;
+
+  font-family: "sans-serif";
+}
+
+#taglist-recentlist {
+  grid-area: top-right-side-panel;
+  margin: 5px 10px 12px 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#taglist-imagetags {
+  grid-area: tags;
+  margin: 0px 10px 10px 5px;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+
+#uploaded-list {
+  grid-area: uploaded-list;
+  margin: 5px 5px 10px 10px;
+  overflow: auto;
+}
+
+.file-drop > .file-drop-target.file-drop-dragging-over-frame {
+  position: absolute;
+  top: 75px;
+  left: 500px;
+}
+
+.taglist-cardactions {
+  flex-grow: 0;
+  justify-content: center;
+  min-height: 52px;
+}
+
+.taglist-cardcontent {
+  flex-grow: 1;
+  overflow: auto;
+  margin-top: 1px;
+  margin-bottom: 1px;
+}
+
+.taglist-tagcontainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  flex-grow: 1;
+  justify-content: space-evenly;
+}
+
+.taglist-row-label {
+  width: 70%;
+}
+
+.taglist-color-label {
+  width: 10%;
+  margin-right: 10px;
+  opacity: 0.7;
+}
+
+.title {
+  font-size: 2em;
+}
+
+#tagger {
+  grid-area: tagger;
+
+  width: 100%;
+
+  padding: 20px 0;
+
+  height: 100%;
+}
+
+.autosized-tagger {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.autosized-tagger button {
+  align-self: stretch;
+}
+
+#settings {
+  grid-area: top-right-side-panel;
+
+  padding: 20px;
+  min-height: 300px;
+}
+
+.list-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  text-align: left;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.arrow {
+  margin-right: 10px;
+}
+
+.image-list-empty {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+
+  text-align: center;
+
+  height: 100%;
+}
+
+.image-counter {
+  text-align: right;
+}
+
+.thumbnail {
+  border: 1px solid #ddd; /* Gray border */
+  border-radius: 4px; /* Rounded border */
+  padding: 5px; /* Some padding */
+  height: 100px; /* Set a small width */
+  width: 100px;
+}
+
+.thumbnail:hover {
+  box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+}
+
+.selected-image-row {
+  background-color: rgba(108, 177, 49, 0.5);
+}
+
+.image-item-name {
+  margin-left: 12px;
+}
+
+.image-item {
+  display: flex;
+  align-items: center;
+}
+
+.second-button {
+  margin-left: 12px;
+}
+
+#header button {
+  background-color: transparent;
+  border: 0;
+}
+
+.bb-input input {
+  text-align: center;
+  width: 120px;
+}
+
+.bb-setting-select {
+  width: 170px;
+}
+
+.bb-input-container {
+  min-width: 400px;
+}
+
+.bb-input-container > div {
+  margin-right: 25px;
+}
+
+.taglist-tag {
+  margin: 2px;
+}

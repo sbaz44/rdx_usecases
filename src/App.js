@@ -8,6 +8,7 @@ import Add2 from "./Add2";
 import AddCamera from "./AddCamera";
 import UpdateCamera from "./UpdateCamera";
 import EditService from "./EditService";
+import Annotation from "./pages/Annotation";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/" component={AddCamera} exact />
           <Route path="/update/:idee" component={UpdateCamera} exact strict />
           <Route path="/edit/:idee" component={EditService} exact strict />
+          <Route path="/annotation" component={Annotation} exact strict />
         </Switch>
       </BrowserRouter>
       {/* <header className="App-header">

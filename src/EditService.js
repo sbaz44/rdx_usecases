@@ -102,8 +102,10 @@ export default class EditService extends Component {
         console.log(time_item.slot);
         console.log(slot.slot + "===" + time_item.slot);
         if (slot.slot === time_item.slot) {
-          slot.Cameras.push(camera_item);
-          console.log("IF");
+          if (!slot.Cameras.includes(camera_item)) {
+            slot.Cameras.push(camera_item);
+          }
+          // console.log("IF");
 
           //   _editedSlot.push(obj);
         } else {
@@ -222,33 +224,7 @@ export default class EditService extends Component {
                           );
                         }
                       }}
-                      // onMouseEnter={() => {
-                      //   if (this.state.mouseState) {
-                      //     if (
-                      //       !item.disabledService.includes(
-                      //         service_item.Service_id
-                      //       )
-                      //     ) {
-                      //       if (this.state.isCamerPresent) {
-                      //         this.usecaseMouseDown2(
-                      //           item,
-                      //           service_index,
-                      //           service_item,
-                      //           index
-                      //         );
-                      //       } else {
-                      //         this.usecaseMouseDown(
-                      //           item,
-                      //           service_index,
-                      //           service_item,
-                      //           index
-                      //         );
-                      //       }
-                      //     }
-                      //   }
-                      // }}
                       onMouseUp={() => this.setState({ mouseState: false })}
-                      // onMouseLeave={() => this.setState({ mouseState: false })}
                     />
                   ))}
                 </div>
@@ -257,7 +233,7 @@ export default class EditService extends Component {
           </div>
         </div>
         <button
-          onClick={(name = "shahbaz") => {
+          onClick={() => {
             let staticTime = [...this.state.StaticTime];
             console.log(staticTime);
             let arr = [];
@@ -273,18 +249,11 @@ export default class EditService extends Component {
                     static_time_ele.Cameras.length !== time_ele.Cameras.length
                   ) {
                     arr.push(time_ele);
-
-                    //   console.log(time_ele);
                   }
                 }
               });
             });
             console.log(arr);
-            // let obj = {};
-            // this.parentLoop(this.state.time, (time_ele) => {
-            //   obj[time_ele.slot] = time_ele.Cameras;
-            // });
-            // console.log(obj);
           }}
         >
           Submit
