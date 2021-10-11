@@ -505,26 +505,22 @@ export default class EditService extends Component {
         </div>
         <button
           onClick={() => {
-            let staticTime = [...this.state.StaticTime];
-            console.log(staticTime);
-            let arr = [];
-            this.parentLoop(staticTime, (static_time_ele) => {
-              this.parentLoop(this.state.time, (time_ele) => {
-                if (static_time_ele.slot === time_ele.slot) {
-                  console.log(
-                    static_time_ele.Cameras.length +
-                      "!==" +
-                      time_ele.Cameras.length
-                  );
-                  if (
-                    static_time_ele.Cameras.length !== time_ele.Cameras.length
-                  ) {
-                    arr.push(time_ele);
+            let _apiData = { ...this.state.apiData };
+            for (let [key, value] of Object.entries(_apiData)) {
+              this.parentLoop(value.global.Cameras, (cam_ele) => {
+                console.log(value.local[cam_ele].Usecases);
+                if (value.local[cam_ele].Usecases) {
+                  if (value.local[cam_ele].Usecases.length > 0) {
+                    console.log("FOUND: " + value.local[cam_ele]);
+                  } else {
+                    console.log(value.local[cam_ele]);
+                    console.log(key);
+                    _apiData[key].local[cam_ele] = {};
                   }
                 }
               });
-            });
-            console.log(arr);
+            }
+            console.log(_apiData);
           }}
         >
           Submit
