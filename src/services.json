@@ -31,6 +31,21 @@
       }
     },
     {
+      "Service_id": "QUEUEV1",
+      "Service_name": "Queue Waiting",
+      "Description": "desc",
+      "Status": "Inactive",
+      "Category": "Usecase",
+      "Parent_container_id": {
+        "AI": ["person"],
+        "Usecase": [],
+        "Analytics": [],
+        "Base": [],
+        "Firmware": [],
+        "Database": []
+      }
+    },
+    {
       "Service_id": "MASKV1",
       "Service_name": "Mask",
       "Description": "desc",
