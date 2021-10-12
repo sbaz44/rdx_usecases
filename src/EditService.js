@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
 import servicess from "./services.json";
+import limits from "./limits.json";
 const Services = servicess["Services"];
+const Limits = limits["details"]["Limitations"];
+const deepStreamLimit = Limits["Deepstream"];
+const usecaseLimit = Limits["Usecase"];
 export default class EditService extends Component {
   state = {
     Service: Services,
@@ -121,7 +125,7 @@ export default class EditService extends Component {
       "4-6": {
         global: {
           Cameras: ["1", "2"],
-          Usecases: ["TRESV1", "LOITV1ANA", "LOITV1"],
+          Usecases: ["LOITV1", "TRESV1", "LOITV1ANA"],
           Dependent: ["LOITV1"],
           AI: ["person"],
         },
@@ -140,21 +144,58 @@ export default class EditService extends Component {
       },
       "6-8": {
         global: {
-          Cameras: [],
-          Usecases: [],
+          Cameras: ["1", "2"],
+          Usecases: ["VEHIV1", "LOITV1", "QUEUEV1", "TRESV1"],
           Dependent: [],
-          AI: [],
+          AI: ["vehicle", "person"],
         },
-        local: {},
+        local: {
+          2: {
+            Usecases: ["VEHIV1", "LOITV1", "QUEUEV1", "TRESV1"],
+            Dependent: [],
+            AI: ["vehicle", "person"],
+          },
+          1: {
+            Usecases: ["VEHIV1"],
+            Dependent: [],
+            AI: ["vehicle"],
+          },
+        },
       },
+      // "6-8": {
+      //   global: {
+      //     Cameras: ["1", "2"],
+      //     Usecases: ["MASKV1", "VEHIV1", "LOITV1"],
+      //     Dependent: [],
+      //     AI: ["fmgh", "vehicle", "person"],
+      //   },
+      //   local: {
+      //     2: {
+      //       Usecases: ["MASKV1", "VEHIV1", "LOITV1"],
+      //       Dependent: [],
+      //       AI: ["fmgh", "vehicle", "person"],
+      //     },
+      //     1: {
+      //       Usecases: ["MASKV1"],
+      //       Dependent: [],
+      //       AI: ["fmgh"],
+      //     },
+      //   },
+      // },
       "8-10": {
         global: {
-          Cameras: [],
-          Usecases: [],
-          Dependent: [],
-          AI: [],
+          Cameras: ["1"],
+          Usecases: ["DUMMYANAV2"],
+          Dependent: ["LOITV1", "VEHIV1"],
+          AI: ["person", "vehicle"],
         },
-        local: {},
+        local: {
+          1: {
+            Usecases: ["DUMMYANAV2"],
+            Dependent: ["LOITV1", "VEHIV1"],
+            AI: ["person", "vehicle"],
+          },
+        },
       },
       "10-12": {
         global: {
@@ -223,6 +264,8 @@ export default class EditService extends Component {
     Cameras: [],
     mouseState: false,
     editedSlot: [],
+    selectedAI: [],
+    selectedDependent: [],
   };
   parentLoop = (arr, callback) => {
     for (let element of arr) {
@@ -233,40 +276,41 @@ export default class EditService extends Component {
   toggleAI = (camera_item, camera_index, api_key, api_index) => {
     console.log(this.state);
     console.log("toggleAI()");
-    console.log(camera_item, camera_index, api_key, api_index);
-    let _service_name = this.props.match.params.service;
-    let _apiData = { ...this.state.apiData };
-    // let ucArr = _apiData[api_key].local[camera_item].Usecases;
-    let aiArr = [..._apiData[api_key].local[camera_item].AI];
-    let dArr = [..._apiData[api_key].local[camera_item].Dependent];
-    console.log(aiArr);
-    this.parentLoop(Services, (ser_ele) => {
-      if (ser_ele.Service_id === _service_name) {
-        // console.log(ser_ele);.
-        this.parentLoop(ser_ele.Parent_container_id.AI, (ai_ele) => {
-          if (aiArr.includes(ai_ele)) {
-            let aiIndex = aiArr.indexOf(ai_ele);
-            console.log(aiIndex);
-            aiArr.splice(aiIndex, 1);
-          }
-        });
-        if (ser_ele.Category === "Analytics") {
-          console.log("Analytics");
-          this.parentLoop(ser_ele.Parent_container_id.Usecase, (ai_ele) => {
-            if (dArr.includes(ai_ele)) {
-              let dIndex = dArr.indexOf(ai_ele);
-              console.log(dIndex);
-              dArr.splice(dIndex, 1);
-              console.log(dArr);
-            }
-          });
-        }
-      }
-    });
-    _apiData[api_key].local[camera_item].AI = [...aiArr];
-    _apiData[api_key].local[camera_item].Dependent = [...dArr];
+    // console.log(camera_item, camera_index, api_key, api_index);
+    // let _service_name = this.props.match.params.service;
+    // let _apiData = { ...this.state.apiData };
+    // // let ucArr = _apiData[api_key].local[camera_item].Usecases;
+    // let aiArr = [..._apiData[api_key].local[camera_item].AI];
+    // let dArr = [..._apiData[api_key].local[camera_item].Dependent];
+    // console.log(aiArr);
+    // this.parentLoop(Services, (ser_ele) => {
+    //   if (ser_ele.Service_id === _service_name) {
+    //     // console.log(ser_ele);.
+    //     this.parentLoop(ser_ele.Parent_container_id.AI, (ai_ele) => {
+    //       if (aiArr.includes(ai_ele)) {
+    //         let aiIndex = aiArr.indexOf(ai_ele);
+    //         console.log(aiIndex);
+    //         aiArr.splice(aiIndex, 1);
+    //       }
+    //     });
+    //     if (ser_ele.Category === "Analytics") {
+    //       console.log("Analytics");
+    //       this.parentLoop(ser_ele.Parent_container_id.Usecase, (ai_ele) => {
+    //         if (dArr.includes(ai_ele)) {
+    //           let dIndex = dArr.indexOf(ai_ele);
+    //           console.log(dIndex);
+    //           dArr.splice(dIndex, 1);
+    //           console.log(dArr);
+    //         }
+    //       });
+    //     }
+    //   }
+    // });
+    // _apiData[api_key].local[camera_item].AI = [...aiArr];
+    // _apiData[api_key].local[camera_item].Dependent = [...dArr];
 
-    this.setState({ apiData: _apiData }, () => console.log(this.state));
+    // this.setState({ apiData: _apiData }, () => console.log(this.state));
+
     //  let AIIndex = aiArr.indexOf(_service_name);
     //  aiArr.splice(AIIndex, 1);
     // if (!ucArr.length) {
@@ -287,138 +331,197 @@ export default class EditService extends Component {
     //   });
     // }
   };
+
   cameraMouseDown = (camera_item, camera_index, api_key, api_index) => {
     let _service_name = this.props.match.params.service;
     let _apiData = { ...this.state.apiData };
-    let ucArr = _apiData[api_key].local[camera_item].Usecases;
+    let selectedAI = this.state.selectedAI;
+    let globalAI = [..._apiData[api_key].global.AI];
 
-    if (ucArr.includes(_service_name)) {
-      // unchecked
+    //to enable/disable slot
+    if (globalAI.length > 0) {
+      const intersection = selectedAI.filter(
+        (element) => !globalAI.includes(element)
+      );
+      let add = globalAI.length + intersection.length;
+      if (deepStreamLimit < add) {
+        return;
+      }
+    } else {
+      if (selectedAI.length > deepStreamLimit) {
+        return;
+      }
+    }
+    //end
+    if (
+      _apiData[api_key].local[camera_item]?.Usecases.includes(_service_name)
+    ) {
+      let ucArr = [..._apiData[api_key].local[camera_item].Usecases];
+
+      // removing UC
       let indexx = ucArr.indexOf(_service_name);
       ucArr.splice(indexx, 1);
       _apiData[api_key].local[camera_item].Usecases = [...ucArr];
+
+      //removing AI
+      let aiArr = [..._apiData[api_key].local[camera_item].AI];
+      let dArr = [..._apiData[api_key].local[camera_item].Dependent];
+      this.parentLoop(Services, (ser_ele) => {
+        if (ser_ele.Service_id === _service_name) {
+          // console.log(ser_ele);.
+          this.parentLoop(ser_ele.Parent_container_id.AI, (ai_ele) => {
+            if (aiArr.includes(ai_ele)) {
+              let aiIndex = aiArr.indexOf(ai_ele);
+              aiArr.splice(aiIndex, 1);
+            }
+          });
+          if (ser_ele.Category === "Analytics") {
+            //removing dependent
+            console.log("Analytics");
+            this.parentLoop(ser_ele.Parent_container_id.Usecase, (ai_ele) => {
+              if (dArr.includes(ai_ele)) {
+                let dIndex = dArr.indexOf(ai_ele);
+                dArr.splice(dIndex, 1);
+              }
+            });
+          }
+        }
+      });
+      _apiData[api_key].local[camera_item].AI = [...aiArr];
+      _apiData[api_key].local[camera_item].Dependent = [...dArr];
     } else {
       console.log("ELSE");
+      if (_apiData[api_key].local[camera_item]?.Usecases) {
+        _apiData[api_key].local[camera_item].Usecases.push(_service_name);
+        Array.prototype.push.apply(
+          _apiData[api_key].local[camera_item].AI,
+          this.state.selectedAI
+        );
+        Array.prototype.push.apply(
+          _apiData[api_key].local[camera_item].Dependent,
+          this.state.selectedDependent
+        );
+      } else {
+        let obj = {
+          Usecases: [],
+          Dependent: [],
+          AI: [],
+        };
+        _apiData[api_key].local[camera_item] = { ...obj };
+        _apiData[api_key].local[camera_item].Usecases.push(_service_name);
+        Array.prototype.push.apply(
+          _apiData[api_key].local[camera_item].AI,
+          this.state.selectedAI
+        );
+        // console.log("object");
+      }
     }
-
-    this.setState({ apiData: _apiData }, () =>
-      this.toggleAI(camera_item, camera_index, api_key, api_index)
+    this.setState(
+      { apiData: _apiData },
+      () => console.log(this.state)
+      // this.toggleAI(camera_item, camera_index, api_key, api_index)
     );
-    // let _editedSlot = [...this.state.editedSlot];
-    // let _time = [...this.state.time];
-    // let _time_slot = _time[time_index].Cameras;
-    // if (_time_slot.includes(camera_item)) {
-    //   console.log("FOUND");
-    //   _time_slot = _time_slot.filter((item) => item != camera_item);
-    //   _time[time_index].Cameras = _time_slot;
-    //   //   let obj = {
-    //   //     slot: time_item.slot,
-    //   //     Cameras: [],
-    //   //   };
-    //   //   obj.Cameras.push(camera_item);
-    //   //   console.log(obj);
-    //   //   _editedSlot.push(obj);
-    // } else {
-    //   //   _time[time_index].Cameras.push(camera_item);
-    // }
-    // console.log(_editedSlot);
-    // if (_editedSlot.length) {
-    //   this.parentLoop(_editedSlot, (slot) => {
-    //     console.log(time_item.slot);
-    //     console.log(slot.slot + "===" + time_item.slot);
-    //     if (slot.slot === time_item.slot) {
-    //       if (!slot.Cameras.includes(camera_item)) {
-    //         slot.Cameras.push(camera_item);
-    //       }
-    //       // console.log("IF");
-    //       //   _editedSlot.push(obj);
-    //     } else {
-    //       let obj = {
-    //         slot: time_item.slot,
-    //         Cameras: [],
-    //       };
-    //       obj.Cameras.push(camera_item);
-    //       _editedSlot.push(obj);
-    //       console.log("ELSE");
-    //     }
-    //   });
-    // } else {
-    //   let obj = {
-    //     slot: time_item.slot,
-    //     Cameras: [],
-    //   };
-    //   obj.Cameras.push(camera_item);
-    //   _editedSlot.push(obj);
-    //   console.log("ELSE");
-    // }
-    // this.setState(
-    //   { time: _time, mouseState: true, editedSlot: _editedSlot },
-    //   () => console.log(this.state)
-    // );
   };
+
   onLoad = () => {
     console.log("onLoad");
-    let _time = [...this.state.time];
     let _apiData = { ...this.state.apiData };
     let _service_name = this.props.match.params.service;
     let Cameras = [];
     for (let [key, value] of Object.entries(this.state.apiData)) {
-      // console.log(key, value);
       Cameras.push(...value.global.Cameras);
-
       this.parentLoop(value.global.Cameras, (cam_ele) => {
-        // console.log(value.local[cam_ele].AI);
         value.local[cam_ele].AI.length = 0;
         this.parentLoop(Services, (ser_ele) => {
           this.parentLoop(value.local[cam_ele].Usecases, (uc_ele) => {
             if (ser_ele.Service_id === uc_ele) {
-              // console.log(ser_ele);
               // value.local[cam_ele].AI.push(...ser_ele.Parent_container_id.AI);
               Array.prototype.push.apply(
                 value.local[cam_ele].AI,
                 ser_ele.Parent_container_id.AI
               );
             }
+
+            if (ser_ele.Service_id === _service_name) {
+              this.setState({
+                selectedAI: [...ser_ele.Parent_container_id.AI],
+                selectedDependent: [...ser_ele.Parent_container_id.Usecase],
+              });
+            }
           });
         });
       });
-
-      // this.parentLoop(_time, (time_ele) => {
-      //   if (time_ele.slot === key) {
-      //     if (Object.keys(value.local).length) {
-      //       this.parentLoop(value.global.Cameras, (cam_ele) => {
-      //         console.log(value.local[cam_ele]);
-      //         // value.local[cam_ele].AI.length = 0;
-      //         _time
-      //       });
-      //     }
-      //     // time_ele.local = { ...value.local };
-      //     // time_ele.cameras = [...value.global.Cameras];
-      //   }
-      // });
     }
     Cameras = [...new Set(Cameras)];
-    console.log(_apiData);
-    this.setState({ Cameras, time: _time });
+
+    this.setState({ Cameras, apiData: { ..._apiData } }, this.onLoadDisable);
   };
   componentDidMount() {
     this.onLoad();
   }
 
+  onLoadDisable = () => {
+    console.log("onLoadDisable()");
+    console.log(this.state);
+  };
+
   renderClassName = (camera_item, camera_index, api_key, api_index) => {
     let _service_name = this.props.match.params.service;
     let _apiData = { ...this.state.apiData };
     if (_apiData[api_key].local[camera_item]) {
-      if (
-        _apiData[api_key].local[camera_item].Usecases.includes(_service_name)
-      ) {
-        return "child active";
+      if (_apiData[api_key].local[camera_item].Usecases) {
+        if (
+          _apiData[api_key].local[camera_item].Usecases.includes(_service_name)
+        ) {
+          return "child active";
+        } else {
+          return "child";
+        }
       } else {
-        return "child";
+        console.log("object");
       }
     }
 
     return "child";
+  };
+
+  renderStyle = (camera_item, camera_index, api_key, api_index) => {
+    let selectedAI = this.state.selectedAI;
+    let _service_name = this.props.match.params.service;
+
+    let _apiData = { ...this.state.apiData };
+    let globalAI = [..._apiData[api_key].global.AI];
+    if (globalAI.length > 0) {
+      const intersection = selectedAI.filter(
+        (element) => !globalAI.includes(element)
+      );
+      let add = globalAI.length + intersection.length;
+      if (deepStreamLimit < add) {
+        return "gray";
+      } else {
+        let staticUC = [..._apiData[api_key].global.Usecases];
+        Array.prototype.push.apply(
+          staticUC,
+          _apiData[api_key].global.Dependent
+        );
+        Array.prototype.push.apply(staticUC, this.state.selectedDependent);
+
+        staticUC.push(_service_name);
+        staticUC = [...new Set(staticUC)];
+
+        if (usecaseLimit < staticUC.length) {
+          return "gray";
+        } else {
+          return "";
+        }
+        // return "";
+      }
+    } else {
+      if (selectedAI.length > deepStreamLimit) {
+        return "gray";
+      }
+      return "";
+    }
   };
   render() {
     const { apiData } = this.state;
@@ -470,13 +573,14 @@ export default class EditService extends Component {
                         api_key,
                         api_index
                       )}
-                      // style={{
-                      //   backgroundColor: item.disabledService.includes(
-                      //     service_item.Service_id
-                      //   )
-                      //     ? "gray"
-                      //     : "",
-                      // }}
+                      style={{
+                        backgroundColor: this.renderStyle(
+                          camera_item,
+                          camera_index,
+                          api_key,
+                          api_index
+                        ),
+                      }}
                       onMouseDown={() => {
                         this.cameraMouseDown(
                           camera_item,
