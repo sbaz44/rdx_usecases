@@ -9,6 +9,7 @@ import AddCamera from "./AddCamera";
 import UpdateCamera from "./UpdateCamera";
 import EditService from "./EditService";
 import Annotation from "./pages/Annotation";
+import Demo from "./Demo";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
       <BrowserRouter>
         <Switch>
           <Route path="/" component={AddCamera} exact />
+          <Route path="/demo/:idee" component={Demo} exact strict />
           <Route path="/update/:idee" component={UpdateCamera} exact strict />
           <Route path="/edit/:service" component={EditService} exact strict />
           <Route path="/annotation" component={Annotation} exact strict />

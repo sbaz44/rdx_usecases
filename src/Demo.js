@@ -6,7 +6,7 @@ const Services = servicess["Services"];
 const Limits = limits["details"]["Limitations"];
 const deepStreamLimit = Limits["Deepstream"];
 const usecaseLimit = Limits["Usecase"];
-export default class UpdateCamera extends Component {
+export default class Demo extends Component {
   state = {
     data: [
       {
@@ -133,14 +133,19 @@ export default class UpdateCamera extends Component {
     apiData: {
       "0-2": {
         global: {
-          Cameras: ["aeabd025afd7433d82aa0bf0659b26e5"],
-          Usecases: ["LOITV1", "AVGWAITV1"],
+          Cameras: ["1", "2"],
+          Usecases: ["LOITV1"],
           Dependent: [],
           AI: ["person"],
         },
         local: {
-          aeabd025afd7433d82aa0bf0659b26e5: {
-            Usecases: ["LOITV1", "AVGWAITV1"],
+          2: {
+            Usecases: ["LOITV1"],
+            Dependent: [],
+            AI: ["person"],
+          },
+          1: {
+            Usecases: ["LOITV1"],
             Dependent: [],
             AI: ["person"],
           },
@@ -148,27 +153,38 @@ export default class UpdateCamera extends Component {
       },
       "2-4": {
         global: {
-          Cameras: ["aeabd025afd7433d82aa0bf0659b26e5"],
-          Usecases: ["LOITV1ANA", "TRESSPASSV1", "PEOPLECOUNTEXCEEDV1"],
-          Dependent: ["LOITV1"],
+          Cameras: ["1"],
+          Usecases: ["LOITV1", "TRESV1"],
+          Dependent: [],
           AI: ["person"],
         },
         local: {
-          aeabd025afd7433d82aa0bf0659b26e5: {
-            Usecases: ["LOITV1ANA", "PEOPLECOUNTEXCEEDV1", "TRESSPASSV1"],
-            Dependent: ["LOITV1"],
+          1: {
+            Usecases: ["LOITV1", "TRESV1"],
+            Dependent: [],
             AI: ["person"],
           },
         },
       },
       "4-6": {
         global: {
-          Cameras: [],
-          Usecases: [],
-          Dependent: [],
-          AI: [],
+          Cameras: ["1", "2"],
+          Usecases: ["TRESV1", "LOITV1ANA", "LOITV1"],
+          Dependent: ["LOITV1"],
+          AI: ["person"],
         },
-        local: {},
+        local: {
+          2: {
+            Usecases: ["LOITV1"],
+            Dependent: [],
+            AI: ["person"],
+          },
+          1: {
+            Usecases: ["LOITV1ANA", "TRESV1"],
+            Dependent: ["LOITV1"],
+            AI: ["person"],
+          },
+        },
       },
       "6-8": {
         global: {
@@ -286,54 +302,28 @@ export default class UpdateCamera extends Component {
       });
     } else {
       _selectedTimeSlot.push(i);
+      console.log(this.state.selectedTimeSlot);
       this.parentLoop(_data, (ele) => {
         if (ele.slot === i) {
+          console.log(ele.slot + "===" + i);
           if (this.state.staticTimeSlot.includes(i)) {
-            console.log("AVAILABLE IN TS");
-            ele.AI = [...ele.staticAI];
-            ele.Usecases = [...ele.staticUC];
-            ele.Dependent = [...ele.staticDependent];
-            ele.disabledService = [...new Set(ele.disabledService)];
-            let addUCnD = [];
-            Array.prototype.push.apply(addUCnD, ele.Usecases);
-            Array.prototype.push.apply(addUCnD, ele.Dependent);
-            addUCnD = [...new Set(addUCnD)];
-            let intersection = ele.disabledService.filter(
-              (x) => !addUCnD.includes(x)
-            );
-            console.log(intersection);
-            ele.disabledService = [...intersection];
-            var indexOf = _data.findIndex((i) => i.slot === ele.slot);
-            this.verifyLimits(ele, "", "", indexOf);
+            if (this.state.staticTimeSlot.includes(i)) {
+              console.log("IF..........");
+              this.onLoad(undefined, ele.slot);
+            } else {
+              console.log("ELSE..........");
+
+              this.onLoad(ele.slot, undefined);
+            }
           } else {
             console.log("ELSE IF..........");
+
             ele.disabledService.length = 0;
             var indexOf = _data.findIndex((i) => i.slot === ele.slot);
             this.verifyLimits(ele, "", "", indexOf);
           }
         }
       });
-
-      // this.parentLoop(_data, (ele) => {
-      //   if (ele.slot === i) {
-      //     if (this.state.staticTimeSlot.includes(i)) {
-      //       if (this.state.staticTimeSlot.includes(i)) {
-      //         console.log("IF..........");
-      //         this.onLoad(undefined, ele.slot);
-      //       } else {
-      //         console.log("ELSE..........");
-
-      //         this.onLoad(ele.slot, undefined);
-      //       }
-      //     } else {
-      //       console.log("ELSE IF..........");
-
-      //       ele.disabledService.length = 0;
-      //       var indexOf = _data.findIndex((i) => i.slot === ele.slot);
-      //       this.verifyLimits(ele, "", "", indexOf);
-      //     }
-      //   }
-      // });
     }
 
     this.setState(

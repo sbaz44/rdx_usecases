@@ -31,8 +31,8 @@
       }
     },
     {
-      "Service_id": "QUEUEV1",
-      "Service_name": "Queue Waiting",
+      "Service_id": "PEOPLECOUNTEXCEEDV1",
+      "Service_name": "person_exceeded",
       "Description": "desc",
       "Status": "Inactive",
       "Category": "Usecase",
@@ -46,13 +46,13 @@
       }
     },
     {
-      "Service_id": "MASKV1",
-      "Service_name": "Mask",
+      "Service_id": "MASKHELMETV1",
+      "Service_name": "gun_mask_helmet_face_detection",
       "Description": "desc",
       "Status": "Inactive",
       "Category": "Usecase",
       "Parent_container_id": {
-        "AI": ["fmgh"],
+        "AI": ["maskhelmet"],
         "Usecase": [],
         "Analytics": [],
         "Base": [],
@@ -61,8 +61,38 @@
       }
     },
     {
-      "Service_id": "TRESV1",
-      "Service_name": "Tresspassing",
+      "Service_id": "AVGWAITV1",
+      "Service_name": "average_waiting_time",
+      "Description": "desc",
+      "Status": "Inactive",
+      "Category": "Usecase",
+      "Parent_container_id": {
+        "AI": ["person"],
+        "Usecase": [],
+        "Analytics": [],
+        "Base": [],
+        "Firmware": [],
+        "Database": []
+      }
+    },
+    {
+      "Service_id": "TRESSPASSV1",
+      "Service_name": "tresspassing",
+      "Description": "desc",
+      "Status": "Inactive",
+      "Category": "Usecase",
+      "Parent_container_id": {
+        "AI": ["person"],
+        "Usecase": [],
+        "Analytics": [],
+        "Base": [],
+        "Firmware": [],
+        "Database": []
+      }
+    },
+    {
+      "Service_id": "PERSONMISSINGV1",
+      "Service_name": "person_missing",
       "Description": "desc",
       "Status": "Inactive",
       "Category": "Usecase",
