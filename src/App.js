@@ -6,6 +6,7 @@ import "./App.css";
 import Add from "./Add";
 import Add2 from "./Add2";
 import AddCamera from "./AddCamera";
+import AddCamera2 from "./AddCamera2";
 import UpdateCamera from "./UpdateCamera";
 import EditService from "./EditService";
 import Annotation from "./pages/Annotation";

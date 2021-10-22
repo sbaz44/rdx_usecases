@@ -273,65 +273,6 @@ export default class EditService extends Component {
     }
   };
 
-  toggleAI = (camera_item, camera_index, api_key, api_index) => {
-    console.log(this.state);
-    console.log("toggleAI()");
-    // console.log(camera_item, camera_index, api_key, api_index);
-    // let _service_name = this.props.match.params.service;
-    // let _apiData = { ...this.state.apiData };
-    // // let ucArr = _apiData[api_key].local[camera_item].Usecases;
-    // let aiArr = [..._apiData[api_key].local[camera_item].AI];
-    // let dArr = [..._apiData[api_key].local[camera_item].Dependent];
-    // console.log(aiArr);
-    // this.parentLoop(Services, (ser_ele) => {
-    //   if (ser_ele.Service_id === _service_name) {
-    //     // console.log(ser_ele);.
-    //     this.parentLoop(ser_ele.Parent_container_id.AI, (ai_ele) => {
-    //       if (aiArr.includes(ai_ele)) {
-    //         let aiIndex = aiArr.indexOf(ai_ele);
-    //         console.log(aiIndex);
-    //         aiArr.splice(aiIndex, 1);
-    //       }
-    //     });
-    //     if (ser_ele.Category === "Analytics") {
-    //       console.log("Analytics");
-    //       this.parentLoop(ser_ele.Parent_container_id.Usecase, (ai_ele) => {
-    //         if (dArr.includes(ai_ele)) {
-    //           let dIndex = dArr.indexOf(ai_ele);
-    //           console.log(dIndex);
-    //           dArr.splice(dIndex, 1);
-    //           console.log(dArr);
-    //         }
-    //       });
-    //     }
-    //   }
-    // });
-    // _apiData[api_key].local[camera_item].AI = [...aiArr];
-    // _apiData[api_key].local[camera_item].Dependent = [...dArr];
-
-    // this.setState({ apiData: _apiData }, () => console.log(this.state));
-
-    //  let AIIndex = aiArr.indexOf(_service_name);
-    //  aiArr.splice(AIIndex, 1);
-    // if (!ucArr.length) {
-    //   console.log("AI IS 0");
-    //   _apiData[api_key].local[camera_item].AI.length = 0;
-    // } else {
-    //   console.log("AI IS Greater than 0");
-    //   this.parentLoop(ucArr, (uc_ele) => {
-    //     let result = 0;
-    //     this.parentLoop(this.state.Service, (ser_ele) => {
-    //       if (uc_ele === ser_ele.Service_id) {
-    //         if (ser_ele.Parent_container_id.AI.includes(uc_ele)) {
-    //           result += 1;
-    //         }
-    //       }
-    //     });
-    //     // console.log(result);
-    //   });
-    // }
-  };
-
   cameraMouseDown = (camera_item, camera_index, api_key, api_index) => {
     let _service_name = this.props.match.params.service;
     let _apiData = { ...this.state.apiData };
